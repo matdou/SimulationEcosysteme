@@ -60,6 +60,28 @@ Bestiole::~Bestiole( void )
 
 }
 
+// getters and setters
+int Bestiole::getIdentite() const {
+    return identite;
+}
+
+void Bestiole::setVitesse(double nouvelle_vitesse) {
+    vitesse = std::min(std::max(0.0, nouvelle_vitesse), MAX_VITESSE);
+
+}
+double Bestiole::getVitesse() const {
+    return vitesse;
+}
+
+void Bestiole::setOrientation(double nouvelle_orientation) {
+    orientation = nouvelle_orientation;
+}
+
+double Bestiole::getOrientation() const {
+    return orientation;
+}
+
+
 
 void Bestiole::initCoords( int xLim, int yLim )
 {

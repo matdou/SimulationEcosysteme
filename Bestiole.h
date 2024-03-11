@@ -46,6 +46,12 @@ public :                                           // Forme canonique :
 
    void initCoords( int xLim, int yLim );
 
+   int getIdentite( void ) const;
+   void setVitesse( double vitesse );
+   double getVitesse( void ) const;
+   void setOrientation( double orientation );
+   double getOrientation( void ) const;
+   
    friend bool operator==( const Bestiole & b1, const Bestiole & b2 );
 
 };
