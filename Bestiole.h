@@ -11,6 +11,8 @@ using namespace std;
 
 class Milieu;
 
+class Comportement;
+
 
 class Bestiole
 {
@@ -30,6 +32,7 @@ private :
    double            vitesse;
 
    T               * couleur;
+
 
 private :
    void bouge( int xLim, int yLim );
@@ -54,6 +57,8 @@ public :                                           // Forme canonique :
    
    friend bool operator==( const Bestiole & b1, const Bestiole & b2 );
 
+   void appliquerComportement();
+   void setComportement(Comportement *c);
 };
 
 

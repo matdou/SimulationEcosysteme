@@ -1,6 +1,6 @@
 #include "Bestiole.h"
-
 #include "Milieu.h"
+#include "Comportement.h"
 
 #include <cstdlib>
 #include <cmath>
@@ -11,6 +11,8 @@ const double      Bestiole::MAX_VITESSE = 10.;
 const double      Bestiole::LIMITE_VUE = 30.;
 
 int               Bestiole::next = 0;
+
+Comportement *comportement;
 
 
 Bestiole::Bestiole( void )
@@ -167,3 +169,14 @@ bool Bestiole::jeTeVois( const Bestiole & b ) const
    return ( dist <= LIMITE_VUE );
 
 }
+
+void Bestiole::appliquerComportement(){
+   if (comportement != nullptr) {
+      comportement->appliquer(*this);
+   }
+}
+
+void Bestiole::setComportement(Comportement *c) {
+    comportement = c;
+}
+
