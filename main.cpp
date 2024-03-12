@@ -7,17 +7,27 @@
 
 #include <iostream>
 
+
 using namespace std;
+
 
 
 int main()
 {
+   //BestioleFactory::registerType("Peureux", []() -> Bestiole* { return new Peureux(); });
+   
+   Aquarium aquarium( 640, 480, 30 );
 
-   Aquarium       aquarium( 640, 480, 30 );
-
-   for ( int i = 1; i <= 20; ++i ){
-      Bestiole* peureux = BestioleFactory::createBestiole<Peureux>();
+   for ( int i = 1; i <= 1; ++i ){
+      
+      Bestiole* peureux = BestioleFactory::createBestiole("Peureux");
+   if (peureux != nullptr) {
       aquarium.getMilieu().addMember(*peureux);
+   } else {
+      std::cerr << "Error: Failed to create a Bestiole of type 'Peureux'." << std::endl;
+   }
+      
+      // aquarium.getMilieu().addMember(*peureux);
 
 
       // TODO : Milieu is storing a copy of the Bestiole, WARNING

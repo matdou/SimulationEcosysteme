@@ -2,18 +2,17 @@
 #define BESTIOLEFACTORY_H
 
 #include "Bestiole.h"
-#include <type_traits>
+#include <map>
+#include <string>
+#include <functional>
 
 class BestioleFactory {
 public:
-    template <typename BestioleType>
-    static Bestiole* createBestiole() {
-        static_assert(std::is_base_of<Bestiole, BestioleType>::value, "BestioleType must derive from Bestiole");
-        return new BestioleType();
-    }
+    static void registerType(const std::string& typeName, std::function<Bestiole*()> creator);
+    static Bestiole* createBestiole(const std::string& typeName);
 
-    // Example of a non-template method declaration
-    static void someUtilityFunction();
+private:
+    static std::map<std::string, std::function<Bestiole*()>>& getFactoryMap();
 };
 
 #endif // BESTIOLEFACTORY_H

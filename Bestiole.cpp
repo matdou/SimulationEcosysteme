@@ -42,12 +42,17 @@ Bestiole::Bestiole( const Bestiole & b )
    cout << "const Bestiole (" << identite << ") par copie" << endl;
 
    x = b.x;
+   std::cout << "x: " << x << std::endl;
    y = b.y;
+   std::cout << "y: " << y << std::endl;
    cumulX = cumulY = 0.;
    orientation = b.orientation;
+   std::cout << "orientation: " << orientation << std::endl;
    vitesse = b.vitesse;
+   std::cout << "vitesse: " << vitesse << std::endl;
    couleur = new T[ 3 ];
    memcpy( couleur, b.couleur, 3*sizeof(T) );
+   std::cout << "couleur: " << couleur << std::endl;
 
 }
 
