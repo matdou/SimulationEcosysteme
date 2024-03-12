@@ -1,21 +1,30 @@
-main : main.cpp Aquarium.o Bestiole.o Milieu.o Peureux.o BestioleFactory.o
-	g++ -Wall -std=c++11 -o main main.cpp Aquarium.o Bestiole.o Milieu.o Peureux.o BestioleFactory.o -I . -lX11 -lpthread
+CXX = g++
+CXXFLAGS = -Wall -std=c++11
+LDFLAGS = -lX11 -lpthread
+INC_DIR = .
 
-Aquarium.o : Aquarium.h Aquarium.cpp
-	g++ -Wall -std=c++11  -c Aquarium.cpp -I .
+SRCDIR = src
+SRCS = $(wildcard $(SRCDIR)/*.cpp)
+OBJDIR = obj
+OBJS = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SRCS))
+BINDIR = bin
+EXEC = $(BINDIR)/main
 
-Bestiole.o : Bestiole.h Bestiole.cpp
-	g++ -Wall -std=c++11  -c Bestiole.cpp -I .
+# Directory containing UImg.h and CImg.h
+IMG_DIR = img
+INC_DIR += -I$(IMG_DIR)
 
-Milieu.o : Milieu.h Milieu.cpp
-	g++ -Wall -std=c++11  -c Milieu.cpp -I .
+.PHONY: all clean
 
-Peureux.o : Peureux.h Peureux.cpp
-	g++ -Wall -std=c++11  -c Peureux.cpp -I .
+all: $(EXEC)
 
-BestioleFactory.o : BestioleFactory.h BestioleFactory.cpp
-	g++ -Wall -std=c++11  -c bestioleFactory.cpp -I .
+$(EXEC): $(OBJS)
+	@mkdir -p $(BINDIR)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
+	@mkdir -p $(OBJDIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INC_DIR)
 
 clean:
-	rm -rf *.o main
-
+	rm -rf $(OBJDIR) $(BINDIR)
