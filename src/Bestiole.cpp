@@ -1,177 +1,122 @@
 #include "Bestiole.h"
+
+#include <cmath>
+#include <cstdlib>
+
 #include "Milieu.h"
 
-#include <cstdlib>
-#include <cmath>
+const double Bestiole::AFF_SIZE = 8.;
+const double Bestiole::MAX_VITESSE = 10.;
+const double Bestiole::LIMITE_VUE = 30.;
 
-
-const double      Bestiole::AFF_SIZE = 8.;
-const double      Bestiole::MAX_VITESSE = 10.;
-const double      Bestiole::LIMITE_VUE = 30.;
-
-int               Bestiole::next = 0;
+int Bestiole::next = 0;
 
 Comportement *comportement;
 
+Bestiole::Bestiole(void) {
+    identite = ++next;
 
-Bestiole::Bestiole( void )
-{
+    cout << "const Bestiole (" << identite << ") par defaut" << endl;
 
-   identite = ++next;
+    x = y = 0;
+    cumulX = cumulY = 0.;
+    orientation = static_cast<double>(rand()) / RAND_MAX * 2. * M_PI;
+    vitesse = static_cast<double>(rand()) / RAND_MAX * MAX_VITESSE;
 
-   cout << "const Bestiole (" << identite << ") par defaut" << endl;
-
-   x = y = 0;
-   cumulX = cumulY = 0.;
-   orientation = static_cast<double>( rand() )/RAND_MAX*2.*M_PI;
-   vitesse = static_cast<double>( rand() )/RAND_MAX*MAX_VITESSE;
-
-   couleur = new T[ 3 ];
-   couleur[ 0 ] = static_cast<int>( static_cast<double>( rand() )/RAND_MAX*230. );
-   couleur[ 1 ] = static_cast<int>( static_cast<double>( rand() )/RAND_MAX*230. );
-   couleur[ 2 ] = static_cast<int>( static_cast<double>( rand() )/RAND_MAX*230. );
-
+    couleur = new T[3];
+    couleur[0] =
+        static_cast<int>(static_cast<double>(rand()) / RAND_MAX * 230.);
+    couleur[1] =
+        static_cast<int>(static_cast<double>(rand()) / RAND_MAX * 230.);
+    couleur[2] =
+        static_cast<int>(static_cast<double>(rand()) / RAND_MAX * 230.);
 }
 
-
-Bestiole::Bestiole( const Bestiole & b )
-{
-
-   identite = ++next;
-
-   cout << "const Bestiole (" << identite << ") par copie" << endl;
-
-   x = b.x;
-   std::cout << "x: " << x << std::endl;
-   y = b.y;
-   std::cout << "y: " << y << std::endl;
-   cumulX = cumulY = 0.;
-   orientation = b.orientation;
-   std::cout << "orientation: " << orientation << std::endl;
-   vitesse = b.vitesse;
-   std::cout << "vitesse: " << vitesse << std::endl;
-   couleur = new T[ 3 ];
-   memcpy( couleur, b.couleur, 3*sizeof(T) );
-   std::cout << "couleur: " << couleur << std::endl;
-
+Bestiole::Bestiole(const Bestiole &b) {
+    identite = ++next;
+    x = b.x;
+    y = b.y;
+    cumulX = cumulY = 0.;
+    orientation = b.orientation;
+    vitesse = b.vitesse;
+    couleur = new T[3];
+    memcpy(couleur, b.couleur, 3 * sizeof(T));
 }
 
-
-Bestiole::~Bestiole( void )
-{
-
-   delete[] couleur;
-
-   cout << "dest Bestiole" << endl;
-
-}
+Bestiole::~Bestiole(void) { delete[] couleur; }
 
 // getters and setters
-int Bestiole::getIdentite() const {
-    return identite;
-}
+int Bestiole::getIdentite() const { return identite; }
 
 void Bestiole::setVitesse(double nouvelle_vitesse) {
     vitesse = std::min(std::max(0.0, nouvelle_vitesse), MAX_VITESSE);
-
 }
-double Bestiole::getVitesse() const {
-    return vitesse;
-}
+double Bestiole::getVitesse() const { return vitesse; }
 
 void Bestiole::setOrientation(double nouvelle_orientation) {
     orientation = nouvelle_orientation;
 }
 
-double Bestiole::getOrientation() const {
-    return orientation;
+double Bestiole::getOrientation() const { return orientation; }
+
+void Bestiole::initCoords(int xLim, int yLim) {
+    x = rand() % xLim;
+    y = rand() % yLim;
 }
 
+void Bestiole::bouge(int xLim, int yLim) {
+    double nx, ny;
+    double dx = cos(orientation) * vitesse;
+    double dy = -sin(orientation) * vitesse;
+    int cx, cy;
 
+    cx = static_cast<int>(cumulX);
+    cumulX -= cx;
+    cy = static_cast<int>(cumulY);
+    cumulY -= cy;
 
-void Bestiole::initCoords( int xLim, int yLim )
-{
+    nx = x + dx + cx;
+    ny = y + dy + cy;
 
-   x = rand() % xLim;
-   y = rand() % yLim;
+    if ((nx < 0) || (nx > xLim - 1)) {
+        orientation = M_PI - orientation;
+        cumulX = 0.;
+    } else {
+        x = static_cast<int>(nx);
+        cumulX += nx - x;
+    }
 
+    if ((ny < 0) || (ny > yLim - 1)) {
+        orientation = -orientation;
+        cumulY = 0.;
+    } else {
+        y = static_cast<int>(ny);
+        cumulY += ny - y;
+    }
 }
 
-
-void Bestiole::bouge( int xLim, int yLim )
-{
-
-   double         nx, ny;
-   double         dx = cos( orientation )*vitesse;
-   double         dy = -sin( orientation )*vitesse;
-   int            cx, cy;
-
-
-   cx = static_cast<int>( cumulX ); cumulX -= cx;
-   cy = static_cast<int>( cumulY ); cumulY -= cy;
-
-   nx = x + dx + cx;
-   ny = y + dy + cy;
-
-   if ( (nx < 0) || (nx > xLim - 1) ) {
-      orientation = M_PI - orientation;
-      cumulX = 0.;
-   }
-   else {
-      x = static_cast<int>( nx );
-      cumulX += nx - x;
-   }
-
-   if ( (ny < 0) || (ny > yLim - 1) ) {
-      orientation = -orientation;
-      cumulY = 0.;
-   }
-   else {
-      y = static_cast<int>( ny );
-      cumulY += ny - y;
-   }
-
+void Bestiole::action(Milieu &monMilieu) {
+    bouge(monMilieu.getWidth(), monMilieu.getHeight());
 }
 
+void Bestiole::draw(UImg &support) {
+    double xt = x + cos(orientation) * AFF_SIZE / 2.1;
+    double yt = y - sin(orientation) * AFF_SIZE / 2.1;
 
-void Bestiole::action( Milieu & monMilieu )
-{
-
-   bouge( monMilieu.getWidth(), monMilieu.getHeight() );
-
+    support.draw_ellipse(x, y, AFF_SIZE, AFF_SIZE / 5.,
+                         -orientation / M_PI * 180., couleur);
+    support.draw_circle(xt, yt, AFF_SIZE / 2., couleur);
 }
 
-
-void Bestiole::draw( UImg & support )
-{
-
-   double         xt = x + cos( orientation )*AFF_SIZE/2.1;
-   double         yt = y - sin( orientation )*AFF_SIZE/2.1;
-
-
-   support.draw_ellipse( x, y, AFF_SIZE, AFF_SIZE/5., -orientation/M_PI*180., couleur );
-   support.draw_circle( xt, yt, AFF_SIZE/2., couleur );
-
+bool operator==(const Bestiole &b1, const Bestiole &b2) {
+    return (b1.identite == b2.identite);
 }
 
+bool Bestiole::jeTeVois(const Bestiole &b) const {
+    double dist;
 
-bool operator==( const Bestiole & b1, const Bestiole & b2 )
-{
-
-   return ( b1.identite == b2.identite );
-
-}
-
-
-bool Bestiole::jeTeVois( const Bestiole & b ) const
-{
-
-   double         dist;
-
-
-   dist = std::sqrt( (x-b.x)*(x-b.x) + (y-b.y)*(y-b.y) );
-   return ( dist <= LIMITE_VUE );
-
+    dist = std::sqrt((x - b.x) * (x - b.x) + (y - b.y) * (y - b.y));
+    return (dist <= LIMITE_VUE);
 }
 
 void Bestiole::setCouleur(int r, int g, int b) {
@@ -179,7 +124,3 @@ void Bestiole::setCouleur(int r, int g, int b) {
     couleur[1] = g;
     couleur[2] = b;
 }
-
-
-
-

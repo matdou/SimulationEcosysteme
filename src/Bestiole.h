@@ -1,64 +1,57 @@
 #ifndef _BESTIOLES_H_
 #define _BESTIOLES_H_
 
+#include <iostream>
 
 #include "UImg.h"
 
-#include <iostream>
-
 using namespace std;
-
 
 class Milieu;
 
 class Comportement;
 
+class Bestiole {
+   private:
+    static const double AFF_SIZE;
+    static const double MAX_VITESSE;
+    static const double LIMITE_VUE;
 
-class Bestiole
-{
+    static int next;
 
-private :
-   static const double     AFF_SIZE;
-   static const double     MAX_VITESSE;
-   static const double     LIMITE_VUE;
+   private:
+    int identite;
+    int x, y;
+    double cumulX, cumulY;
+    double orientation;
+    double vitesse;
 
-   static int              next;
+    T* couleur;
 
-private :
-   int               identite;
-   int               x, y;
-   double            cumulX, cumulY;
-   double            orientation;
-   double            vitesse;
+   private:
+    void bouge(int xLim, int yLim);
 
-   T               * couleur;
+   public:                        // Forme canonique :
+    Bestiole(void);               // Constructeur par defaut
+    Bestiole(const Bestiole& b);  // Constructeur de copies
+    ~Bestiole(void);              // Destructeur
+                                  // Operateur d'affectation binaire par defaut
+    void action(Milieu& monMilieu);
+    void draw(UImg& support);
 
+    bool jeTeVois(const Bestiole& b) const;
 
-private :
-   void bouge( int xLim, int yLim );
+    void initCoords(int xLim, int yLim);
 
-public :                                           // Forme canonique :
-   Bestiole( void );                               // Constructeur par defaut
-   Bestiole( const Bestiole & b );                 // Constructeur de copies
-   ~Bestiole( void );                              // Destructeur
-                                                   // Operateur d'affectation binaire par defaut
-   void action( Milieu & monMilieu );
-   void draw( UImg & support );
+    int getIdentite(void) const;
+    void setVitesse(double vitesse);
+    double getVitesse(void) const;
+    void setOrientation(double orientation);
+    double getOrientation(void) const;
 
-   bool jeTeVois( const Bestiole & b ) const;
+    friend bool operator==(const Bestiole& b1, const Bestiole& b2);
 
-   void initCoords( int xLim, int yLim );
-
-   int getIdentite( void ) const;
-   void setVitesse( double vitesse );
-   double getVitesse( void ) const;
-   void setOrientation( double orientation );
-   double getOrientation( void ) const;
-   
-   friend bool operator==( const Bestiole & b1, const Bestiole & b2 );
-
-   void setCouleur(int r, int g, int b);
-
+    void setCouleur(int r, int g, int b);
 };
 
 #endif

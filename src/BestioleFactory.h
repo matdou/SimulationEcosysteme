@@ -1,18 +1,20 @@
 #ifndef BESTIOLEFACTORY_H
 #define BESTIOLEFACTORY_H
 
-#include "Bestiole.h"
+#include <functional>
 #include <map>
 #include <string>
-#include <functional>
+
+#include "Bestiole.h"
 
 class BestioleFactory {
-public:
-    static void registerType(const std::string& typeName, std::function<Bestiole*()> creator);
+   public:
+    static void registerType(const std::string& typeName,
+                             std::function<Bestiole*()> creator);
     static Bestiole* createBestiole(const std::string& typeName);
 
-private:
+   private:
     static std::map<std::string, std::function<Bestiole*()>>& getFactoryMap();
 };
 
-#endif // BESTIOLEFACTORY_H
+#endif  // BESTIOLEFACTORY_H

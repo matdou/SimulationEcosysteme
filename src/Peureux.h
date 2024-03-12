@@ -5,11 +5,11 @@
 #include "BestioleFactory.h"
 
 class Peureux : public Bestiole {
-public:
+   public:
     Peureux();
     static std::string getTypeName() { return "Peureux"; }
     static bool dummy;
     // Other methods
 };
 
-#endif // PEUREUX_H
+#endif  // PEUREUX_H
