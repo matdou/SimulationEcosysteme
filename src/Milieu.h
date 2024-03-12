@@ -6,6 +6,7 @@
 
 #include "Bestiole.h"
 #include "UImg.h"
+#include "PopulationConfig.h"
 
 using namespace std;
 
@@ -15,6 +16,7 @@ class Milieu : public UImg {
 
     int width, height;
     std::vector<Bestiole> listeBestioles;
+    std::vector<std::pair<int, PopulationConfig>> populationConfigs; // step for birth, config
 
    public:
     Milieu(int _width, int _height);
@@ -30,6 +32,11 @@ class Milieu : public UImg {
         listeBestioles.back().initCoords(width, height);
     }
     int nbVoisins(const Bestiole& b);
+
+    void addPopulationConfig(const PopulationConfig& config);
+
+    void initFromConfigs(void);
+
 };
 
 #endif

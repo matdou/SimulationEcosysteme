@@ -14,3 +14,6 @@ std::vector<std::unique_ptr<Bestiole>> PopulationGenerator::generateInitialPopul
 
     return population;
 }
+
+
+
