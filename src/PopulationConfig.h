@@ -13,6 +13,12 @@ public:
     void addTypeCount(const std::string& typeName, int count) {
         typeCounts[typeName] = count;
     }
+
+    void removeTypeCount(const std::string& typeName) {
+        typeCounts.erase(typeName);
+    }
+
+
 };
 
 #endif // POPULATIONCONFIG_H

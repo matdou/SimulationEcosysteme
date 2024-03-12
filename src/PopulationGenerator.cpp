@@ -14,8 +14,3 @@ std::vector<std::unique_ptr<Bestiole>> PopulationGenerator::generateInitialPopul
 
     return population;
 }
-
-void PopulationGenerator::generateNewBestioles(std::vector<std::unique_ptr<Bestiole>>& population, double birthRate) {
-    // Loop through existing population and randomly generate new bestioles based on birthRate
-    // Implementation depends on your specific requirements
-}
