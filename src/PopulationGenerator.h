@@ -1,28 +1,15 @@
-
 #ifndef POPULATIONGENERATOR_H
 #define POPULATIONGENERATOR_H
 
-#include <memory>
-#include <vector>
-
 #include "BestioleFactory.h"
 #include "PopulationConfig.h"
+#include <vector>
+#include <memory>
 
-std::vector<std::unique_ptr<Bestiole>> generatePopulation(
-    const PopulationConfig& config) {
-    std::vector<std::unique_ptr<Bestiole>> population;
+class PopulationGenerator {
+public:
+    static std::vector<std::unique_ptr<Bestiole>> generateInitialPopulation(const PopulationConfig& config);
+    static void generateNewBestioles(std::vector<std::unique_ptr<Bestiole>>& population, double birthRate);
+};
 
-    for (const auto& typeCount : config.typeCounts) {
-        for (int i = 0; i < typeCount.second; ++i) {
-            std::unique_ptr<Bestiole> bestiole(
-                BestioleFactory::createBestiole(typeCount.first));
-            if (bestiole) {
-                population.push_back(std::move(bestiole));
-            }
-        }
-    }
-
-    return population;
-}
-
-#endif  // POPULATIONGENERATOR_H
+#endif // POPULATIONGENERATOR_H
