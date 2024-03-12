@@ -1,6 +1,5 @@
 #include "Bestiole.h"
 #include "Milieu.h"
-#include "Comportement.h"
 
 #include <cstdlib>
 #include <cmath>
@@ -170,13 +169,12 @@ bool Bestiole::jeTeVois( const Bestiole & b ) const
 
 }
 
-void Bestiole::appliquerComportement(){
-   if (comportement != nullptr) {
-      comportement->appliquer(*this);
-   }
+void Bestiole::setCouleur(int r, int g, int b) {
+    couleur[0] = r;
+    couleur[1] = g;
+    couleur[2] = b;
 }
 
-void Bestiole::setComportement(Comportement *c) {
-    comportement = c;
-}
+
+
 

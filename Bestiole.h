@@ -57,9 +57,8 @@ public :                                           // Forme canonique :
    
    friend bool operator==( const Bestiole & b1, const Bestiole & b2 );
 
-   void appliquerComportement();
-   void setComportement(Comportement *c);
-};
+   void setCouleur(int r, int g, int b);
 
+};
 
 #endif

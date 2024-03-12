@@ -1,5 +1,5 @@
-main : main.cpp Aquarium.o Bestiole.o Milieu.o Comportement.o BestioleFactory.o
-	g++ -Wall -std=c++11 -o main main.cpp Aquarium.o Bestiole.o Milieu.o Comportement.o BestioleFactory.o -I . -lX11 -lpthread
+main : main.cpp Aquarium.o Bestiole.o Milieu.o Peureux.o
+	g++ -Wall -std=c++11 -o main main.cpp Aquarium.o Bestiole.o Milieu.o Peureux.o -I . -lX11 -lpthread
 
 Aquarium.o : Aquarium.h Aquarium.cpp
 	g++ -Wall -std=c++11  -c Aquarium.cpp -I .
@@ -10,11 +10,8 @@ Bestiole.o : Bestiole.h Bestiole.cpp
 Milieu.o : Milieu.h Milieu.cpp
 	g++ -Wall -std=c++11  -c Milieu.cpp -I .
 
-Comportement.o : Comportement.h Comportement.cpp
-	g++ -Wall -std=c++11  -c Comportement.cpp -I .
-
-BestioleFactory.o : bestioleFactory.h bestioleFactory.cpp
-	g++ -Wall -std=c++11  -c bestioleFactory.cpp -I .
+Peureux.o : peureux.h peureux.cpp
+	g++ -Wall -std=c++11  -c Peureux.cpp -I .
 
 clean:
 	rm -rf *.o main

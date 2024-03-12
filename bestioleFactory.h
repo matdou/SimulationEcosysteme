@@ -2,20 +2,18 @@
 #define BESTIOLEFACTORY_H
 
 #include "Bestiole.h"
+#include <type_traits>
 
-// Factory pattern and Singleton pattern
 class BestioleFactory {
-private:
-    static BestioleFactory* instance;
-    BestioleFactory() {} // Constructeur privé
-
 public:
-    static BestioleFactory* getInstance();
-    Bestiole* createBestiole(const std::string& type);
+    template <typename BestioleType>
+    static Bestiole* createBestiole() {
+        static_assert(std::is_base_of<Bestiole, BestioleType>::value, "BestioleType must derive from Bestiole");
+        return new BestioleType();
+    }
 
-    BestioleFactory(const BestioleFactory&) = delete;
-    BestioleFactory& operator=(const BestioleFactory&) = delete;
-};  
-
+    // Example of a non-template method declaration
+    static void someUtilityFunction();
+};
 
 #endif // BESTIOLEFACTORY_H
