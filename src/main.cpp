@@ -31,15 +31,12 @@ int main() {
     milieu.addPopulationConfig(config);
 
     milieu.initFromConfigs();
-    /*
-    auto population = PopulationGenerator::generateInitialPopulation(config);
+    
 
-    for (auto& bestiole : population) {
-        aquarium.getMilieu().addMember(*bestiole);
+   
+    for (int i = 0; i < 40; i++) {
+        milieu.artificialBirth(config);
     }
-
-    */
-
     aquarium.run();
 
     return 0;

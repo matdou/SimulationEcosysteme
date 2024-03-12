@@ -24,51 +24,18 @@ void Milieu::step(void) {
         it->draw(*this);
     } 
 
-    // Ajouter les Bestioles qui naissent proportionellement à leur nombre
-    // A chaque step on a aleatoirement (si random<birthRate) une naissance
-    // a chaque naissance, on increment le compteur, et on ajoute une bestiole
-    // correspondant a la config en position du compteur modulo la taille de la
-    // config, en d'aitre terme, a chaque fois que une bestiole doit apparaitre, on
-    // itere sur la config, et on ajoute une bestiole de chaque type
+    // Ajouter les Bestioles en fonction des configurations (birthRate)
 
-
-    for (auto& configPair : populationConfigs) {
-
-    if (std::rand() < configPair.second.birthRate * RAND_MAX) {
-        // Calculate the total number of types in the configuration
-        int totalTypes = 0;
-        for (const auto& typeCount : configPair.second.typeCounts) {
-            totalTypes += typeCount.second;
-        }
-
-        // Get the index of the next type to create
-        int currentIndex = configPair.first % totalTypes;
-
-        // Find the corresponding type in the configuration
-        int accumulatedCount = 0;
-        std::string selectedType;
-        for (const auto& typeCount : configPair.second.typeCounts) {
-            accumulatedCount += typeCount.second;
-            if (currentIndex < accumulatedCount) {
-                selectedType = typeCount.first;
-                break;
+    for (auto& config : populationConfigs) { // 
+        if (std::rand() < config.birthRate * RAND_MAX) {
+            // Birth
+            std::cout << "Milieu : birth" << std::endl;
+            std::unique_ptr<Bestiole> bestiole(BestioleFactory::createBestiole(config.getNextBirthType())); 
+            if (bestiole) {
+                addMember(*bestiole);
             }
         }
-
-        // Create the selected type of bestiole
-        std::unique_ptr<Bestiole> bestiole(BestioleFactory::createBestiole(selectedType));
-        if (bestiole) {
-            std::cout << "Adding new bestiole of type: " << selectedType << std::endl;
-            addMember(*bestiole);
-        }
-
-        // Increment the counter for the current configuration
-        configPair.first++;
     }
-}
-
-    
-
 }
 
 int Milieu::nbVoisins(const Bestiole& b) {
@@ -82,20 +49,29 @@ int Milieu::nbVoisins(const Bestiole& b) {
 }
 
 void Milieu::addPopulationConfig(const PopulationConfig& config) {
-    populationConfigs.push_back(std::make_pair(0, config));
+    populationConfigs.push_back(config);
 }
 
 void Milieu::initFromConfigs(){
     for (const auto& config : populationConfigs) {
-        for (const auto& typeCount : config.second.typeCounts) {
+        for (const auto& typeCount : config.typeCounts) {
             for (int i = 0; i < typeCount.second; ++i) {
                 std::unique_ptr<Bestiole> bestiole(BestioleFactory::createBestiole(typeCount.first));
                 if (bestiole) {
                     addMember(*bestiole);
                 }
             }
+        } 
+    }
 }
-        
-    
+
+void Milieu::artificialBirth(PopulationConfig config){
+    for (const auto& typeCount : config.typeCounts) {
+        for (int i = 0; i < typeCount.second; ++i) {
+            std::unique_ptr<Bestiole> bestiole(BestioleFactory::createBestiole(typeCount.first));
+            if (bestiole) {
+                addMember(*bestiole);
+            }
+        }
     }
 }

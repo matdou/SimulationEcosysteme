@@ -16,7 +16,7 @@ class Milieu : public UImg {
 
     int width, height;
     std::vector<Bestiole> listeBestioles;
-    std::vector<std::pair<int, PopulationConfig>> populationConfigs; // step for birth, config
+    std::vector<PopulationConfig> populationConfigs;
 
    public:
     Milieu(int _width, int _height);
@@ -36,6 +36,8 @@ class Milieu : public UImg {
     void addPopulationConfig(const PopulationConfig& config);
 
     void initFromConfigs(void);
+
+    void artificialBirth(PopulationConfig);
 
 };
 
