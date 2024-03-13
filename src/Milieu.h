@@ -18,8 +18,10 @@ class Milieu : public UImg {
     std::vector<Bestiole> listeBestioles;
     std::vector<PopulationConfig> populationConfigs;
 
+    int delay;
+
    public:
-    Milieu(int _width, int _height);
+    Milieu(int _width, int _height, int _delay);
     ~Milieu(void);
 
     int getWidth(void) const { return width; };

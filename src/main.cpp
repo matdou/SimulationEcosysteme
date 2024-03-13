@@ -26,7 +26,7 @@ int main() {
     config.addTypeCount("Gregaire", 3);
     //config.addTypeCount("Kamikaze", 20);
     //config.addTypeCount("Prevoyante", 200);
-    config.setBirthRate(0.01);
+    config.setBirthRate(1); // 1 births per second in average
 
     milieu.addPopulationConfig(config);
 
@@ -34,9 +34,10 @@ int main() {
     
 
    
-    for (int i = 0; i < 40; i++) {
+    for (int i = 0; i < 0; i++) {
         milieu.artificialBirth(config);
     }
+
     aquarium.run();
 
     return 0;
