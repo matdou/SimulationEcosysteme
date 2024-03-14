@@ -19,13 +19,11 @@ Bestiole::Bestiole(void) {
     orientation = static_cast<double>(rand()) / RAND_MAX * 2. * M_PI;
     vitesse = static_cast<double>(rand()) / RAND_MAX * MAX_VITESSE;
 
-    couleur = new T[3];
-    couleur[0] =
-        static_cast<int>(static_cast<double>(rand()) / RAND_MAX * 230.);
-    couleur[1] =
-        static_cast<int>(static_cast<double>(rand()) / RAND_MAX * 230.);
-    couleur[2] =
-        static_cast<int>(static_cast<double>(rand()) / RAND_MAX * 230.);
+    couleur = {{
+        static_cast<int>(static_cast<double>(rand()) / RAND_MAX * 230.),
+        static_cast<int>(static_cast<double>(rand()) / RAND_MAX * 230.),
+        static_cast<int>(static_cast<double>(rand()) / RAND_MAX * 230.)
+    }};
     std::cout << "Bestiole : created from default, with identite" << identite
               << std::endl;
 }
@@ -37,8 +35,7 @@ Bestiole::Bestiole(const Bestiole &b) {
     cumulX = cumulY = 0.;
     orientation = b.orientation;
     vitesse = b.vitesse;
-    couleur = new T[3];
-    memcpy(couleur, b.couleur, 3 * sizeof(T));
+    couleur = b.couleur;
     std::cout << "Bestiole : created from copy constructor, with identite"
               << identite << std::endl;
 }
@@ -106,10 +103,9 @@ void Bestiole::draw(UImg &support) {
     double xt = x + cos(orientation) * AFF_SIZE / 2.1;
     double yt = y - sin(orientation) * AFF_SIZE / 2.1;
 
-    support.draw_ellipse(x, y, AFF_SIZE, AFF_SIZE / 5.,
-                             - orientation / M_PI * 180.,
-                         couleur);
-    support.draw_circle(xt, yt, AFF_SIZE / 2., couleur);
+    support.draw_ellipse(x, y, AFF_SIZE, AFF_SIZE / 5., -orientation / M_PI * 180., couleur.data());    
+    support.draw_circle(xt, yt, AFF_SIZE / 2., couleur.data());
+
 }
 
 bool operator==(const Bestiole &b1, const Bestiole &b2) {

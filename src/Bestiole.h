@@ -27,7 +27,7 @@ class Bestiole {
     double orientation;
     double vitesse;
 
-    T* couleur;
+    std::array<int, 3> couleur;
 
     // double lifeExpectancy;
 
