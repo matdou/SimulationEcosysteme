@@ -6,10 +6,12 @@
 #include <string>
 
 class PopulationConfig {
-public:
+   public:
     std::map<std::string, int> typeCounts;
     double birthRate;
-    // Use currentTypeName to track the current type instead of a direct iterator to avoid invalidation issues.
+    double deathRate;
+    // Use currentTypeName to track the current type instead of a direct
+    // iterator to avoid invalidation issues.
     std::string currentTypeName;
 
     PopulationConfig() : birthRate(0.0), currentTypeName("") {}
@@ -25,7 +27,8 @@ public:
     void removeTypeCount(const std::string& typeName) {
         typeCounts.erase(typeName);
         if (currentTypeName == typeName) {
-            // If the current type was removed, reset to the beginning of the map, if possible.
+            // If the current type was removed, reset to the beginning of the
+            // map, if possible.
             if (!typeCounts.empty()) {
                 currentTypeName = typeCounts.begin()->first;
             } else {
@@ -35,9 +38,7 @@ public:
         }
     }
 
-    void setBirthRate(double rate) {
-        birthRate = rate;
-    }
+    void setBirthRate(double rate) { birthRate = rate; }
 
     std::string getNextBirthType() {
         if (typeCounts.empty()) {
@@ -46,13 +47,15 @@ public:
         }
 
         if (currentTypeName.empty()) {
-            // This condition should not happen if methods are used correctly, but added as a safety measure.
+            // This condition should not happen if methods are used correctly,
+            // but added as a safety measure.
             currentTypeName = typeCounts.begin()->first;
         }
 
         auto it = typeCounts.find(currentTypeName);
         if (it == typeCounts.end()) {
-            // In case currentTypeName is not found, which should not normally occur, reset to the first element.
+            // In case currentTypeName is not found, which should not normally
+            // occur, reset to the first element.
             it = typeCounts.begin();
             currentTypeName = it->first;
         }
@@ -69,6 +72,10 @@ public:
 
         return nextBirthType;
     }
+
+    void setDeathRate(T a) {
+        deathRate = a;
+    };
 };
 
-#endif // POPULATIONCONFIG_H
+#endif  // POPULATIONCONFIG_H

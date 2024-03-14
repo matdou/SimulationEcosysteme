@@ -22,6 +22,7 @@ Bestiole* BestioleFactory::createBestiole(const std::string& typeName) {
     if (it != factoryMap.end()) {
         std::cout << "Found creator function for type: " << typeName
                   << std::endl;
+        std::cout << "returning it->second()" << std::endl;
         return it->second();
     }
     std::cerr << "Error: No creator function found for type: " << typeName

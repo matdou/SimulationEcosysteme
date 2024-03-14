@@ -26,7 +26,8 @@ int main() {
     config.addTypeCount("Gregaire", 3);
     //config.addTypeCount("Kamikaze", 20);
     //config.addTypeCount("Prevoyante", 200);
-    config.setBirthRate(1); // 1 births per second in average
+    config.setBirthRate(0.1); // 1 births per second in average
+    config.setDeathRate(10); // 10 seconds
 
     milieu.addPopulationConfig(config);
 

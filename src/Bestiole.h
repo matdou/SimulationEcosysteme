@@ -2,6 +2,7 @@
 #define _BESTIOLES_H_
 
 #include <iostream>
+#include <vector>
 
 #include "UImg.h"
 
@@ -28,6 +29,8 @@ class Bestiole {
 
     T* couleur;
 
+    // double lifeExpectancy;
+
    private:
     void bouge(int xLim, int yLim);
 
@@ -52,6 +55,10 @@ class Bestiole {
     friend bool operator==(const Bestiole& b1, const Bestiole& b2);
 
     void setCouleur(int r, int g, int b);
+
+    // void setLifeExpectancy(double lifeExpectancy);
+    // double getLifeExpectancy(void) const;
+
 };
 
 #endif

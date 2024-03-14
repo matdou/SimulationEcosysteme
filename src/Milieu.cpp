@@ -22,22 +22,41 @@ void Milieu::step(void) {
     for (std::vector<Bestiole>::iterator it = listeBestioles.begin();
          it != listeBestioles.end(); ++it) {
         it->action(*this);
+        std::cout << "Milieu : step : bestiole before draw" << std::endl;
         it->draw(*this);
+        std::cout << "Milieu : step : bestiole after draw" << std::endl;
     }
 
     // Ajouter les Bestioles en fonction des configurations (birthRate)
-
-    for (auto& config : populationConfigs) {  //
-        double probability = (delay / 1000.0) * config.birthRate;
-        if (probability > 1.0) probability = 1.0; // Ensure probability doesn't exceed 1
+    std::cout << "Milieu : step :  birthRate " << populationConfigs.size()
+              << std::endl;
+    for (auto& config : populationConfigs) {
+        std::cout << "Milieu : step :  birthRate : BIRTH " << config.birthRate
+                  << std::endl;
+        double probability = (delay / 1000.0) / config.birthRate;
+        if (probability > 1.0) probability = 1.0;
         if (std::rand() < probability * RAND_MAX) {
-            // Birth
             std::cout << "Milieu : birth" << std::endl;
             std::unique_ptr<Bestiole> bestiole(
                 BestioleFactory::createBestiole(config.getNextBirthType()));
             if (bestiole) {
                 addMember(*bestiole);
             }
+        }
+    }
+    // Suppression des bestioles basée sur la probabilité de décès
+    double probability;
+    for (auto& config : populationConfigs) {
+        probability =
+            (delay / 1000.0) / config.deathRate * listeBestioles.size();
+        if (probability > 1.0)
+            probability = 1.0;  // Assure que la probabilité ne dépasse pas 1
+
+        if (!listeBestioles.empty() && std::rand() < probability * RAND_MAX) {
+            // Sélectionne et supprime un élément aléatoire
+            int index = std::rand() % listeBestioles.size();
+            // Suppression sans itérateur
+            listeBestioles.erase(listeBestioles.begin() + index);
         }
     }
 }

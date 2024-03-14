@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -std=c++11 -fsanitize=address
+CXXFLAGS = -Wall -std=c++14 -fsanitize=address
 LDFLAGS = -lX11 -lpthread -fsanitize=address
 
 # Include directory for project headers
