@@ -17,15 +17,10 @@ void BestioleFactory::registerType(const std::string& typeName,
 // Public static method to create a Bestiole instance based on type name
 Bestiole* BestioleFactory::createBestiole(const std::string& typeName) {
     auto& factoryMap = getFactoryMap();  // Use getter to ensure initialization
-    std::cout << "Creating Bestiole of type: " << typeName << std::endl;
     auto it = factoryMap.find(typeName);
+
     if (it != factoryMap.end()) {
-        std::cout << "Found creator function for type: " << typeName
-                  << std::endl;
-        std::cout << "returning it->second()" << std::endl;
         return it->second();
     }
-    std::cerr << "Error: No creator function found for type: " << typeName
-              << std::endl;
     return nullptr;
 }

@@ -7,9 +7,11 @@
 
 class PopulationConfig {
    public:
-    std::map<std::string, int> typeCounts;
+    std::map<std::string, int> typeCounts; // typename, count
     double birthRate;
     double deathRate;
+    double avgLifeTime;
+
     // Use currentTypeName to track the current type instead of a direct
     // iterator to avoid invalidation issues.
     std::string currentTypeName;
@@ -75,6 +77,10 @@ class PopulationConfig {
 
     void setDeathRate(T a) {
         deathRate = a;
+    };
+
+    void setAvgLifeTime(T a) {
+        avgLifeTime = a;
     };
 };
 

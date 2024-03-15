@@ -24,8 +24,13 @@ Bestiole::Bestiole(void) {
         static_cast<int>(static_cast<double>(rand()) / RAND_MAX * 230.),
         static_cast<int>(static_cast<double>(rand()) / RAND_MAX * 230.)
     }};
-    std::cout << "Bestiole : created from default, with identite" << identite
+
+
+
+    std::cout << "Bestiole : created from default, with identite : " << identite
               << std::endl;
+
+    lifeTime = -1; // -1 means infinite life
 }
 
 Bestiole::Bestiole(const Bestiole &b) {
@@ -36,6 +41,7 @@ Bestiole::Bestiole(const Bestiole &b) {
     orientation = b.orientation;
     vitesse = b.vitesse;
     couleur = b.couleur;
+    lifeTime = b.lifeTime;
     std::cout << "Bestiole : created from copy constructor, with identite"
               << identite << std::endl;
 }
@@ -124,3 +130,14 @@ void Bestiole::setCouleur(int r, int g, int b) {
     couleur[1] = g;
     couleur[2] = b;
 }
+
+void Bestiole::setLifeExpectancy(double lifeExpectancy) {
+    this->lifeTime = lifeExpectancy;
+}
+
+double Bestiole::getLifeExpectancy() const { return lifeTime; }
+
+void Bestiole::setLifeExpectancyFromAvg(double averageLifeExpectancy) {
+    this->lifeTime = averageLifeExpectancy * (1 + (static_cast<double>(rand()) / RAND_MAX - 0.5) / 2); // TODO
+}
+

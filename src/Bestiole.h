@@ -29,7 +29,7 @@ class Bestiole {
 
     std::array<int, 3> couleur;
 
-    // double lifeExpectancy;
+    double lifeTime;
 
    private:
     void bouge(int xLim, int yLim);
@@ -56,8 +56,10 @@ class Bestiole {
 
     void setCouleur(int r, int g, int b);
 
-    // void setLifeExpectancy(double lifeExpectancy);
-    // double getLifeExpectancy(void) const;
+    void setLifeExpectancy(double lifeExpectancy);
+    double getLifeExpectancy(void) const;
+
+    void setLifeExpectancyFromAvg(double averageLifeExpectancy);
 
 };
 

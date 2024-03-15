@@ -22,33 +22,28 @@ void Milieu::step(void) {
     for (std::vector<Bestiole>::iterator it = listeBestioles.begin();
          it != listeBestioles.end(); ++it) {
         it->action(*this);
-        std::cout << "Milieu : step : bestiole before draw" << std::endl;
         it->draw(*this);
-        std::cout << "Milieu : step : bestiole after draw" << std::endl;
     }
 
     // Ajouter les Bestioles en fonction des configurations (birthRate)
-    std::cout << "Milieu : step :  birthRate " << populationConfigs.size()
-              << std::endl;
     for (auto& config : populationConfigs) {
-        std::cout << "Milieu : step :  birthRate : BIRTH " << config.birthRate
-                  << std::endl;
-        double probability = (delay / 1000.0) / config.birthRate;
+        double probability = (delay / 1000.0) * config.birthRate;
         if (probability > 1.0) probability = 1.0;
         if (std::rand() < probability * RAND_MAX) {
-            std::cout << "Milieu : birth" << std::endl;
             std::unique_ptr<Bestiole> bestiole(
                 BestioleFactory::createBestiole(config.getNextBirthType()));
             if (bestiole) {
                 addMember(*bestiole);
+                std::cout << "Bestiole " << bestiole->getIdentite()
+                          << " is born from birth " << std::endl;
             }
         }
     }
-    // Suppression des bestioles basée sur la probabilité de décès
+    // NOT NECESSARY :  Suppression des bestioles basée sur la probabilité de décès
     double probability;
     for (auto& config : populationConfigs) {
         probability =
-            (delay / 1000.0) / config.deathRate * listeBestioles.size();
+            (delay / 1000.0) * config.deathRate * listeBestioles.size();
         if (probability > 1.0)
             probability = 1.0;  // Assure que la probabilité ne dépasse pas 1
 
@@ -56,9 +51,35 @@ void Milieu::step(void) {
             // Sélectionne et supprime un élément aléatoire
             int index = std::rand() % listeBestioles.size();
             // Suppression sans itérateur
+            std::cout << "Bestiole " << listeBestioles[index].getIdentite()
+                      << " is dead from death " << std::endl;
             listeBestioles.erase(listeBestioles.begin() + index);
         }
     }
+
+    // Suppression des bestioles basée sur la duree de vie
+
+    for (auto& config : populationConfigs) {
+        for (auto it = listeBestioles.begin(); it != listeBestioles.end();) {
+            //check if life expectancy is -1 = infinie life
+            // in that case, ++it
+            // else, check if lifeTime is negative in that case delete and ++it
+            // else increse lifeTime and ++it
+            if (it->getLifeExpectancy() == -1) {
+                ++it;
+            } else if (it->getLifeExpectancy() <= 0) {
+                it = listeBestioles.erase(it);
+            } else {
+                it->setLifeExpectancy(it->getLifeExpectancy() - delay / 1000.0);
+                std::cout << "Life expectancy of bestiole " << it->getIdentite()
+                          << " is " << it->getLifeExpectancy() << std::endl;
+                ++it;
+            }
+
+
+        }
+    }
+
 }
 
 int Milieu::nbVoisins(const Bestiole& b) {
@@ -81,6 +102,7 @@ void Milieu::initFromConfigs() {
             for (int i = 0; i < typeCount.second; ++i) {
                 std::unique_ptr<Bestiole> bestiole(
                     BestioleFactory::createBestiole(typeCount.first));
+                    bestiole.get()->setLifeExpectancyFromAvg(config.avgLifeTime);
                 if (bestiole) {
                     addMember(*bestiole);
                 }
