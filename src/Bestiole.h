@@ -59,7 +59,7 @@ class Bestiole {
     void setLifeExpectancy(double lifeExpectancy);
     double getLifeExpectancy(void) const;
 
-    void setLifeExpectancyFromAvg(double averageLifeExpectancy);
+    void setLifeExpectancyFromAvg(double averageLifeExpectancy, double std);
 
 };
 

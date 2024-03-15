@@ -5,83 +5,25 @@
 #include <map>
 #include <string>
 
-class PopulationConfig {
-   public:
+struct PopulationConfig
+{
     std::map<std::string, int> typeCounts; // typename, count
     double birthRate;
     double deathRate;
     double avgLifeTime;
-
-    // Use currentTypeName to track the current type instead of a direct
-    // iterator to avoid invalidation issues.
+    double lifeTimeStd;
     std::string currentTypeName;
 
-    PopulationConfig() : birthRate(0.0), currentTypeName("") {}
+    PopulationConfig();
 
-    void addTypeCount(const std::string& typeName, int count) {
-        if (typeCounts.empty()) {
-            // If adding the first type, set it as the current type.
-            currentTypeName = typeName;
-        }
-        typeCounts[typeName] = count;
-    }
+    void addTypeCount(const std::string& typeName, int count);
+    void removeTypeCount(const std::string& typeName);
+    void setBirthRate(double rate);
+    std::string getNextBirthType();
+    void setDeathRate(double a);
+    void setAvgLifeTime(double a);
+    void setLifeTimeStd(double a);
 
-    void removeTypeCount(const std::string& typeName) {
-        typeCounts.erase(typeName);
-        if (currentTypeName == typeName) {
-            // If the current type was removed, reset to the beginning of the
-            // map, if possible.
-            if (!typeCounts.empty()) {
-                currentTypeName = typeCounts.begin()->first;
-            } else {
-                // If the map is now empty, reset currentTypeName.
-                currentTypeName = "";
-            }
-        }
-    }
-
-    void setBirthRate(double rate) { birthRate = rate; }
-
-    std::string getNextBirthType() {
-        if (typeCounts.empty()) {
-            std::cerr << "typeCounts is empty" << std::endl;
-            return "";
-        }
-
-        if (currentTypeName.empty()) {
-            // This condition should not happen if methods are used correctly,
-            // but added as a safety measure.
-            currentTypeName = typeCounts.begin()->first;
-        }
-
-        auto it = typeCounts.find(currentTypeName);
-        if (it == typeCounts.end()) {
-            // In case currentTypeName is not found, which should not normally
-            // occur, reset to the first element.
-            it = typeCounts.begin();
-            currentTypeName = it->first;
-        }
-
-        // Preparing to return the current type and advance to the next one
-        std::string nextBirthType = it->first;
-
-        // Move to the next type, or wrap around to the beginning if at the end
-        ++it;
-        if (it == typeCounts.end()) {
-            it = typeCounts.begin();
-        }
-        currentTypeName = it->first;
-
-        return nextBirthType;
-    }
-
-    void setDeathRate(T a) {
-        deathRate = a;
-    };
-
-    void setAvgLifeTime(T a) {
-        avgLifeTime = a;
-    };
 };
 
 #endif  // POPULATIONCONFIG_H

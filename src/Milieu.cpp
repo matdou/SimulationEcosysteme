@@ -33,6 +33,7 @@ void Milieu::step(void) {
             std::unique_ptr<Bestiole> bestiole(
                 BestioleFactory::createBestiole(config.getNextBirthType()));
             if (bestiole) {
+                bestiole.get()->setLifeExpectancyFromAvg(config.avgLifeTime, config.lifeTimeStd);// TODO : create method (encapsulation principle)
                 addMember(*bestiole);
                 std::cout << "Bestiole " << bestiole->getIdentite()
                           << " is born from birth " << std::endl;
@@ -97,12 +98,22 @@ void Milieu::addPopulationConfig(const PopulationConfig& config) {
 }
 
 void Milieu::initFromConfigs() {
+
+    int sum = 0;
+    for (const auto& config : populationConfigs) {
+        for (const auto& typeCount : config.typeCounts) {
+            sum += typeCount.second;
+        }
+    }
+    listeBestioles.reserve(sum); // TODO 
+
+    std::cout << "Reserve " << sum << " bestioles" << std::endl;
     for (const auto& config : populationConfigs) {
         for (const auto& typeCount : config.typeCounts) {
             for (int i = 0; i < typeCount.second; ++i) {
                 std::unique_ptr<Bestiole> bestiole(
                     BestioleFactory::createBestiole(typeCount.first));
-                    bestiole.get()->setLifeExpectancyFromAvg(config.avgLifeTime);
+                    bestiole.get()->setLifeExpectancyFromAvg(config.avgLifeTime, config.lifeTimeStd);
                 if (bestiole) {
                     addMember(*bestiole);
                 }

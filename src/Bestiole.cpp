@@ -137,7 +137,12 @@ void Bestiole::setLifeExpectancy(double lifeExpectancy) {
 
 double Bestiole::getLifeExpectancy() const { return lifeTime; }
 
-void Bestiole::setLifeExpectancyFromAvg(double averageLifeExpectancy) {
-    this->lifeTime = averageLifeExpectancy * (1 + (static_cast<double>(rand()) / RAND_MAX - 0.5) / 2); // TODO
+void Bestiole::setLifeExpectancyFromAvg(double averageLifeExpectancy, double std) {
+    if (averageLifeExpectancy < 0) {
+        this->lifeTime = -1;
+        return;
+    }
+    //this->lifeTime = averageLifeExpectancy * (1 + (static_cast<double>(rand()) / RAND_MAX - 0.5) / 2); // TODO    
+    this->lifeTime = averageLifeExpectancy + std * (static_cast<double>(rand()) / RAND_MAX - 0.5);
 }
 

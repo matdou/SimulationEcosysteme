@@ -9,4 +9,5 @@ static bool dummy = []() {
 
 Kamikaze::Kamikaze() {
     setCouleur(255, 0, 0);
+    setVitesse(10);
 }

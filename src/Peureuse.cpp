@@ -10,4 +10,5 @@ static bool dummy = []() {
 Peureuse::Peureuse() {
     // Change color to blue
     setCouleur(0, 0, 255);
+    setVitesse(1);
 }
