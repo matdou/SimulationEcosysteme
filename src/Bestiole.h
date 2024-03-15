@@ -38,7 +38,7 @@ class Bestiole {
     Bestiole(void);               // Constructeur par defaut
     Bestiole(const Bestiole& b);  // Constructeur de copies
     ~Bestiole(void);              // Destructeur
-                                  // Operateur d'affectation binaire par defaut
+    
     Bestiole(Bestiole&& b);
     void action(Milieu& monMilieu);
     void draw(UImg& support);
