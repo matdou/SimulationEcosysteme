@@ -33,14 +33,16 @@ void Milieu::step(void) {
             std::unique_ptr<Bestiole> bestiole(
                 BestioleFactory::createBestiole(config.getNextBirthType()));
             if (bestiole) {
-                bestiole.get()->setLifeExpectancyFromAvg(config.avgLifeTime, config.lifeTimeStd);// TODO : create method (encapsulation principle)
+                bestiole.get()->setLifeExpectancyFromAvg(
+                    config.avgLifeTime,
+                    config.lifeTimeStd);  // TODO : create method (encapsulation
+                                          // principle)
                 addMember(*bestiole);
-                std::cout << "Bestiole " << bestiole->getIdentite()
-                          << " is born from birth " << std::endl;
             }
         }
     }
-    // NOT NECESSARY :  Suppression des bestioles basée sur la probabilité de décès
+    // NOT NECESSARY :  Suppression des bestioles basée sur la probabilité de
+    // décès
     double probability;
     for (auto& config : populationConfigs) {
         probability =
@@ -52,8 +54,6 @@ void Milieu::step(void) {
             // Sélectionne et supprime un élément aléatoire
             int index = std::rand() % listeBestioles.size();
             // Suppression sans itérateur
-            std::cout << "Bestiole " << listeBestioles[index].getIdentite()
-                      << " is dead from death " << std::endl;
             listeBestioles.erase(listeBestioles.begin() + index);
         }
     }
@@ -62,25 +62,16 @@ void Milieu::step(void) {
 
     for (auto& config : populationConfigs) {
         for (auto it = listeBestioles.begin(); it != listeBestioles.end();) {
-            //check if life expectancy is -1 = infinie life
-            // in that case, ++it
-            // else, check if lifeTime is negative in that case delete and ++it
-            // else increse lifeTime and ++it
             if (it->getLifeExpectancy() == -1) {
                 ++it;
             } else if (it->getLifeExpectancy() <= 0) {
                 it = listeBestioles.erase(it);
             } else {
                 it->setLifeExpectancy(it->getLifeExpectancy() - delay / 1000.0);
-                std::cout << "Life expectancy of bestiole " << it->getIdentite()
-                          << " is " << it->getLifeExpectancy() << std::endl;
                 ++it;
             }
-
-
         }
     }
-
 }
 
 int Milieu::nbVoisins(const Bestiole& b) {
@@ -98,14 +89,13 @@ void Milieu::addPopulationConfig(const PopulationConfig& config) {
 }
 
 void Milieu::initFromConfigs() {
-
     int sum = 0;
     for (const auto& config : populationConfigs) {
         for (const auto& typeCount : config.typeCounts) {
             sum += typeCount.second;
         }
     }
-    listeBestioles.reserve(sum); // TODO 
+    listeBestioles.reserve(sum+1000);  // TODO
 
     std::cout << "Reserve " << sum << " bestioles" << std::endl;
     for (const auto& config : populationConfigs) {
@@ -113,7 +103,8 @@ void Milieu::initFromConfigs() {
             for (int i = 0; i < typeCount.second; ++i) {
                 std::unique_ptr<Bestiole> bestiole(
                     BestioleFactory::createBestiole(typeCount.first));
-                    bestiole.get()->setLifeExpectancyFromAvg(config.avgLifeTime, config.lifeTimeStd);
+                bestiole.get()->setLifeExpectancyFromAvg(config.avgLifeTime,
+                                                         config.lifeTimeStd);
                 if (bestiole) {
                     addMember(*bestiole);
                 }

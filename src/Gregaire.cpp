@@ -1,4 +1,5 @@
 #include "Gregaire.h"
+
 #include "BestioleFactory.h"
 
 static bool dummy = []() {
@@ -7,6 +8,4 @@ static bool dummy = []() {
     return true;
 }();
 
-Gregaire::Gregaire() {
-    setCouleur(0, 255, 0);
-}
+Gregaire::Gregaire() { setCouleur(0, 255, 0); }

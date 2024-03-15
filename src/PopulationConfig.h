@@ -5,9 +5,8 @@
 #include <map>
 #include <string>
 
-struct PopulationConfig
-{
-    std::map<std::string, int> typeCounts; // typename, count
+struct PopulationConfig {
+    std::map<std::string, int> typeCounts;  // typename, count
     double birthRate;
     double deathRate;
     double avgLifeTime;
@@ -23,7 +22,6 @@ struct PopulationConfig
     void setDeathRate(double a);
     void setAvgLifeTime(double a);
     void setLifeTimeStd(double a);
-
 };
 
 #endif  // POPULATIONCONFIG_H

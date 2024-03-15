@@ -19,18 +19,15 @@ Bestiole::Bestiole(void) {
     orientation = static_cast<double>(rand()) / RAND_MAX * 2. * M_PI;
     vitesse = static_cast<double>(rand()) / RAND_MAX * MAX_VITESSE;
 
-    couleur = {{
-        static_cast<int>(static_cast<double>(rand()) / RAND_MAX * 230.),
-        static_cast<int>(static_cast<double>(rand()) / RAND_MAX * 230.),
-        static_cast<int>(static_cast<double>(rand()) / RAND_MAX * 230.)
-    }};
-
-
+    couleur = {
+        {static_cast<int>(static_cast<double>(rand()) / RAND_MAX * 230.),
+         static_cast<int>(static_cast<double>(rand()) / RAND_MAX * 230.),
+         static_cast<int>(static_cast<double>(rand()) / RAND_MAX * 230.)}};
 
     std::cout << "Bestiole : created from default, with identite : " << identite
               << std::endl;
 
-    lifeTime = -1; // -1 means infinite life
+    lifeTime = -1;  // -1 means infinite life
 }
 
 Bestiole::Bestiole(const Bestiole &b) {
@@ -109,9 +106,9 @@ void Bestiole::draw(UImg &support) {
     double xt = x + cos(orientation) * AFF_SIZE / 2.1;
     double yt = y - sin(orientation) * AFF_SIZE / 2.1;
 
-    support.draw_ellipse(x, y, AFF_SIZE, AFF_SIZE / 5., -orientation / M_PI * 180., couleur.data());    
+    support.draw_ellipse(x, y, AFF_SIZE, AFF_SIZE / 5.,
+                         -orientation / M_PI * 180., couleur.data());
     support.draw_circle(xt, yt, AFF_SIZE / 2., couleur.data());
-
 }
 
 bool operator==(const Bestiole &b1, const Bestiole &b2) {
@@ -137,12 +134,14 @@ void Bestiole::setLifeExpectancy(double lifeExpectancy) {
 
 double Bestiole::getLifeExpectancy() const { return lifeTime; }
 
-void Bestiole::setLifeExpectancyFromAvg(double averageLifeExpectancy, double std) {
+void Bestiole::setLifeExpectancyFromAvg(double averageLifeExpectancy,
+                                        double std) {
     if (averageLifeExpectancy < 0) {
         this->lifeTime = -1;
         return;
     }
-    //this->lifeTime = averageLifeExpectancy * (1 + (static_cast<double>(rand()) / RAND_MAX - 0.5) / 2); // TODO    
-    this->lifeTime = averageLifeExpectancy + std * (static_cast<double>(rand()) / RAND_MAX - 0.5);
+    // this->lifeTime = averageLifeExpectancy * (1 +
+    // (static_cast<double>(rand()) / RAND_MAX - 0.5) / 2); // TODO
+    this->lifeTime = averageLifeExpectancy +
+                     std * (static_cast<double>(rand()) / RAND_MAX - 0.5);
 }
-

@@ -8,7 +8,6 @@ class Gregaire : public Bestiole {
     Gregaire();
     static std::string getTypeName() { return "Gregaire"; }
     static bool dummy;
-    // Other methods
 };
 
 #endif  // GREGAIRE

@@ -5,8 +5,8 @@
 #include <vector>
 
 #include "Bestiole.h"
-#include "UImg.h"
 #include "PopulationConfig.h"
+#include "UImg.h"
 
 using namespace std;
 
@@ -30,7 +30,7 @@ class Milieu : public UImg {
     void step(void);
 
     void addMember(const Bestiole& b) {
-        listeBestioles.push_back(b);
+        listeBestioles.push_back(b);  // TODO 
         listeBestioles.back().initCoords(width, height);
     }
     int nbVoisins(const Bestiole& b);
@@ -40,7 +40,6 @@ class Milieu : public UImg {
     void initFromConfigs(void);
 
     void artificialBirth(PopulationConfig);
-
 };
 
 #endif

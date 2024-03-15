@@ -1,6 +1,11 @@
 #include "PopulationConfig.h"
 
-PopulationConfig::PopulationConfig() : birthRate(0.0), deathRate(0.0), avgLifeTime(-1), currentTypeName(""), lifeTimeStd(0.5) {}
+PopulationConfig::PopulationConfig()
+    : birthRate(0.0),
+      deathRate(0.0),
+      avgLifeTime(-1),
+      currentTypeName(""),
+      lifeTimeStd(0.5) {}
 
 void PopulationConfig::addTypeCount(const std::string& typeName, int count) {
     if (typeCounts.empty()) {
@@ -20,9 +25,7 @@ void PopulationConfig::removeTypeCount(const std::string& typeName) {
     }
 }
 
-void PopulationConfig::setBirthRate(double rate) {
-    birthRate = rate;
-}
+void PopulationConfig::setBirthRate(double rate) { birthRate = rate; }
 
 std::string PopulationConfig::getNextBirthType() {
     if (typeCounts.empty()) {
@@ -51,10 +54,8 @@ std::string PopulationConfig::getNextBirthType() {
     return nextBirthType;
 }
 
-void PopulationConfig::setDeathRate(double a) {
-    deathRate = a;
-}
+void PopulationConfig::setDeathRate(double a) { deathRate = a; }
 
-void PopulationConfig::setAvgLifeTime(double a) {
-    avgLifeTime = a;
-}
+void PopulationConfig::setAvgLifeTime(double a) { avgLifeTime = a; }
+
+void PopulationConfig::setLifeTimeStd(double a) { lifeTimeStd = a; }

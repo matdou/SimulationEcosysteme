@@ -1,4 +1,5 @@
 #include "Kamikaze.h"
+
 #include "BestioleFactory.h"
 
 static bool dummy = []() {
