@@ -15,7 +15,7 @@ class Milieu : public UImg {
     static const T white[];
 
     int width, height;
-    std::vector<Bestiole> listeBestioles;
+    std::vector<std::unique_ptr<Bestiole>> listeBestioles;
     std::vector<PopulationConfig> populationConfigs;
 
     int delay;
@@ -29,10 +29,11 @@ class Milieu : public UImg {
 
     void step(void);
 
-    void addMember(const Bestiole& b) {
-        listeBestioles.push_back(b);  // TODO 
-        listeBestioles.back().initCoords(width, height);
+    void addMember(std::unique_ptr<Bestiole> b) { // TODO MAKE CONST
+        b->initCoords(width, height);
+        listeBestioles.push_back(std::move(b));
     }
+
     int nbVoisins(const Bestiole& b);
 
     void addPopulationConfig(const PopulationConfig& config);

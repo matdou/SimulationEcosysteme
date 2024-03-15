@@ -43,10 +43,13 @@ Bestiole::Bestiole(const Bestiole &b) {
               << identite << std::endl;
 }
 
+
 Bestiole::~Bestiole(void) {
     cout << "dest Bestiole (" << identite << ")" << endl;
     // delete[] couleur;
 }
+
+
 
 // getters and setters
 int Bestiole::getIdentite() const { return identite; }

@@ -19,10 +19,9 @@ Milieu::~Milieu(void) { cout << "dest Milieu" << endl; }
 
 void Milieu::step(void) {
     cimg_forXY(*this, x, y) fillC(x, y, 0, white[0], white[1], white[2]);
-    for (std::vector<Bestiole>::iterator it = listeBestioles.begin();
-         it != listeBestioles.end(); ++it) {
-        it->action(*this);
-        it->draw(*this);
+    for (auto it = listeBestioles.begin(); it != listeBestioles.end(); ++it) {
+        (*it)->action(*this);
+        (*it)->draw(*this);
     }
 
     // Ajouter les Bestioles en fonction des configurations (birthRate)
@@ -37,7 +36,8 @@ void Milieu::step(void) {
                     config.avgLifeTime,
                     config.lifeTimeStd);  // TODO : create method (encapsulation
                                           // principle)
-                addMember(*bestiole);
+                // initcoords
+                addMember(std::move(bestiole));
             }
         }
     }
@@ -59,15 +59,17 @@ void Milieu::step(void) {
     }
 
     // Suppression des bestioles basée sur la duree de vie
-
     for (auto& config : populationConfigs) {
         for (auto it = listeBestioles.begin(); it != listeBestioles.end();) {
-            if (it->getLifeExpectancy() == -1) {
+            if ((*it)->getLifeExpectancy() ==
+                -1) {  
+
                 ++it;
-            } else if (it->getLifeExpectancy() <= 0) {
+            } else if ((*it)->getLifeExpectancy() <= 0) {  
                 it = listeBestioles.erase(it);
             } else {
-                it->setLifeExpectancy(it->getLifeExpectancy() - delay / 1000.0);
+                (*it)->setLifeExpectancy((*it)->getLifeExpectancy() -
+                                         delay / 1000.0);  
                 ++it;
             }
         }
@@ -77,12 +79,12 @@ void Milieu::step(void) {
 int Milieu::nbVoisins(const Bestiole& b) {
     int nb = 0;
 
-    for (std::vector<Bestiole>::iterator it = listeBestioles.begin();
-         it != listeBestioles.end(); ++it)
-        if (!(b == *it) && b.jeTeVois(*it)) ++nb;
+    for (const auto& bestiolePtr : listeBestioles)
+        if (!(b == *bestiolePtr) && b.jeTeVois(*bestiolePtr)) ++nb;
 
     return nb;
 }
+
 
 void Milieu::addPopulationConfig(const PopulationConfig& config) {
     populationConfigs.push_back(config);
@@ -95,7 +97,7 @@ void Milieu::initFromConfigs() {
             sum += typeCount.second;
         }
     }
-    listeBestioles.reserve(sum+1000);  // TODO
+    listeBestioles.reserve(sum + 1000);  // TODO
 
     std::cout << "Reserve " << sum << " bestioles" << std::endl;
     for (const auto& config : populationConfigs) {
@@ -106,7 +108,7 @@ void Milieu::initFromConfigs() {
                 bestiole.get()->setLifeExpectancyFromAvg(config.avgLifeTime,
                                                          config.lifeTimeStd);
                 if (bestiole) {
-                    addMember(*bestiole);
+                    addMember(std::move(bestiole));
                 }
             }
         }
@@ -119,7 +121,7 @@ void Milieu::artificialBirth(PopulationConfig config) {
             std::unique_ptr<Bestiole> bestiole(
                 BestioleFactory::createBestiole(typeCount.first));
             if (bestiole) {
-                addMember(*bestiole);
+                addMember(std::move(bestiole));
             }
         }
     }
