@@ -5,27 +5,43 @@
 #include <map>
 #include <string>
 
-struct PopulationConfig {
-    std::map<std::string, int> typeCounts;  // typename, count
+class PopulationConfig {
+private:
+    std::map<std::string, int> typeCounts; // Typename to count mapping
     double birthRate;
     double deathRate;
     double avgLifeTime;
     double lifeTimeStd;
-
     int currentTypeCount;
     std::string currentTypeName;
-    
 
+    // Helper methods to manage current type state
+    void setCurrentType(const std::string& typeName);
+    void resetCurrentType();
+
+public:
     PopulationConfig();
 
+    // Modifier methods for type counts
     void addTypeCount(const std::string& typeName, int count);
     void removeTypeCount(const std::string& typeName);
-    void setBirthRate(double rate);
+
+    // Setters
+    void setBirthRate(double rate) { birthRate = rate; }
+    void setDeathRate(double a) { deathRate = a; }
+    void setAvgLifeTime(double a) { avgLifeTime = a; }
+    void setLifeTimeStd(double a) { lifeTimeStd = a; }
+
+    // Accessor methods
     std::string getNextBirthType();
-    void setDeathRate(double a);
-    void setAvgLifeTime(double a);
-    void setLifeTimeStd(double a);
     int getTotalPopulationSize() const;
+    double getBirthRate() const { return birthRate; }
+    double getDeathRate() const { return deathRate; }
+    double getAvgLifeTime() const { return avgLifeTime; }
+    double getLifeTimeStd() const { return lifeTimeStd; }
+    std::string getCurrentTypeName() const { return currentTypeName; }
+    const std::map<std::string, int>& getTypeCounts() const { return typeCounts; }
+
 };
 
 #endif  // POPULATIONCONFIG_H

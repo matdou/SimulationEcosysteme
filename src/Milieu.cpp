@@ -35,7 +35,7 @@ void Milieu::processBestiolesActionsAndDrawings() {
 
 void Milieu::handleBirths() {
     for (auto& config : populationConfigs) {
-        double probability = std::min((delay / 1000.0) * config.birthRate, 1.0);
+        double probability = std::min((delay / 1000.0) * config.getBirthRate(), 1.0);
         if (std::rand() < probability * RAND_MAX) {
             addBestioleFromConfig(config);
         }
@@ -45,7 +45,7 @@ void Milieu::handleBirths() {
 void Milieu::handleRandomDeaths() {
     double probability;
     for (auto& config : populationConfigs) {
-        probability = std::min((delay / 1000.0) * config.deathRate * listeBestioles.size(), 1.0);
+        probability = std::min((delay / 1000.0) * config.getDeathRate() * listeBestioles.size(), 1.0);
         if (!listeBestioles.empty() && std::rand() < probability * RAND_MAX) {
             int index = std::rand() % listeBestioles.size();
             listeBestioles.erase(listeBestioles.begin() + index);
@@ -70,7 +70,7 @@ void Milieu::updateLifeExpectancyAndRemoveExpired() {
 void Milieu::addBestioleFromConfig(PopulationConfig& config) {
     std::unique_ptr<Bestiole> bestiole(BestioleFactory::createBestiole(config.getNextBirthType()));
     if (bestiole) {
-        bestiole.get()->setLifeExpectancyFromAvg(config.avgLifeTime, config.lifeTimeStd);
+        bestiole.get()->setLifeExpectancyFromAvg(config.getAvgLifeTime(), config.getLifeTimeStd());
         addMember(std::move(bestiole));
     }
 }
@@ -103,7 +103,7 @@ void Milieu::addPopulationConfig(const PopulationConfig& config) {
 int Milieu::calculateTotalPopulationSize() const {
     int sum = 0;
     for (const auto& config : populationConfigs) {
-        for (const auto& typeCount : config.typeCounts) {
+        for (const auto& typeCount : config.getTypeCounts()) {
             sum += typeCount.second;
         }
     }
@@ -129,7 +129,7 @@ void Milieu::initFromConfigs() {
 
     for (auto& config : populationConfigs) {
         int popSize = config.getTotalPopulationSize();
-        std::cout << "Adding " << popSize << " bestioles of type " << config.currentTypeName << std::endl;
+        std::cout << "Adding " << popSize << " bestioles of type " << config.getCurrentTypeName() << std::endl;
         for (int i = 0; i < popSize; i++) {
             addBestioleFromConfig(config);
         }   
