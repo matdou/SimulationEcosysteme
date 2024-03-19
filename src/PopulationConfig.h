@@ -11,7 +11,10 @@ struct PopulationConfig {
     double deathRate;
     double avgLifeTime;
     double lifeTimeStd;
+
+    int currentTypeCount;
     std::string currentTypeName;
+    
 
     PopulationConfig();
 
@@ -22,6 +25,7 @@ struct PopulationConfig {
     void setDeathRate(double a);
     void setAvgLifeTime(double a);
     void setLifeTimeStd(double a);
+    int getTotalPopulationSize() const;
 };
 
 #endif  // POPULATIONCONFIG_H

@@ -22,63 +22,66 @@ void Milieu::addMember(std::unique_ptr<Bestiole> b) { // TODO MAKE CONST
     listeBestioles.push_back(std::move(b));
 }
 
-void Milieu::step(void) {
-    cimg_forXY(*this, x, y) fillC(x, y, 0, white[0], white[1], white[2]);
-    for (auto it = listeBestioles.begin(); it != listeBestioles.end(); ++it) {
-        (*it)->action(*this);
-        (*it)->draw(*this);
+void Milieu::clearEnvironment() {
+        cimg_forXY(*this, x, y) fillC(x, y, 0, white[0], white[1], white[2]);
     }
 
-    // Ajouter les Bestioles en fonction des configurations (birthRate)
+void Milieu::processBestiolesActionsAndDrawings() {
+    for (auto& bestiole : listeBestioles) {
+        bestiole->action(*this);
+        bestiole->draw(*this);
+    }
+}
+
+void Milieu::handleBirths() {
     for (auto& config : populationConfigs) {
-        double probability = (delay / 1000.0) * config.birthRate;
-        if (probability > 1.0) probability = 1.0;
+        double probability = std::min((delay / 1000.0) * config.birthRate, 1.0);
         if (std::rand() < probability * RAND_MAX) {
-            std::unique_ptr<Bestiole> bestiole(
-                BestioleFactory::createBestiole(config.getNextBirthType()));
-            if (bestiole) {
-                bestiole.get()->setLifeExpectancyFromAvg(
-                    config.avgLifeTime,
-                    config.lifeTimeStd);  // TODO : create method (encapsulation
-                                          // principle)
-                // initcoords
-                addMember(std::move(bestiole));
-            }
+            addBestioleFromConfig(config);
         }
     }
-    // NOT NECESSARY :  Suppression des bestioles basée sur la probabilité de
-    // décès
+}
+
+void Milieu::handleRandomDeaths() {
     double probability;
     for (auto& config : populationConfigs) {
-        probability =
-            (delay / 1000.0) * config.deathRate * listeBestioles.size();
-        if (probability > 1.0)
-            probability = 1.0;  // Assure que la probabilité ne dépasse pas 1
-
+        probability = std::min((delay / 1000.0) * config.deathRate * listeBestioles.size(), 1.0);
         if (!listeBestioles.empty() && std::rand() < probability * RAND_MAX) {
-            // Sélectionne et supprime un élément aléatoire
             int index = std::rand() % listeBestioles.size();
-            // Suppression sans itérateur
             listeBestioles.erase(listeBestioles.begin() + index);
         }
     }
+}
 
-    // Suppression des bestioles basée sur la duree de vie
-    for (auto& config : populationConfigs) {
-        for (auto it = listeBestioles.begin(); it != listeBestioles.end();) {
-            if ((*it)->getLifeExpectancy() ==
-                -1) {  
-
-                ++it;
-            } else if ((*it)->getLifeExpectancy() <= 0) {  
-                it = listeBestioles.erase(it);
-            } else {
-                (*it)->setLifeExpectancy((*it)->getLifeExpectancy() -
-                                         delay / 1000.0);  
-                ++it;
-            }
+void Milieu::updateLifeExpectancyAndRemoveExpired() {
+    for (auto it = listeBestioles.begin(); it != listeBestioles.end();) {
+        if ((*it)->getLifeExpectancy() == -1) {  // Assuming -1 denotes immortality or unmanaged life expectancy
+            ++it;
+        } else if ((*it)->getLifeExpectancy() <= 0) {
+            it = listeBestioles.erase(it);  // Bestiole's life expectancy expired; remove it
+        } else {
+            (*it)->setLifeExpectancy((*it)->getLifeExpectancy() - delay / 1000.0);
+            ++it;
         }
     }
+}
+
+// Add ONE bestiole from a population config
+void Milieu::addBestioleFromConfig(PopulationConfig& config) {
+    std::unique_ptr<Bestiole> bestiole(BestioleFactory::createBestiole(config.getNextBirthType()));
+    if (bestiole) {
+        bestiole.get()->setLifeExpectancyFromAvg(config.avgLifeTime, config.lifeTimeStd);
+        addMember(std::move(bestiole));
+    }
+}
+
+
+void Milieu::step() {
+    clearEnvironment();
+    processBestiolesActionsAndDrawings();
+    handleBirths();
+    handleRandomDeaths();
+    updateLifeExpectancyAndRemoveExpired();
 }
 
 
@@ -106,7 +109,8 @@ int Milieu::calculateTotalPopulationSize() const {
     }
         return sum;
 }
-
+/*
+// Add bestioles from a population type and count
 void Milieu::createAndAddBestiole(const PopulationConfig& config, const std::pair<const std::string, int>& typeCount) {
     for (int i = 0; i < typeCount.second; ++i) {
         std::unique_ptr<Bestiole> bestiole(BestioleFactory::createBestiole(typeCount.first));
@@ -116,17 +120,19 @@ void Milieu::createAndAddBestiole(const PopulationConfig& config, const std::pai
         }
     }
 }
-    
+*/
 
 void Milieu::initFromConfigs() {
     int totalPopulationSize = calculateTotalPopulationSize();
     listeBestioles.reserve(totalPopulationSize + 1000); // Consider changing that
     std::cout << "Reserve " << totalPopulationSize << " bestioles" << std::endl;
 
-    for (const auto& config : populationConfigs) {
-        for (const auto& typeCount : config.typeCounts) {
-            createAndAddBestiole(config, typeCount);
-        }
+    for (auto& config : populationConfigs) {
+        int popSize = config.getTotalPopulationSize();
+        std::cout << "Adding " << popSize << " bestioles of type " << config.currentTypeName << std::endl;
+        for (int i = 0; i < popSize; i++) {
+            addBestioleFromConfig(config);
+        }   
     }
 }
 

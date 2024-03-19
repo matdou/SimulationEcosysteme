@@ -28,28 +28,29 @@ void PopulationConfig::removeTypeCount(const std::string& typeName) {
 void PopulationConfig::setBirthRate(double rate) { birthRate = rate; }
 
 std::string PopulationConfig::getNextBirthType() {
-    if (typeCounts.empty()) {
-        std::cerr << "typeCounts is empty" << std::endl;
-        return "";
-    }
 
-    if (currentTypeName.empty()) {
-        currentTypeName = typeCounts.begin()->first;
-    }
 
     auto it = typeCounts.find(currentTypeName);
+    currentTypeCount++;
+    std::cout << "Current type count: " << currentTypeCount << std::endl;
+    std::cout << "Current type name: " << currentTypeName << std::endl;
+
+    if (currentTypeCount >= it->second) {
+        std::cout << "Current type count is greater than or equal to type count" << std::endl;
+        currentTypeCount = 0;
+        ++it;
+    }
+
     if (it == typeCounts.end()) {
+        std::cout << "Iterator is at the end" << std::endl;
         it = typeCounts.begin();
         currentTypeName = it->first;
     }
+    currentTypeName = it->first;
+
 
     std::string nextBirthType = it->first;
 
-    ++it;
-    if (it == typeCounts.end()) {
-        it = typeCounts.begin();
-    }
-    currentTypeName = it->first;
 
     return nextBirthType;
 }
@@ -59,3 +60,11 @@ void PopulationConfig::setDeathRate(double a) { deathRate = a; }
 void PopulationConfig::setAvgLifeTime(double a) { avgLifeTime = a; }
 
 void PopulationConfig::setLifeTimeStd(double a) { lifeTimeStd = a; }
+
+int PopulationConfig::getTotalPopulationSize() const {
+    int total = 0;
+    for (auto& pair : typeCounts) {
+        total += pair.second;
+    }
+    return total;
+}
