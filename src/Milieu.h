@@ -25,6 +25,7 @@ private:
     void processBestiolesActionsAndDrawings();
     void handleBirths();
     void handleRandomDeaths();
+    void handleCloning();
     void updateLifeExpectancyAndRemoveExpired();
     void addBestioleFromConfig(PopulationConfig& config);
 

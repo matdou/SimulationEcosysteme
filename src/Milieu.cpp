@@ -75,12 +75,26 @@ void Milieu::addBestioleFromConfig(PopulationConfig& config) {
     }
 }
 
+void Milieu::handleCloning() {
+    double probability;
+    for (auto& config : populationConfigs) {
+        probability = std::min((delay / 1000.0) * config.getCloningRate() * listeBestioles.size(), 1.0);
+        if (!listeBestioles.empty() && std::rand() < probability * RAND_MAX) {
+            int index = std::rand() % listeBestioles.size();
+            std::unique_ptr<Bestiole> clone = std::make_unique<Bestiole>(*listeBestioles[index]);
+            addMember(std::move(clone));
+        }
+    }
+    
+}
+
 
 void Milieu::step() {
     clearEnvironment();
     processBestiolesActionsAndDrawings();
     handleBirths();
     handleRandomDeaths();
+    handleCloning();
     updateLifeExpectancyAndRemoveExpired();
 }
 

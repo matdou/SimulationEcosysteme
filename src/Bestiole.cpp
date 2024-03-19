@@ -39,7 +39,7 @@ Bestiole::Bestiole(const Bestiole &b) {
     vitesse = b.vitesse;
     couleur = b.couleur;
     lifeTime = b.lifeTime;
-    std::cout << "Bestiole : created from copy constructor, with identite"
+    std::cout << "Bestiole : created from copy constructor, with identite : "
               << identite << std::endl;
 }
 

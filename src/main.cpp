@@ -26,6 +26,7 @@ int main() {
     config.setDeathRate(0);  // No decay rate
     config.setAvgLifeTime(10);
     config.setLifeTimeStd(2.);
+    config.setCloningRate(1);
     
     milieu.addPopulationConfig(config);
 

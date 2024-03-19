@@ -10,8 +10,10 @@ private:
     std::map<std::string, int> typeCounts; // Typename to count mapping
     double birthRate;
     double deathRate;
+    double cloningRate;
     double avgLifeTime;
     double lifeTimeStd;
+
     int currentTypeCount;
     std::string currentTypeName;
 
@@ -29,6 +31,7 @@ public:
     // Setters
     void setBirthRate(double rate) { birthRate = rate; }
     void setDeathRate(double a) { deathRate = a; }
+    void setCloningRate(double a) { cloningRate = a; }
     void setAvgLifeTime(double a) { avgLifeTime = a; }
     void setLifeTimeStd(double a) { lifeTimeStd = a; }
 
@@ -37,6 +40,7 @@ public:
     int getTotalPopulationSize() const;
     double getBirthRate() const { return birthRate; }
     double getDeathRate() const { return deathRate; }
+    double getCloningRate() const { return cloningRate; }
     double getAvgLifeTime() const { return avgLifeTime; }
     double getLifeTimeStd() const { return lifeTimeStd; }
     std::string getCurrentTypeName() const { return currentTypeName; }
