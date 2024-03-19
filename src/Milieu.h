@@ -11,7 +11,7 @@
 using namespace std;
 
 class Milieu : public UImg {
-   private:
+private:
     static const T white[];
 
     int width, height;
@@ -20,7 +20,10 @@ class Milieu : public UImg {
 
     int delay;
 
-   public:
+    int calculateTotalPopulationSize() const;
+    void createAndAddBestiole(const PopulationConfig& config, const const std::pair<const std::string, int>& typeCount);
+
+public:
     Milieu(int _width, int _height, int _delay);
     ~Milieu(void);
 
@@ -29,18 +32,16 @@ class Milieu : public UImg {
 
     void step(void);
 
-    void addMember(std::unique_ptr<Bestiole> b) { // TODO MAKE CONST
-        b->initCoords(width, height);
-        listeBestioles.push_back(std::move(b));
-    }
+    void addMember(std::unique_ptr<Bestiole> b);
 
     int nbVoisins(const Bestiole& b);
 
     void addPopulationConfig(const PopulationConfig& config);
+    
 
     void initFromConfigs(void);
 
-    void artificialBirth(PopulationConfig);
+    void killMember(int identite);
 };
 
 #endif

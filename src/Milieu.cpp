@@ -17,6 +17,11 @@ Milieu::Milieu(int _width, int _height, int _delay)
 
 Milieu::~Milieu(void) { cout << "dest Milieu" << endl; }
 
+void Milieu::addMember(std::unique_ptr<Bestiole> b) { // TODO MAKE CONST
+    b->initCoords(width, height);
+    listeBestioles.push_back(std::move(b));
+}
+
 void Milieu::step(void) {
     cimg_forXY(*this, x, y) fillC(x, y, 0, white[0], white[1], white[2]);
     for (auto it = listeBestioles.begin(); it != listeBestioles.end(); ++it) {
@@ -76,6 +81,7 @@ void Milieu::step(void) {
     }
 }
 
+
 int Milieu::nbVoisins(const Bestiole& b) {
     int nb = 0;
 
@@ -90,39 +96,46 @@ void Milieu::addPopulationConfig(const PopulationConfig& config) {
     populationConfigs.push_back(config);
 }
 
-void Milieu::initFromConfigs() {
+// Method to calculate total population size
+int Milieu::calculateTotalPopulationSize() const {
     int sum = 0;
     for (const auto& config : populationConfigs) {
         for (const auto& typeCount : config.typeCounts) {
             sum += typeCount.second;
         }
     }
-    listeBestioles.reserve(sum + 1000);  // TODO
+        return sum;
+}
 
-    std::cout << "Reserve " << sum << " bestioles" << std::endl;
+void Milieu::createAndAddBestiole(const PopulationConfig& config, const std::pair<const std::string, int>& typeCount) {
+    for (int i = 0; i < typeCount.second; ++i) {
+        std::unique_ptr<Bestiole> bestiole(BestioleFactory::createBestiole(typeCount.first));
+        bestiole.get()->setLifeExpectancyFromAvg(config.avgLifeTime, config.lifeTimeStd);
+        if (bestiole) {
+            addMember(std::move(bestiole));
+        }
+    }
+}
+    
+
+void Milieu::initFromConfigs() {
+    int totalPopulationSize = calculateTotalPopulationSize();
+    listeBestioles.reserve(totalPopulationSize + 1000); // Consider changing that
+    std::cout << "Reserve " << totalPopulationSize << " bestioles" << std::endl;
+
     for (const auto& config : populationConfigs) {
         for (const auto& typeCount : config.typeCounts) {
-            for (int i = 0; i < typeCount.second; ++i) {
-                std::unique_ptr<Bestiole> bestiole(
-                    BestioleFactory::createBestiole(typeCount.first));
-                bestiole.get()->setLifeExpectancyFromAvg(config.avgLifeTime,
-                                                         config.lifeTimeStd);
-                if (bestiole) {
-                    addMember(std::move(bestiole));
-                }
-            }
+            createAndAddBestiole(config, typeCount);
         }
     }
 }
 
-void Milieu::artificialBirth(PopulationConfig config) {
-    for (const auto& typeCount : config.typeCounts) {
-        for (int i = 0; i < typeCount.second; ++i) {
-            std::unique_ptr<Bestiole> bestiole(
-                BestioleFactory::createBestiole(typeCount.first));
-            if (bestiole) {
-                addMember(std::move(bestiole));
-            }
+
+void Milieu::killMember(int identite) {
+    for (auto it = listeBestioles.begin(); it != listeBestioles.end(); ++it) {
+        if ((*it)->getIdentite() == identite) {
+            listeBestioles.erase(it);
+            return;
         }
     }
 }

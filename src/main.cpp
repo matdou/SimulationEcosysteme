@@ -31,8 +31,8 @@ int main() {
 
     milieu.initFromConfigs();
 
-    for (int i = 0; i < 0; i++) {
-        milieu.artificialBirth(config);
+    for (int i = 0; i < 10; i++) {
+        milieu.killMember(i);
     }
 
     aquarium.run();
