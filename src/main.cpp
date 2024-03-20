@@ -33,7 +33,7 @@ int main() {
     milieu.initFromConfigs();
     std::cout << "Total population size: " << config.getTotalPopulationSize() << std::endl;
 
-
+                                    
     aquarium.run();
 
     return 0;

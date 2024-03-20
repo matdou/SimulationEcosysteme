@@ -2,16 +2,18 @@ CXX = g++
 CXXFLAGS = -Wall -std=c++14 -fsanitize=address
 LDFLAGS = -lX11 -lpthread -fsanitize=address
 
-# Include directory for project headers
-INC_DIR = -I.
+# Include directories for project headers
+INC_DIR = -I. -Isrc -Isrc/comportements -Isrc/capteurs
 
-# Source directory
+# Source directories
 SRCDIR = src
-SRCS = $(wildcard $(SRCDIR)/*.cpp)
+SRCDIR2 = src/comportements
+SRCDIR3 = src/capteurs
+SRCS = $(wildcard $(SRCDIR)/*.cpp) $(wildcard $(SRCDIR2)/*.cpp) $(wildcard $(SRCDIR3)/*.cpp)
 
 # Object directory
 OBJDIR = obj
-OBJS = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SRCS))
+OBJS = $(patsubst %.cpp,$(OBJDIR)/%.o,$(notdir $(SRCS)))
 
 # Binary directory
 BINDIR = bin
@@ -21,6 +23,8 @@ EXEC = $(BINDIR)/main
 IMG_DIR = img
 INC_DIR += -I$(IMG_DIR)
 
+vpath %.cpp $(SRCDIR) $(SRCDIR2) $(SRCDIR3)
+
 .PHONY: all clean
 
 all: $(EXEC)
@@ -29,9 +33,10 @@ $(EXEC): $(OBJS)
 	@mkdir -p $(BINDIR)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
+# Generic rule for compiling any .cpp to an .o
+$(OBJDIR)/%.o: %.cpp
 	@mkdir -p $(OBJDIR)
-	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INC_DIR)
+	$(CXX) $(CXXFLAGS) $(INC_DIR) -c $< -o $@
 
 clean:
 	rm -rf $(OBJDIR) $(BINDIR)
