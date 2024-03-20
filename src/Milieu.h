@@ -42,6 +42,10 @@ public:
     void addPopulationConfig(const PopulationConfig& config);
     void initFromConfigs(void);
     void killMember(int identite);
+
+    void updateBestiolesFromCapteurs();
+    std::vector<std::reference_wrapper<Bestiole>> visibleNeighbors(std::unique_ptr<Bestiole>& b);
+    
 };
 
 #endif

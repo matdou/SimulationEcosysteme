@@ -4,6 +4,8 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <vector>
+
 
 class PopulationConfig {
 private:
@@ -17,6 +19,8 @@ private:
     int currentTypeCount;
     std::string currentTypeName;
 
+    std::vector<std::string> globalCapteurs;
+
     // Helper methods to manage current type state
     void setCurrentType(const std::string& typeName);
     void resetCurrentType();
@@ -28,12 +32,16 @@ public:
     void addTypeCount(const std::string& typeName, int count);
     void removeTypeCount(const std::string& typeName);
 
+    void addGlobalCapteur(std::string s);
+
     // Setters
     void setBirthRate(double rate) { birthRate = rate; }
     void setDeathRate(double a) { deathRate = a; }
     void setCloningRate(double a) { cloningRate = a; }
     void setAvgLifeTime(double a) { avgLifeTime = a; }
     void setLifeTimeStd(double a) { lifeTimeStd = a; }
+
+
 
     // Accessor methods
     std::string getNextBirthType();
@@ -45,6 +53,10 @@ public:
     double getLifeTimeStd() const { return lifeTimeStd; }
     std::string getCurrentTypeName() const { return currentTypeName; }
     const std::map<std::string, int>& getTypeCounts() const { return typeCounts; }
+    const std::vector<std::string>& getGlobalCapteurs() const { return globalCapteurs; }
+
+
+
 
 };
 

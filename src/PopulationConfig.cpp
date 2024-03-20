@@ -1,4 +1,5 @@
 #include "PopulationConfig.h"
+#include "Yeux.h"
 
 PopulationConfig::PopulationConfig() : birthRate(0.0), deathRate(0.0), avgLifeTime(-1), lifeTimeStd(0.5), currentTypeCount(0) {}
 
@@ -53,3 +54,8 @@ int PopulationConfig::getTotalPopulationSize() const {
     }
     return total;
 }
+
+void PopulationConfig::addGlobalCapteur(std::string s) {
+    globalCapteurs.push_back(s);
+}
+

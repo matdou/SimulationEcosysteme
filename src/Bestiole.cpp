@@ -4,6 +4,7 @@
 #include <cstdlib>
 
 #include "Milieu.h"
+#include "Yeux.h"
 
 const double Bestiole::AFF_SIZE = 8.;
 const double Bestiole::MAX_VITESSE = 10.;
@@ -45,7 +46,7 @@ Bestiole::Bestiole(const Bestiole &b) {
 
 
 Bestiole::~Bestiole(void) {
-    cout << "dest Bestiole (" << identite << ")" << endl;
+    std::cout << "dest Bestiole (" << identite << ")" << std::endl;
     // delete[] couleur;
 }
 
@@ -119,10 +120,13 @@ bool operator==(const Bestiole &b1, const Bestiole &b2) {
 }
 
 bool Bestiole::jeTeVois(const Bestiole &b) const {
-    double dist;
+    for (const auto &capteur : capteurs) {
+        if (capteur->jeTeVois(b, *this)) {
+            return true;
+        }
+    }
 
-    dist = std::sqrt((x - b.x) * (x - b.x) + (y - b.y) * (y - b.y));
-    return (dist <= LIMITE_VUE);
+    return false;
 }
 
 void Bestiole::setCouleur(int r, int g, int b) {
@@ -146,3 +150,33 @@ void Bestiole::setLifeExpectancyFromAvg(double averageLifeExpectancy,
     this->lifeTime = averageLifeExpectancy +
                      std * (static_cast<double>(rand()) / RAND_MAX - 0.5);
 }
+
+
+double Bestiole::getX() const {
+    return x + cumulX;
+}
+
+double Bestiole::getY() const {
+    return y + cumulY;
+}
+/*
+void Bestiole::addCapteur(std::unique_ptr<Capteur>& capteur) {
+    capteurs.push_back(std::move(capteur));
+}
+
+void Bestiole::addCapteurs(std::vector<std::unique_ptr<Capteur>>& capteurs) {
+    for (const auto& capteur : capteurs) {
+        capteurs.push_back(std::move(capteur));
+    }
+}
+*/
+
+void Bestiole::addCapteursFromString(const std::string& s) {
+    if (s == "Yeux") {
+        std::unique_ptr<Capteur> capteur = std::make_unique<Yeux>();
+        capteurs.push_back(std::move(capteur));
+        //TODO
+    }
+}
+
+

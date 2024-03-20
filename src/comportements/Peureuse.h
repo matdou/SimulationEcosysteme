@@ -6,9 +6,11 @@
 class Peureuse : public Bestiole {
    public:
     Peureuse();
+    virtual ~Peureuse() override;
     static std::string getTypeName() { return "Peureuse"; }
     static bool dummy;
-    // Other methods
+    void update(const std::vector<std::reference_wrapper<Bestiole>>& voisins) override;
+    std::unique_ptr<Bestiole> clone() const override;
 };
 
 #endif  // PEUREUSE_H

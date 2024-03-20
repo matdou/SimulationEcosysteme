@@ -6,7 +6,8 @@
 
 #include "UImg.h"
 
-using namespace std;
+class Capteur; // Forward declaration
+
 
 class Milieu;
 
@@ -30,6 +31,7 @@ class Bestiole {
     std::array<int, 3> couleur;
 
     double lifeTime;
+    std::vector<std::unique_ptr<Capteur>> capteurs;
 
    private:
     void bouge(int xLim, int yLim);
@@ -37,7 +39,7 @@ class Bestiole {
    public:                        // Forme canonique :
     Bestiole(void);               // Constructeur par defaut
     Bestiole(const Bestiole& b);  // Constructeur de copies
-    ~Bestiole(void);              // Destructeur
+    virtual ~Bestiole();           // Destructeur
     
     Bestiole(Bestiole&& b);
     void action(Milieu& monMilieu);
@@ -59,8 +61,21 @@ class Bestiole {
 
     void setLifeExpectancy(double lifeExpectancy);
     double getLifeExpectancy(void) const;
-
     void setLifeExpectancyFromAvg(double averageLifeExpectancy, double std);
+
+    void addCapteur(std::unique_ptr<Capteur>& capteur);
+    void addCapteurs(std::vector<std::unique_ptr<Capteur>>& capteurs);
+
+    void percevoirEnvironnement() const;
+    virtual void update(const std::vector<std::reference_wrapper<Bestiole>>& voisins) = 0; // permet de traiter les bestioles voisines sans modifier l'ensemble original des bestioles TODO MAKE VIRTUAL
+
+
+    double getX() const;
+    double getY() const;
+
+    void addCapteursFromString(const std::string& capteurs);
+
+    virtual std::unique_ptr<Bestiole> clone() const = 0;
 };
 
 #endif
