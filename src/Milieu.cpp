@@ -111,6 +111,7 @@ void Milieu::step() {
     handleCloning();
     updateLifeExpectancyAndRemoveExpired();
     updateBestiolesFromCapteurs();
+    handleCollisions();
 }
 
 int Milieu::nbVoisins(const Bestiole& b) {
@@ -181,5 +182,27 @@ std::vector<std::reference_wrapper<Bestiole>> Milieu::visibleNeighbors(
 void Milieu::updateBestiolesFromCapteurs() {
     for (auto& bestiole : listeBestioles) {
         bestiole->update(visibleNeighbors(bestiole));
+    }
+}
+
+
+void Milieu::handleCollisions() {
+    for (auto& bestiole : listeBestioles) {
+        //find all neighbors that collides with bestiole
+        std::vector<std::reference_wrapper<Bestiole>> collidingNeighbors;
+        for (auto& neighbor : listeBestioles) {
+            if (bestiole->collidesWith(*neighbor)) {
+                collidingNeighbors.push_back(std::ref(*neighbor));
+            }
+        }
+        if (!collidingNeighbors.empty()) {
+            collidingNeighbors.push_back(std::ref(*bestiole)); // add initial bestiole
+
+            // Update all colliding neighbors to handle collision
+            for (auto& collidingNeighbor : collidingNeighbors) {
+                collidingNeighbor.get().updateCollision();
+            }
+        }
+
     }
 }

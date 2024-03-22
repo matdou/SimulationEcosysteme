@@ -46,6 +46,7 @@ public:
     void updateBestiolesFromCapteurs();
     std::vector<std::reference_wrapper<Bestiole>> visibleNeighbors(std::unique_ptr<Bestiole>& b);
     
+    void handleCollisions();
 };
 
 #endif
