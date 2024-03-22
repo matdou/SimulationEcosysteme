@@ -28,6 +28,7 @@ class Bestiole {
     double cumulX, cumulY;
     double orientation;
     double vitesse;
+    double vitesseInitiale;
 
     std::array<int, 3> couleur;
 
@@ -77,6 +78,8 @@ class Bestiole {
     void addCapteursFromString(const std::string& capteurs);
 
     virtual std::unique_ptr<Bestiole> clone() const = 0;
+
+    double getVitesseInitiale() const;
 };
 
 #endif

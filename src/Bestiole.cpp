@@ -30,7 +30,9 @@ Bestiole::Bestiole(void) {
               << std::endl;
 
     lifeTime = -1;  // -1 means infinite life
+    vitesseInitiale = vitesse;
 }
+
 
 Bestiole::Bestiole(const Bestiole &b) {
     identite = ++next;
@@ -39,6 +41,7 @@ Bestiole::Bestiole(const Bestiole &b) {
     cumulX = cumulY = 0.;
     orientation = b.orientation;
     vitesse = b.vitesse;
+    vitesseInitiale = b.vitesseInitiale;
     couleur = b.couleur;
     lifeTime = b.lifeTime;
     std::cout << "Bestiole : created from copy constructor, with identite : "
@@ -184,4 +187,7 @@ void Bestiole::addCapteursFromString(const std::string& s) {
     }
 }
 
+
+
+double Bestiole::getVitesseInitiale() const { return vitesseInitiale; };
 

@@ -44,6 +44,7 @@ void Gregaire::update(const std::vector<std::reference_wrapper<Bestiole>>& voisi
         }
 
         if (direction_diff > 0) {
+
             setCouleur(255,0,0);
         } else {
             setCouleur(0,0,255);
