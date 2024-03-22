@@ -5,6 +5,7 @@
 
 #include "Milieu.h"
 #include "Yeux.h"
+#include "Oreilles.h"
 
 const double Bestiole::AFF_SIZE = 8.;
 const double Bestiole::MAX_VITESSE = 10.;
@@ -175,7 +176,11 @@ void Bestiole::addCapteursFromString(const std::string& s) {
     if (s == "Yeux") {
         std::unique_ptr<Capteur> capteur = std::make_unique<Yeux>();
         capteurs.push_back(std::move(capteur));
-        //TODO
+
+    }
+    if (s == "Oreilles") {
+        std::unique_ptr<Capteur> capteur = std::make_unique<Oreilles>();
+        capteurs.push_back(std::move(capteur));
     }
 }
 

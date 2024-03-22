@@ -11,6 +11,7 @@ static bool dummy = []() {
 
 Gregaire::Gregaire() {
     setCouleur(0, 255, 0);
+    setVitesse(2);
     }
 
 // Destructor
@@ -35,18 +36,27 @@ void Gregaire::update(const std::vector<std::reference_wrapper<Bestiole>>& voisi
         moyenneX /= voisins.size();
         moyenneY /= voisins.size();
 
-        // Calcul de l'angle en fonction des moyennes des positions X et Y
-        double angle = atan2(moyenneY - getY(), moyenneX - getX());
-        double currentAngle = getOrientation();
+        // Calcul de l'angle en fonction des moyennes des positions X et Y"
+        double angle_pos = atan2(moyenneY - getY(), moyenneX - getX());
+        double currentAngle_pos = getOrientation();
 
-        double angleDifference = angle - currentAngle;
-        if (angleDifference > M_PI) {
-            angleDifference -= 2 * M_PI;
-        } else if (angleDifference < -M_PI) {
-            angleDifference += 2 * M_PI;
+        double angle_diff = angle_pos - currentAngle_pos;
+
+        if (angle_diff > M_PI) {
+            angle_diff -= 2 * M_PI;
+        } else if (angle_diff < -M_PI) {
+            angle_diff += 2 * M_PI;
         }
 
-        setOrientation(currentAngle + angleDifference / 10.0); 
+        if (angle_diff > 0) {
+            setCouleur(255,0,0);
+        } else {
+            setCouleur(0,0,255);
+        }
+
+        double newOrientation = getOrientation() + angle_diff/10;
+        setOrientation(newOrientation);
+
     }
 }
 
