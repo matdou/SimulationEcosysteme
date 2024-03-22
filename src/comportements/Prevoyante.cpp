@@ -21,42 +21,44 @@ Prevoyante::~Prevoyante()
     // Destructor
 }
 
-void Prevoyante::update(const std::vector<std::reference_wrapper<Bestiole>> &voisins)
-{
-    // On ne fait rien
 
-    if (!voisins.empty())
-    {
-        double currentDistance;
-        double dx = 0;
-        double dy = 0;
-        double minDistance = 1000000000;
-        std::shared_ptr<Bestiole> nearestBestiole = nullptr;
-        for (const auto &ptr : voisins)
-        {
-            Bestiole &voisin = ptr.get();
-            currentDistance = std::pow(this->getX() - voisin.getX(), 2) +
-                              std::pow(this->getY() - voisin.getY(), 2);
-            if (currentDistance < minDistance)
-            {
-                dx = voisin.getX() - this->getX();
-                dy = voisin.getY() - this->getY();
-                minDistance = currentDistance;
-            }
+void Prevoyante::update(
+    const std::vector<std::reference_wrapper<Bestiole>>& voisins) {
+    setCouleur(255, 255, 0);
+    if (!voisins.empty()) {
+        setCouleur(200, 200, 0);
+        double sumX = 0;
+        double sumY = 0;
+        for (const auto& voisinRef : voisins) {
+            // Find a projected position of the neighbor
+            double directionVoisin = voisinRef.get().getOrientation();
+            double speedVoisin = voisinRef.get().getVitesse();
+            double xVoisin = voisinRef.get().getX();
+            double yVoisin = voisinRef.get().getY();
+            double coeff = 10.0;
+            double xProjected = xVoisin + speedVoisin * coeff * cos(directionVoisin);
+            double yProjected = yVoisin - speedVoisin * coeff * sin(directionVoisin);
+            sumX += xProjected;
+            sumY += yProjected;
         }
 
-        double alpha = M_PI / 10;
-        double newOrientation;
-        double phi = atan2(dy, dx);
-        if (phi >= 0)
-        {
-            newOrientation = this->getOrientation() + alpha;
+        double avgX = sumX / voisins.size();
+        double avgY = sumY / voisins.size();
+        // trying to avoid the average position of the projected neighbors
+        double deltaX = avgX - getX();
+        double deltaY = avgY - getY();
+
+        double targetDirection =  + std::atan2(deltaY, deltaX);
+        double diff_orientation = targetDirection - getOrientation();
+
+        while (diff_orientation >= M_PI) {
+            diff_orientation -= 2.0 * M_PI;
         }
-        else
-        {
-            newOrientation = this->getOrientation() - alpha;
+        while (diff_orientation < -M_PI) {
+            diff_orientation += 2.0 * M_PI;
         }
-        setOrientation(newOrientation);
+
+        setOrientation(getOrientation() + diff_orientation / 10);
     }
 }
 

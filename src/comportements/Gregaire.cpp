@@ -11,7 +11,6 @@ static bool dummy = []() {
 
 Gregaire::Gregaire() {
     setCouleur(0, 255, 0);
-    setVitesse(2);
     }
 
 // Destructor

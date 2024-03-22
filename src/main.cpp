@@ -19,10 +19,10 @@ int main() {
 
     PopulationConfig config;
 
-    //config.addTypeCount("Peureuse", 1);
+    config.addTypeCount("Peureuse", 10);
     config.addTypeCount("Gregaire", 10);
     config.addTypeCount("Kamikaze", 10);
-    //config.addTypeCount("Prevoyante", 1);
+    config.addTypeCount("Prevoyante", 10);
     config.setBirthRate(0);  // 1 births per second in average
     config.setDeathRate(0);  // No decay rate
     config.setAvgLifeTime(30);

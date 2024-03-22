@@ -11,7 +11,6 @@ static bool dummy = []() {
 
 Kamikaze::Kamikaze() {
     setCouleur(255, 0, 0);
-    setVitesse(2);
 }
 
 Kamikaze::~Kamikaze() {
@@ -22,7 +21,7 @@ void Kamikaze::update(
     const std::vector<std::reference_wrapper<Bestiole>>& voisins) {
     setCouleur(255, 0, 0);
     if (!voisins.empty()) {
-        setCouleur(120, 0, 0);
+        setCouleur(200, 0, 0);
         // find closest Neighbour
         Bestiole* closestNeighbour = nullptr;
         double minDistance = 1000000;
@@ -56,9 +55,6 @@ void Kamikaze::update(
             diff_orientation += 2.0 * M_PI;
         }
 
-
-        //std::cout << "Delta X, Delta Y = " << deltaX << ", " << deltaY << std::endl;
-        //std::cout << "Direction Cible  = " << newDirection << std::endl;
 
         setOrientation(getOrientation()+diff_orientation/10);
 
