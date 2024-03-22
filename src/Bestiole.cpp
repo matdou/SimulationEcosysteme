@@ -170,7 +170,7 @@ void Bestiole::addCapteurs(std::vector<std::unique_ptr<Capteur>>& capteurs) {
         capteurs.push_back(std::move(capteur));
     }
 }
-*/
+*/ 
 
 void Bestiole::addCapteursFromString(const std::string& s) {
     if (s == "Yeux") {
