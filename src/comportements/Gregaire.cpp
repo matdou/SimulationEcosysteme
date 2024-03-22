@@ -9,12 +9,12 @@ static bool dummy = []() {
     return true;
 }();
 
-Gregaire::Gregaire() { setCouleur(0, 255, 0); }
+Gregaire::Gregaire() {
+    setCouleur(0, 255, 0);
+    }
 
 // Destructor
 Gregaire::~Gregaire() {
-    std::cout << "Destructor of Gregaire" << std::endl;
-    // Cleanup resources specific to Gregaire if any
 }
 
 
@@ -27,7 +27,7 @@ void Gregaire::update(const std::vector<std::reference_wrapper<Bestiole>>& voisi
         double moyenneX = 0.0;
         double moyenneY = 0.0;
         for (const auto& voisinRef : voisins) {
-            Bestiole& voisin = voisinRef.get(); // Obtenez une référence à l'objet Bestiole
+            Bestiole& voisin = voisinRef.get();
             moyenneX += voisin.getX();
             moyenneY += voisin.getY();
         }
@@ -37,11 +37,16 @@ void Gregaire::update(const std::vector<std::reference_wrapper<Bestiole>>& voisi
 
         // Calcul de l'angle en fonction des moyennes des positions X et Y
         double angle = atan2(moyenneY - getY(), moyenneX - getX());
-        setOrientation(angle);
-    }
-    else {
-        // Si aucun voisin n'est trouvé, la bestiole se déplace aléatoirement
-        std::cout << "No neighbors found" << std::endl;
+        double currentAngle = getOrientation();
+
+        double angleDifference = angle - currentAngle;
+        if (angleDifference > M_PI) {
+            angleDifference -= 2 * M_PI;
+        } else if (angleDifference < -M_PI) {
+            angleDifference += 2 * M_PI;
+        }
+
+        setOrientation(currentAngle + angleDifference / 10.0); 
     }
 }
 

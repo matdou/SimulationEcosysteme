@@ -27,6 +27,10 @@ int main() {
     config.setAvgLifeTime(30);
     config.setLifeTimeStd(2.);
     config.setCloningRate(0);
+
+    config.addGlobalCapteur("Yeux");
+
+
     
     milieu.addPopulationConfig(config);
 

@@ -81,7 +81,10 @@ void Milieu::addBestioleFromConfig(PopulationConfig& config) {
     if (bestiole) {
         bestiole.get()->setLifeExpectancyFromAvg(config.getAvgLifeTime(),
                                                  config.getLifeTimeStd());
-        bestiole.get()->addCapteursFromString("Yeux");
+        for (std::string capteur : config.getGlobalCapteurs()) {
+            bestiole.get()->addCapteursFromString(capteur);
+        }
+
         addMember(std::move(bestiole));
     }
 }
@@ -137,7 +140,7 @@ int Milieu::calculateTotalPopulationSize() const {
 void Milieu::initFromConfigs() {
     int totalPopulationSize = calculateTotalPopulationSize();
     listeBestioles.reserve(totalPopulationSize +
-                           1000);  // Consider changing that
+                           1000);  // TODO Consider changing that
     std::cout << "Reserve " << totalPopulationSize << " bestioles" << std::endl;
 
     for (auto& config : populationConfigs) {
@@ -164,6 +167,7 @@ std::vector<std::reference_wrapper<Bestiole>> Milieu::visibleNeighbors(
     std::vector<std::reference_wrapper<Bestiole>> neighbors;
     for (auto& bestiole : listeBestioles) {
         if (b->jeTeVois(*bestiole)) {
+            if (*b == *bestiole) continue;  // Skip self
             neighbors.push_back(
                 std::ref(*bestiole));  // Utilise std::ref pour ajouter une
                                        // référence au vecteur

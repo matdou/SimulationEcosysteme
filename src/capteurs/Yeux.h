@@ -13,7 +13,6 @@ public:
     Yeux();
     ~Yeux() = default;
     static std::string getTypeName() { return "Yeux"; };
-    void percevoirEnvironnement(const Milieu& milieu, const Bestiole& bestiole);
 
     bool jeTeVois(const Bestiole& bestiole, const Bestiole& moi) override;
 
