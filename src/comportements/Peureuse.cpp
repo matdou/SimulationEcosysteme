@@ -26,10 +26,10 @@ void Peureuse::update(const std::vector<std::reference_wrapper<Bestiole>>& voisi
         double new_speed = getVitesse()*2;
         double new_orientation;
         if(getOrientation()>0){
-            new_orientation = getOrientation()-M_PI/10; #TODO
+            new_orientation = getOrientation()-M_PI/10; // TODO
         }
         else {
-            new_orientation = getOrientation()+M_PI/10; #TODO
+            new_orientation = getOrientation()+M_PI/10; // TODO
         }
         setVitesse(new_speed);
         setOrientation(new_orientation);

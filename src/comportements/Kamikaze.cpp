@@ -11,16 +11,64 @@ static bool dummy = []() {
 
 Kamikaze::Kamikaze() {
     setCouleur(255, 0, 0);
-    setVitesse(10);
+    setVitesse(2);
 }
 
 Kamikaze::~Kamikaze() {
     // Destructor
 }
 
-void Kamikaze::update(const std::vector<std::reference_wrapper<Bestiole>>& voisins) {
-    // Implementation specific to Kamikaze
+void Kamikaze::update(
+    const std::vector<std::reference_wrapper<Bestiole>>& voisins) {
+    setCouleur(255, 0, 0);
+    if (!voisins.empty()) {
+        // find closest Neighbour
+        Bestiole* closestNeighbour = nullptr;
+        if (voisins.size() >= 1) {
+            double minDistance = 1000000;
+            for (const auto& voisinRef : voisins) {
+                Bestiole& voisin = voisinRef.get();
+                double distance = sqrt(pow(voisin.getX() - getX(), 2) +
+                                       pow(voisin.getY() - getY(), 2));
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestNeighbour = &voisin;
+                }
+            }
+
+        }
+
+        if (closestNeighbour != nullptr) {
+            // calculate angle to closest Neighbour
+            double angle = atan2(closestNeighbour->getY() - getY(),
+                                 closestNeighbour->getX() - getX());
+            double angleDifference = angle - getOrientation();
+
+            if (angleDifference > M_PI) {
+                angleDifference -= 2 * M_PI;
+            } else if (angleDifference < -M_PI) {
+                angleDifference += 2 * M_PI;
+            }
+
+            double newOrientation;
+            if (abs(angleDifference) > 1) {
+                setCouleur(0, 0, 0);
+                newOrientation = getOrientation() + angleDifference / 5;
+            } else {
+                setCouleur(255, 255, 0);
+                newOrientation = getOrientation() + angleDifference / 10;
+            }
+            std::cout << "My angle" << getOrientation() << std::endl;
+            std::cout << "Angle to closest Neighbour" << angle << std::endl;
+            std::cout << "angleDifference: " << angleDifference << std::endl;
+            std::cout << "new orientation: " << newOrientation << std::endl;
+
+
+            setOrientation(newOrientation);
+        }
+    }
 }
+
 
 std::unique_ptr<Bestiole> Kamikaze::clone() const {
     return std::make_unique<Kamikaze>(*this);

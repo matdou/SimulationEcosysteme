@@ -33,6 +33,7 @@ Bestiole::Bestiole(void) {
     vitesseInitiale = vitesse;
 }
 
+
 Bestiole::Bestiole(const Bestiole &b) {
     identite = ++next;
     x = b.x;
@@ -189,6 +190,4 @@ void Bestiole::addCapteursFromString(const std::string& s) {
 
 
 double Bestiole::getVitesseInitiale() const { return vitesseInitiale; };
-
-
 
