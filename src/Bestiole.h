@@ -37,6 +37,11 @@ class Bestiole {
     double lifeTime;
     std::vector<std::unique_ptr<Capteur>> capteurs;
 
+    // Accessoires
+    double multiplicateurVitesse = 1.0;
+    double multiplicateurProtection = 1.0;
+    double multiplicateurDiscretion = 0.0;
+
    private:
     void bouge(int xLim, int yLim);
 
@@ -86,6 +91,11 @@ class Bestiole {
     bool collidesWith(const Bestiole& other) const;
 
     void updateCollision();
+
+    void setMultiplicateurVitesse(double multiplicateurVitesse);
+    void setMultiplicateurProtection(double multiplicateurProtection);
+    void setMultiplicateurDiscretion(double multiplicateurDiscretion);
+    
 };
 
 #endif

@@ -208,3 +208,19 @@ void Bestiole::updateCollision() {
         setOrientation(orientation);
     }
 }
+
+void Bestiole::setMultiplicateurVitesse(double multiplicateurVitesse) {
+    this -> multiplicateurVitesse = multiplicateurVitesse;
+    this -> vitesse = vitesseInitiale * multiplicateurVitesse;
+    vitesse = std::min(std::max(0.0, vitesse), MAX_VITESSE);
+    this -> vitesse = vitesse;
+    this -> vitesseInitiale = vitesseInitiale;
+}
+
+void Bestiole::setMultiplicateurProtection(double multiplicateurProtection) {
+    this->multiplicateurProtection = multiplicateurProtection;
+}
+
+void Bestiole::setMultiplicateurDiscretion(double multiplicateurDiscretion) {
+    this->multiplicateurDiscretion = multiplicateurDiscretion;
+}

@@ -21,6 +21,11 @@ private:
 
     std::vector<std::string> globalCapteurs;
 
+    double nageoiresSpeedFactor;
+    double carapaceResistanceFactor;
+    double carapaceSlownessFactor;
+    double camouflageFactor;
+
     // Helper methods to manage current type state
     void setCurrentType(const std::string& typeName);
     void resetCurrentType();
@@ -41,6 +46,9 @@ public:
     void setAvgLifeTime(double a) { avgLifeTime = a; }
     void setLifeTimeStd(double a) { lifeTimeStd = a; }
 
+    void addNageoires(double speedFactor);
+    void addCarapace(double resistanceFactor, double slownessFactor);
+    void addCamouflage(double factor);
 
 
     // Accessor methods
@@ -55,7 +63,10 @@ public:
     const std::map<std::string, int>& getTypeCounts() const { return typeCounts; }
     const std::vector<std::string>& getGlobalCapteurs() const { return globalCapteurs; }
 
-
+    double getSpeedFactor() const { return nageoiresSpeedFactor; }
+    double getProtectionFactor() const { return carapaceResistanceFactor; }
+    double getSlownessFactor() const { return carapaceSlownessFactor; }
+    double getCamouflageFactor() const { return camouflageFactor; }
 
 
 };

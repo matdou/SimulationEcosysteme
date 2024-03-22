@@ -1,7 +1,18 @@
 #include "PopulationConfig.h"
 #include "Yeux.h"
 
-PopulationConfig::PopulationConfig() : birthRate(0.0), deathRate(0.0), avgLifeTime(-1), lifeTimeStd(0.5), currentTypeCount(0) {}
+PopulationConfig::PopulationConfig() {
+    birthRate = 0.0;
+    deathRate = 0.0;
+    avgLifeTime = -1;
+    lifeTimeStd = 0.5;
+    currentTypeCount = 0;
+    nageoiresSpeedFactor = 1.0;
+    carapaceResistanceFactor = 1.0;
+    carapaceSlownessFactor = 1.0;
+    camouflageFactor = 1.0;
+
+}
 
 void PopulationConfig::addTypeCount(const std::string& typeName, int count) {
     typeCounts[typeName] = count;
@@ -59,3 +70,15 @@ void PopulationConfig::addGlobalCapteur(std::string s) {
     globalCapteurs.push_back(s);
 }
 
+void PopulationConfig::addNageoires(double speedFactor) {
+    PopulationConfig::nageoiresSpeedFactor = speedFactor;
+}
+
+void PopulationConfig::addCarapace(double resistanceFactor, double slownessFactor) {
+    carapaceResistanceFactor = resistanceFactor;
+    carapaceSlownessFactor = slownessFactor;
+}
+
+void PopulationConfig::addCamouflage(double factor) {
+    camouflageFactor = factor;
+}

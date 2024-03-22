@@ -29,8 +29,9 @@ int main() {
 
     //config.addGlobalCapteur("Yeux");
     config.addGlobalCapteur("Oreilles");
-    config.addGlobalCapteur("Yeux");
+    //config.addGlobalCapteur("Yeux");
 
+    config.addNageoires(5);
 
     
     milieu.addPopulationConfig(config);

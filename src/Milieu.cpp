@@ -84,7 +84,9 @@ void Milieu::addBestioleFromConfig(PopulationConfig& config) {
         for (std::string capteur : config.getGlobalCapteurs()) {
             bestiole.get()->addCapteursFromString(capteur);
         }
-
+        bestiole.get()->setMultiplicateurVitesse(config.getSpeedFactor() * config.getSlownessFactor());
+        bestiole.get()->setMultiplicateurProtection(config.getProtectionFactor());
+        bestiole.get()->setMultiplicateurDiscretion(config.getCamouflageFactor());
         addMember(std::move(bestiole));
     }
 }
