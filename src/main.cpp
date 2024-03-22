@@ -19,7 +19,7 @@ int main() {
 
     PopulationConfig config;
     //config.addTypeCount("Peureuse", 1);
-    config.addTypeCount("Gregaire", 50);
+    config.addTypeCount("Gregaire", 10);
     //config.addTypeCount("Kamikaze", 1);
     //config.addTypeCount("Prevoyante", 1);
     config.setBirthRate(0);  // 1 births per second in average
