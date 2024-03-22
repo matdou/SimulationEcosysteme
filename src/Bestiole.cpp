@@ -8,7 +8,7 @@
 #include "Oreilles.h"
 
 const double Bestiole::AFF_SIZE = 8.;
-const double Bestiole::MAX_VITESSE = 10.;
+const double Bestiole::MAX_VITESSE = 15.;
 const double Bestiole::LIMITE_VUE = 30.;
 const double Bestiole::COLLISION_DISTANCE = 10.;
 const double Bestiole::EXPLOSION_PROBABILITY = 0.01; //TODO
@@ -125,6 +125,7 @@ bool operator==(const Bestiole &b1, const Bestiole &b2) {
     return (b1.identite == b2.identite);
 }
 
+// handles multiple sensors (Yeux + Oreilles)
 bool Bestiole::jeTeVois(const Bestiole &b) const {
     for (const auto &capteur : capteurs) {
         if (capteur->jeTeVois(b, *this)) {

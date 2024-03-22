@@ -19,23 +19,26 @@ Peureuse::~Peureuse() {
 }
 
 void Peureuse::update(const std::vector<std::reference_wrapper<Bestiole>>& voisins) {
-    this->setCouleur(0, 0, 255);
+    this->setCouleur(0, 0, 255); // blue when 
+
     if (voisins.size() >= 3){
-        setCouleur(0, 0, 120);
-        double new_speed = getVitesse()*2;
-        double new_orientation;
-        if(getOrientation()>0){
-            new_orientation = getOrientation()-M_PI/10; // TODO
+        setCouleur(150, 0, 150); // purple when there are 3 or more neighbors
+        
+        if (turnCooldown == 0){
+            setVitesse(10);
+            setOrientation(getOrientation() + M_PI);
+            turnCooldown = 20;
         }
-        else {
-            new_orientation = getOrientation()+M_PI/10; // TODO
-        }
-        setVitesse(new_speed);
-        setOrientation(new_orientation);
+    }
+    
+    if (turnCooldown > 0){
+        turnCooldown--;
+        setCouleur(0, 0, 150); // dark blue when the cooldown is active
     }
     else{
-        setVitesse(getVitesseInitiale());
+        setVitesse( getVitesseInitiale());
     }
+    
     
 }
 

@@ -11,8 +11,6 @@
 #include "PopulationGenerator.h"
 #include "Prevoyante.h"
 
-using namespace std;
-
 int main() {
     Aquarium aquarium(640, 480, 30);
     Milieu& milieu = aquarium.getMilieu();
@@ -31,6 +29,7 @@ int main() {
 
     //config.addGlobalCapteur("Yeux");
     config.addGlobalCapteur("Oreilles");
+    config.addGlobalCapteur("Yeux");
 
 
     

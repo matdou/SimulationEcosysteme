@@ -41,7 +41,7 @@ void Gregaire::update(const std::vector<std::reference_wrapper<Bestiole>>& voisi
             direction_diff += 2 * M_PI;
         }
 
-        double newOrientation = getOrientation() + direction_diff/10;
+        double newOrientation = getOrientation() + direction_diff/7;
         setOrientation(newOrientation);
 
     }

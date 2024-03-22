@@ -10,7 +10,7 @@
 
 Yeux::Yeux() : Capteur() {
     champVision = 6;
-    distanceVision = 80;
+    distanceVision = 800;
     capaciteDetection = 1;
     std::cout << "Yeux created" << std::endl;
 
