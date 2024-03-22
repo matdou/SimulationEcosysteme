@@ -7,7 +7,6 @@
 #include <iostream>
 
 
-
 Oreilles::Oreilles() : Capteur() {
 
     distanceAudible = 80;
