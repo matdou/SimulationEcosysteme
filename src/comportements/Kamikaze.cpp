@@ -22,6 +22,7 @@ void Kamikaze::update(
     const std::vector<std::reference_wrapper<Bestiole>>& voisins) {
     setCouleur(255, 0, 0);
     if (!voisins.empty()) {
+        setCouleur(200, 0, 0);
         // find closest Neighbour
         Bestiole* closestNeighbour = nullptr;
         if (voisins.size() >= 1) {
@@ -52,18 +53,10 @@ void Kamikaze::update(
 
             double newOrientation;
             if (abs(angleDifference) > 1) {
-                setCouleur(0, 0, 0);
                 newOrientation = getOrientation() + angleDifference / 5;
             } else {
-                setCouleur(255, 255, 0);
                 newOrientation = getOrientation() + angleDifference / 10;
             }
-            std::cout << "My angle" << getOrientation() << std::endl;
-            std::cout << "Angle to closest Neighbour" << angle << std::endl;
-            std::cout << "angleDifference: " << angleDifference << std::endl;
-            std::cout << "new orientation: " << newOrientation << std::endl;
-
-
             setOrientation(newOrientation);
         }
     }

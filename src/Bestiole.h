@@ -19,6 +19,8 @@ class Bestiole {
     static const double AFF_SIZE;
     static const double MAX_VITESSE;
     static const double LIMITE_VUE;
+    static const double COLLISION_DISTANCE;
+    static const double EXPLOSION_PROBABILITY;
 
     static int next;
 
@@ -80,6 +82,10 @@ class Bestiole {
     virtual std::unique_ptr<Bestiole> clone() const = 0;
 
     double getVitesseInitiale() const;
+
+    bool collidesWith(const Bestiole& other) const;
+
+    void updateCollision();
 };
 
 #endif

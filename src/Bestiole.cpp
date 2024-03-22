@@ -10,6 +10,8 @@
 const double Bestiole::AFF_SIZE = 8.;
 const double Bestiole::MAX_VITESSE = 10.;
 const double Bestiole::LIMITE_VUE = 30.;
+const double Bestiole::COLLISION_DISTANCE = 10.;
+const double Bestiole::EXPLOSION_PROBABILITY = 0.01; //TODO
 
 int Bestiole::next = 0;
 
@@ -163,17 +165,6 @@ double Bestiole::getX() const {
 double Bestiole::getY() const {
     return y + cumulY;
 }
-/*
-void Bestiole::addCapteur(std::unique_ptr<Capteur>& capteur) {
-    capteurs.push_back(std::move(capteur));
-}
-
-void Bestiole::addCapteurs(std::vector<std::unique_ptr<Capteur>>& capteurs) {
-    for (const auto& capteur : capteurs) {
-        capteurs.push_back(std::move(capteur));
-    }
-}
-*/
 
 void Bestiole::addCapteursFromString(const std::string& s) {
     if (s == "Yeux") {
@@ -191,3 +182,28 @@ void Bestiole::addCapteursFromString(const std::string& s) {
 
 double Bestiole::getVitesseInitiale() const { return vitesseInitiale; };
 
+
+bool Bestiole::collidesWith(const Bestiole &other) const {
+    double distance = sqrt(pow(getX() - other.getX(), 2) +
+                           pow(getY() - other.getY(), 2));
+    if (distance < COLLISION_DISTANCE && distance > 0.) {
+        // Collision
+        return true;
+    }
+}
+
+
+void Bestiole::updateCollision() {
+    if (static_cast<double>(rand()) / RAND_MAX < EXPLOSION_PROBABILITY) {
+        // Explosion
+        setLifeExpectancy(0);
+    }
+    else {
+        // Change direction
+        double orientation = getOrientation() + M_PI;
+        if (orientation > 2 * M_PI) {
+            orientation -= 2 * M_PI;
+        }
+        setOrientation(orientation);
+    }
+}

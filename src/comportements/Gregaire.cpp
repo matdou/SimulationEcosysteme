@@ -20,11 +20,11 @@ Gregaire::~Gregaire() {
 
 
 
-// Update the behavior of the Gregaire Bestiole
+// Update the Orientation of the Bestiole based on the average orientation of its neighbors
 void Gregaire::update(const std::vector<std::reference_wrapper<Bestiole>>& voisins) {
     this->setCouleur(0, 255, 0); // Set the color to green
     if (!voisins.empty()) {
-        this->setCouleur(0, 155, 0); // Set the color to dark green
+        this->setCouleur(0, 200, 0); // Set the color to dark green when there are neighbors
         double directionMoyenne = 0.0;
         for (const auto& voisinRef : voisins) {
             Bestiole& voisin = voisinRef.get();
@@ -34,20 +34,12 @@ void Gregaire::update(const std::vector<std::reference_wrapper<Bestiole>>& voisi
         directionMoyenne /= voisins.size();
 
         double currentDirection = getOrientation();
-
         double direction_diff = directionMoyenne - currentDirection;
 
         if (direction_diff > M_PI) {
             direction_diff -= 2 * M_PI;
         } else if (direction_diff < -M_PI) {
             direction_diff += 2 * M_PI;
-        }
-
-        if (direction_diff > 0) {
-
-            setCouleur(255,0,0);
-        } else {
-            setCouleur(0,0,255);
         }
 
         double newOrientation = getOrientation() + direction_diff/10;
