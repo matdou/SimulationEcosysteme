@@ -4,17 +4,19 @@
 #include <array>
 #include <iostream>
 #include <vector>
-
+#include <memory> // For std::unique_ptr
 #include "UImg.h"
 
-class Capteur;  // Forward declaration
+class Capteur; // Forward declaration
+class Milieu; // Forward declaration
 
-class Milieu;
-
-class Comportement;
-
+/**
+ * Base class representing a creature in the environment. 
+ * It includes basic attributes like position, speed, and orientation, 
+ * and functionalities like moving and perceiving other creatures.
+ */
 class Bestiole {
-   private:
+private:
     static const double AFF_SIZE;
     static const double MAX_VITESSE;
     static const double LIMITE_VUE;
@@ -29,7 +31,6 @@ class Bestiole {
 
     static int next;
 
-   private:
     int identite;
     int x, y;
     double cumulX, cumulY;
@@ -42,69 +43,92 @@ class Bestiole {
     double lifeTime;
     std::vector<std::unique_ptr<Capteur>> capteurs;
 
-    // Accessoires
     double multiplicateurVitesse = 1.0;
     double multiplicateurProtection = 1.0;
     double multiplicateurDiscretion = 0.0;
 
-   private:
+    /** Moves the creature within the given limits. */
     void bouge(int xLim, int yLim);
 
-   public:                        // Forme canonique :
-    Bestiole(void);               // Constructeur par defaut
-    Bestiole(const Bestiole& b);  // Constructeur de copies
-    virtual ~Bestiole();          // Destructeur
-
+public:
+    // Constructors & Destructor
+    Bestiole();
+    Bestiole(const Bestiole& b);
     Bestiole(Bestiole&& b);
-    void action(Milieu& monMilieu);
-    void draw(UImg& support);
+    virtual ~Bestiole();
 
-    bool jeTeVois(const Bestiole& b) const;
-
-    void initCoords(int xLim, int yLim);
-
-    int getIdentite(void) const;
-    void setVitesse(double vitesse);
-    double getVitesse(void) const;
-    void setOrientation(double orientation);
-    double getOrientation(void) const;
-
+    /** Checks for equality based on identity. */
     friend bool operator==(const Bestiole& b1, const Bestiole& b2);
 
-    void setCouleur(int r, int g, int b);
-
-    void setLifeExpectancy(double lifeExpectancy);
-    double getLifeExpectancy(void) const;
-    void setLifeExpectancyFromAvg(double averageLifeExpectancy, double std);
-
-    void addCapteur(std::unique_ptr<Capteur> capteur);
-
-    void percevoirEnvironnement() const;
-    virtual void update(
-        const std::vector<std::reference_wrapper<Bestiole>>&
-            voisins) = 0;  // permet de traiter les bestioles voisines sans
-                           // modifier l'ensemble original des bestioles TODO
-                           // MAKE VIRTUAL
-
-    double getX() const;
-    double getY() const;
-
-    void addCapteursFromString(const std::string& capteurs);
-
+    /** Creates a copy of this creature. */
     virtual std::unique_ptr<Bestiole> clone() const = 0;
 
+    /** Performs actions such as moving. */
+    void action(Milieu& monMilieu);
+    
+    /** Draws the creature on the given canvas. */
+    void draw(UImg& support);
+
+    /** Checks if this creature can see another creature. */
+    bool jeTeVois(const Bestiole& b) const;
+    
+    /** Initializes the coordinates of the creature. */
+    void initCoords(int xLim, int yLim);
+
+    /** Returns the identity of the creature. */
+    int getIdentite() const;
+
+    /** Sets the speed of the creature. */
+    void setVitesse(double vitesse);
+    /** Returns the speed of the creature. */
+    double getVitesse() const;
+    /** Returns the initial speed of the creature. */
     double getVitesseInitiale() const;
+    /** Returns the initial multiplied speed of the creature. */
+    double getInitialMultipliedVitesse() const;
 
+    /** Sets the orientation of the creature. */
+    void setOrientation(double orientation);
+    /** Returns the orientation of the creature. */
+    double getOrientation() const;
+
+    /** Sets the color of the creature. */
+    void setCouleur(int r, int g, int b);
+
+    /** Sets the life expectancy of the creature. */
+    void setLifeExpectancy(double lifeExpectancy);
+    /** Returns the life expectancy of the creature. */
+    double getLifeExpectancy() const;
+
+    /** Sets the life expectancy of the creature from average and standard deviation. */
+    void setLifeExpectancyFromAvg(double averageLifeExpectancy, double std);
+
+    /** Adds a sensor to the creature. */
+    void addCapteur(std::unique_ptr<Capteur> capteur);
+    /** Adds sensors to the creature based on a string description. */
+    void addCapteursFromString(const std::string& capteurs);
+
+    /** Perceives the environment around the creature. */
+    void percevoirEnvironnement() const;
+    /** Updates the creature's behavior based on nearby creatures. */
+    virtual void update(const std::vector<std::reference_wrapper<Bestiole>>& voisins) = 0;
+
+    /** Checks if this creature collides with another creature. */
     bool collidesWith(const Bestiole& other) const;
-
+    /** Updates the creature upon collision. */
     void updateCollision();
 
-    void setMultiplicateurVitesse(double multiplicateurVitesseNageoires,
-                                  double multiplicateurVitesseCarapace);
-    void setMultiplicateurProtection(double multiplicateurProtection);
-    void setMultiplicateurDiscretion(double multiplicateurDiscretion);
+    /** Returns the X coordinate of the creature. */
+    double getX() const;
+    /** Returns the Y coordinate of the creature. */
+    double getY() const;
 
-    double getInitialMultipliedVitesse() const;
+    /** Sets speed multipliers of the creature. */
+    void setMultiplicateurVitesse(double multiplicateurVitesseNageoires, double multiplicateurVitesseCarapace);
+    /** Sets the protection multiplier of the creature. */
+    void setMultiplicateurProtection(double multiplicateurProtection);
+    /* Sets the discretion multiplier of the creature. */
+    void setMultiplicateurDiscretion(double multiplicateurDiscretion);
 };
 
-#endif
+#endif // BESTIOLES_H

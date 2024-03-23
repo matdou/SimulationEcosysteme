@@ -2,18 +2,29 @@
 #define PEUREUSE_H
 
 #include "BestioleFactory.h"
+#include <memory>
+#include <string>
+#include <vector>
+#include <functional>
 
 class Peureuse : public Bestiole {
-   public:
+public:
+    // Constructors & Destructor
     Peureuse();
     virtual ~Peureuse() override;
-    static std::string getTypeName() { return "Peureuse"; }
-    static bool dummy;
-    void update(
-        const std::vector<std::reference_wrapper<Bestiole>>& voisins) override;
+
+    // Overridden methods from Bestiole
+    void update(const std::vector<std::reference_wrapper<Bestiole>>& voisins) override;
     std::unique_ptr<Bestiole> clone() const override;
 
-    int turnCooldown = 0;  // Cooldown for turning 180 degrees
+    // Static methods
+    static std::string getTypeName();
+
+    // Static variables
+    static bool dummy; // Dummy variable to force the linker to include the class in the factory
+
+    // Class-specific variables
+    int turnCooldown = 0; // Cooldown for turning 180 degrees
 };
 
 #endif  // PEUREUSE_H

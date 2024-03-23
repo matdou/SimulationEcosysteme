@@ -2,27 +2,27 @@
 #define _AQUARIUM_H_
 
 #include <CImg.h>
-
 #include <iostream>
 
-using namespace std;
-using namespace cimg_library;
+// using namespace std;
+// using namespace cimg_library;
 
 class Milieu;
 
-class Aquarium : public CImgDisplay {
-   private:
+class Aquarium : public cimg_library::CImgDisplay {
+private:
     Milieu* flotte;
-
     int delay;
 
-   public:
+public:
+    // Constructor & Destructor
     Aquarium(int width, int height, int _delay);
     ~Aquarium(void);
 
-    Milieu& getMilieu(void) { return *flotte; }
+    // Accessor
+    Milieu& getMilieu(void);
 
     void run(void);
 };
 
-#endif
+#endif // _AQUARIUM_H_
