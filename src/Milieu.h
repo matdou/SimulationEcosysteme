@@ -36,6 +36,11 @@ public:
 
     int getWidth(void) const { return width; };
     int getHeight(void) const { return height; };
+    PopulationConfig& getPopulationConfig(int index) { return populationConfigs[index]; }; // NON CONST because it shuffles through the bestioles
+    std::vector<PopulationConfig>& getPopulationConfigs() { return populationConfigs; }; 
+    std::vector<std::unique_ptr<Bestiole>>& getBestioles() { return listeBestioles; };
+    int getDelay() const { return delay; };
+
     void step(void);
     void addMember(std::unique_ptr<Bestiole> b);
     int nbVoisins(const Bestiole& b);
