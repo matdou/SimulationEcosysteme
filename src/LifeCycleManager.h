@@ -10,17 +10,30 @@ class Milieu;
 
 class LifeCycleManager {
 public:
+    static const int ESTIMATION_TIME = 60*2;
+    static const int MAX_POPULATION_SIZE = 1000;
+    static const int MEMORY_MARGIN = 2;
+
     LifeCycleManager(Milieu& milieu);
     void handleBirths();
     void handleRandomDeaths();
     void handleCloning();
     void updateLifeExpectancyAndRemoveExpired();
+    void handleCollisions();
+    void updateBestiolesFromCapteurs();
+    void addBestioleFromConfig(PopulationConfig& config);
+    void setupBestioleFactors(Bestiole& bestiole, PopulationConfig& config);
+    void initFromConfigs();
+
+    void killMember(int identite);
+
+    int calculateTotalPopulationSize() const;
+    int calculateMemorySize() const;
+    std::vector<std::reference_wrapper<Bestiole>> visibleNeighbors(std::unique_ptr<Bestiole>& b);
 
 private:
     Milieu& milieu; // Reference to the milieu to interact with the bestioles
     std::vector<std::unique_ptr<Bestiole>>& bestioles; // Direct access to the bestioles within the milieu
-
-    void addBestioleFromConfig(PopulationConfig& config); // NOT CONST config because it shuffles through the bestioles
     double calculateProbability(double rate, int delay) const;
 };
 

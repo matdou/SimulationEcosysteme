@@ -7,6 +7,7 @@
 #include "Bestiole.h"
 #include "PopulationConfig.h"
 #include "UImg.h"
+#include "LifeCycleManager.h"
 
 class Milieu : public UImg {
 private:
@@ -23,11 +24,7 @@ private:
 
     void clearEnvironment();
     void processBestiolesActionsAndDrawings();
-    void handleBirths();
-    void handleRandomDeaths();
-    void handleCloning();
-    void updateLifeExpectancyAndRemoveExpired();
-    void addBestioleFromConfig(PopulationConfig& config);
+    LifeCycleManager lifeCycleManager;
 
 
 public:

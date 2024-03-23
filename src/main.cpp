@@ -18,14 +18,14 @@ int main() {
     PopulationConfig config;
 
  
-    config.addTypeCount("Kamikaze", 10);
+    config.addTypeCount("Kamikaze", 100);
     // config.addTypeCount("Prevoyante", 2);
-    // config.setBirthRate(0);  // 1 births per second in average
+    config.setBirthRate(0.5);  // 1 births per second in average
     // config.setDeathRate(0);  // No decay rate
-    //vconfig.setAvgLifeTime(30);
+    config.setAvgLifeTime(10);
     // config.setLifeTimeStd(2.);
-    // config.setCloningRate(0);
-    config.addOreilles(8000, 1);
+    config.setCloningRate(1);
+    config.addOreilles(80, 1);
 
     // config.addCarapace(5, 5);
     std::cout << "Total population size: " << config.getTotalPopulationSize() << std::endl;

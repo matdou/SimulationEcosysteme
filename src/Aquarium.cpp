@@ -25,6 +25,7 @@ Aquarium::~Aquarium(void) {
 void Aquarium::run(void) {
     cout << "running Aquarium" << endl;
 
+
     while (!is_closed()) {
         // cout << "iteration de la simulation" << endl;
 

@@ -3,6 +3,12 @@
 #include "BestioleFactory.h"
 #include <algorithm>
 #include <cstdlib>
+#include "Milieu.h"
+
+const int ESTIMATED_TIME = 60 * 2; // 2 minutes
+const int MAX_VECTOR_SIZE = 100000; 
+const int STORAGE_MARGIN = 2; // 2 times the estimated memory size
+
 
 LifeCycleManager::LifeCycleManager(Milieu& milieu)
     : milieu(milieu), bestioles(milieu.getBestioles()) {}
@@ -59,14 +65,111 @@ void LifeCycleManager::addBestioleFromConfig(PopulationConfig& config) {
             bestiole->addCapteur(capteur->clone());
         }
 
-        bestiole->setMultiplicateurVitesse(config.getSpeedFactor(), config.getSlownessFactor());
-        bestiole->setMultiplicateurProtection(config.getProtectionFactor());
-        bestiole->setMultiplicateurDiscretion(config.getCamouflageFactor());
+        setupBestioleFactors(*bestiole, config);
         bestioles.push_back(std::move(bestiole));
     }
+}
+
+void LifeCycleManager::setupBestioleFactors(Bestiole& bestiole, PopulationConfig& config){
+    bestiole.setMultiplicateurVitesse(config.getSpeedFactor(), config.getSlownessFactor());
+    bestiole.setMultiplicateurProtection(config.getProtectionFactor());
+    bestiole.setMultiplicateurDiscretion(config.getCamouflageFactor());
 }
 
 
 double LifeCycleManager::calculateProbability(double rate, int delay) const {
     return std::min((delay / 1000.0) * rate, 1.0);
+}
+
+void LifeCycleManager::handleCollisions() {
+    for (auto& bestiole : bestioles) {
+        //find all neighbors that collides with bestiole
+        std::vector<std::reference_wrapper<Bestiole>> collidingNeighbors;
+        for (auto& neighbor : bestioles) {
+            if (bestiole->collidesWith(*neighbor)) {
+                collidingNeighbors.push_back(std::ref(*neighbor));
+            }
+        }
+        if (!collidingNeighbors.empty()) {
+            collidingNeighbors.push_back(std::ref(*bestiole)); // add initial bestiole
+
+            // Update all colliding neighbors to handle collision
+            for (auto& collidingNeighbor : collidingNeighbors) {
+                collidingNeighbor.get().updateCollision();
+            }
+        }
+
+    }
+}
+
+
+void LifeCycleManager::updateBestiolesFromCapteurs() {
+    for (auto& bestiole : bestioles) {
+        bestiole->update(visibleNeighbors(bestiole));
+    }
+}
+
+std::vector<std::reference_wrapper<Bestiole>> LifeCycleManager::visibleNeighbors(
+    std::unique_ptr<Bestiole>& b) {
+    std::vector<std::reference_wrapper<Bestiole>> neighbors;
+    for (auto& bestiole : bestioles) {
+        if (b->jeTeVois(*bestiole)) {
+            if (*b == *bestiole) continue;  // Skip self
+            neighbors.push_back(
+                std::ref(*bestiole));  // Utilise std::ref pour ajouter une
+                                       // référence au vecteur
+        }
+    }
+    // Retourne le vecteur de références
+    return neighbors;
+}
+
+void LifeCycleManager::killMember(int identite) {
+    bestioles.erase(std::remove_if(bestioles.begin(), bestioles.end(),
+                                   [identite](const std::unique_ptr<Bestiole>& b) {
+                                       return b->getIdentite() == identite;
+                                   }),
+                    bestioles.end());
+}
+
+int LifeCycleManager::calculateTotalPopulationSize() const {
+    int totalPopulationSize = 0;
+    for (const auto& config : milieu.getPopulationConfigs()) {
+        totalPopulationSize += config.getTotalPopulationSize();
+    }
+    return totalPopulationSize;
+}
+
+int LifeCycleManager::calculateMemorySize() const {
+    double growingRate = 0.0;
+    for (const auto& config : milieu.getPopulationConfigs()) {
+        growingRate += config.getBirthRate();
+        growingRate -= config.getDeathRate();
+        growingRate += config.getCloningRate();
+    }
+    int estimatedMemorySize = calculateTotalPopulationSize() * ESTIMATED_TIME * growingRate;
+    estimatedMemorySize = STORAGE_MARGIN * std::max(estimatedMemorySize, calculateTotalPopulationSize());
+    estimatedMemorySize = std::min(estimatedMemorySize, MAX_VECTOR_SIZE); 
+    return estimatedMemorySize;
+}
+
+void LifeCycleManager::initFromConfigs() {
+    int totalPopulationSize = calculateTotalPopulationSize();
+    bestioles.reserve(calculateMemorySize());
+    std::cout << "Reserve " << totalPopulationSize << " bestioles" << std::endl;
+
+    for (auto& config : milieu.getPopulationConfigs()) {
+        int popSize = config.getTotalPopulationSize();
+        std::cout << "Adding " << popSize << " bestioles of type "
+                  << config.getCurrentTypeName() << std::endl;
+        for (int i = 0; i < popSize; i++) {
+            addBestioleFromConfig(config);
+        }
+    }
+
+    for (auto& bestiole : bestioles) {
+        int x = milieu.getWidth();
+        int y = milieu.getHeight();
+        bestiole->initCoords(x, y);
+    }
 }
