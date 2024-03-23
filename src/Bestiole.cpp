@@ -134,23 +134,28 @@ bool operator==(const Bestiole &b1, const Bestiole &b2) {
 // handles multiple sensors (Yeux + Oreilles)
 bool Bestiole::jeTeVois(const Bestiole &b) const {
     int i = 0;
+    if (*this == b) {
+        std::cout << "Bestiole : jeTeVois : same bestiole" << std::endl;
+        return false;
+    }
     for (const auto &capteur : capteurs) {
         //check if it is a null pointer
         if (!capteur) {
             i++;
             std::cout << "Null pointer in capteurs : " << i << std::endl;
-
             continue;
         }
+
         if (capteur->jeTeVois(b, *this)) {
             if (b.multiplicateurDiscretion > 0) {
-                if (static_cast<double>(rand()) / RAND_MAX < b.multiplicateurDiscretion) {
+                if (static_cast<double>(rand()) / RAND_MAX < 1 - b.multiplicateurDiscretion) {
                     // The other bestiole is not detected
                     return false;
                 }
             }
             return true;
         }
+
     }
 
     return false;

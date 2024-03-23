@@ -17,9 +17,6 @@ int main() {
 
     PopulationConfig config;
 
-
-    vector<string> types = {"Kamikaze", "Prevoyante", "Peureuse", "Gregaire"};
-
     config.addTypeCount("Kamikaze", 70);
     config.addTypeCount("Prevoyante", 10);
     config.addTypeCount("Peureuse", 10);
@@ -30,7 +27,7 @@ int main() {
     // config.setDeathRate(0);  // No decay rate
     // config.setLifeTimeStd(2.);
     config.setCloningRate(0.0); // clones per second in average
-    config.addOreilles(80, 1);
+    config.addOreilles(8000, 1);
     std::cout << "Total population size: " << config.getTotalPopulationSize() << std::endl;
     
     milieu.addPopulationConfig(config);

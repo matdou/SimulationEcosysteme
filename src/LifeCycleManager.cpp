@@ -123,8 +123,8 @@ std::vector<std::reference_wrapper<Bestiole>>
 LifeCycleManager::visibleNeighbors(std::unique_ptr<Bestiole>& b) {
     std::vector<std::reference_wrapper<Bestiole>> neighbors;
     for (auto& bestiole : bestioles) {
+        if (*b == *bestiole) continue;  // Skip self
         if (b->jeTeVois(*bestiole)) {
-            if (*b == *bestiole) continue;  // Skip self
             neighbors.push_back(
                 std::ref(*bestiole));  // Utilise std::ref pour ajouter une
                                        // référence au vecteur
