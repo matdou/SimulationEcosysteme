@@ -4,6 +4,7 @@
 #include "Capteur.h"
 #include <string>
 
+
 class Yeux : public Capteur {
 private:
     double champVision;
@@ -11,10 +12,12 @@ private:
     double capaciteDetection;
 public:
     Yeux();
+    Yeux(double champVision, double distanceVision, double capaciteDetection);
     ~Yeux() = default;
     static std::string getTypeName() { return "Yeux"; };
 
     bool jeTeVois(const Bestiole& bestiole, const Bestiole& moi) override;
+    std::unique_ptr<Capteur> clone() const override;
 
 };
 

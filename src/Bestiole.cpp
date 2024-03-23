@@ -13,6 +13,12 @@ const double Bestiole::LIMITE_VUE = 30.;
 const double Bestiole::COLLISION_DISTANCE = 10.;
 const double Bestiole::EXPLOSION_PROBABILITY = 0.01; //TODO
 
+const double Bestiole::MAX_MULT_VITESSE = 5.0; // v^max
+const double Bestiole::MAX_MULT_SLOWNESS = 10; // \eta^max
+const double Bestiole::MAX_MULT_PROTECTION = 10.0; // \omega^max
+const double Bestiole::MAX_MULT_DISCRETION = 0.9; // \ksi^max
+const double Bestiole::MIN_MULT_DISCRETION = 0.5; // \ksi^min
+
 int Bestiole::next = 0;
 
 Bestiole::Bestiole(void) {
@@ -127,8 +133,22 @@ bool operator==(const Bestiole &b1, const Bestiole &b2) {
 
 // handles multiple sensors (Yeux + Oreilles)
 bool Bestiole::jeTeVois(const Bestiole &b) const {
+    int i = 0;
     for (const auto &capteur : capteurs) {
+        //check if it is a null pointer
+        if (!capteur) {
+            i++;
+            std::cout << "Null pointer in capteurs : " << i << std::endl;
+
+            continue;
+        }
         if (capteur->jeTeVois(b, *this)) {
+            if (b.multiplicateurDiscretion > 0) {
+                if (static_cast<double>(rand()) / RAND_MAX < b.multiplicateurDiscretion) {
+                    // The other bestiole is not detected
+                    return false;
+                }
+            }
             return true;
         }
     }
@@ -196,8 +216,9 @@ bool Bestiole::collidesWith(const Bestiole &other) const {
 
 void Bestiole::updateCollision() {
     if (static_cast<double>(rand()) / RAND_MAX < EXPLOSION_PROBABILITY) {
-        // Explosion
-        setLifeExpectancy(0);
+        if(static_cast<double>(rand()) / RAND_MAX < 1/multiplicateurProtection){
+            setLifeExpectancy(0);
+        }
     }
     else {
         // Change direction
@@ -209,18 +230,27 @@ void Bestiole::updateCollision() {
     }
 }
 
-void Bestiole::setMultiplicateurVitesse(double multiplicateurVitesse) {
-    this -> multiplicateurVitesse = multiplicateurVitesse;
-    this -> vitesse = vitesseInitiale * multiplicateurVitesse;
-    vitesse = std::min(std::max(0.0, vitesse), MAX_VITESSE);
-    this -> vitesse = vitesse;
-    this -> vitesseInitiale = vitesseInitiale;
+void Bestiole::setMultiplicateurVitesse(double multiplicateurVitesseNageoires, double multiplicateurVitesseCarapace) {
+    multiplicateurVitesseNageoires = std::min(std::max(0.0, multiplicateurVitesseNageoires), MAX_MULT_VITESSE);
+    multiplicateurVitesseCarapace = std::min(std::max(0.0, multiplicateurVitesseCarapace), MAX_MULT_SLOWNESS);
+    this -> multiplicateurVitesse = multiplicateurVitesseNageoires/multiplicateurVitesseCarapace;
+    this -> vitesse = multiplicateurVitesse * vitesseInitiale;
 }
 
 void Bestiole::setMultiplicateurProtection(double multiplicateurProtection) {
+    multiplicateurProtection = std::min(std::max(0.0, multiplicateurProtection), MAX_MULT_PROTECTION);
     this->multiplicateurProtection = multiplicateurProtection;
 }
 
 void Bestiole::setMultiplicateurDiscretion(double multiplicateurDiscretion) {
+    multiplicateurDiscretion = std::min(std::max(MIN_MULT_DISCRETION, multiplicateurDiscretion), MAX_MULT_DISCRETION);
     this->multiplicateurDiscretion = multiplicateurDiscretion;
+}
+
+double Bestiole::getInitialMultipliedVitesse() const {
+    return vitesseInitiale * multiplicateurVitesse;
+}
+
+void Bestiole::addCapteur(std::unique_ptr<Capteur> capteur) {
+    capteurs.push_back(std::move(capteur));
 }

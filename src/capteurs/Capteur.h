@@ -9,11 +9,10 @@ class Milieu; // Forward declaration
 
 
 class Capteur {
-protected:
-     //std::unique_ptr<Bestiole> decoratedBestiole;
 public:
-     ~Capteur() = default;
-    virtual bool jeTeVois(const Bestiole& bestiole, const Bestiole& moi) = 0;
+     virtual ~Capteur() = default; // Virtual destructor
+     virtual bool jeTeVois(const Bestiole& bestiole, const Bestiole& moi) = 0;
+     virtual std::unique_ptr<Capteur> clone() const = 0; 
 };
 
 #endif  // ICAPTEUR_H

@@ -16,6 +16,14 @@ Yeux::Yeux() : Capteur() {
 
 }
 
+Yeux::Yeux(double champVision, double distanceVision, double capaciteDetection) : Capteur() {
+    this->champVision = champVision;
+    this->distanceVision = distanceVision;
+    this->capaciteDetection = capaciteDetection;
+    std::cout << "Yeux created" << std::endl;
+
+}
+
 
 bool Yeux::jeTeVois(const Bestiole& bestiole, const Bestiole& moi) {
     if (capaciteDetection < std::rand()/RAND_MAX) {
@@ -33,3 +41,6 @@ bool Yeux::jeTeVois(const Bestiole& bestiole, const Bestiole& moi) {
 
 }
 
+std::unique_ptr<Capteur> Yeux::clone() const {
+    return std::make_unique<Yeux>(*this);
+}

@@ -1,4 +1,6 @@
 #include "PopulationConfig.h"
+
+#include "Oreilles.h"
 #include "Yeux.h"
 
 PopulationConfig::PopulationConfig() {
@@ -11,7 +13,55 @@ PopulationConfig::PopulationConfig() {
     carapaceResistanceFactor = 1.0;
     carapaceSlownessFactor = 1.0;
     camouflageFactor = 1.0;
+}
 
+PopulationConfig::PopulationConfig(const PopulationConfig& other) {
+    typeCounts = other.typeCounts;
+    birthRate = other.birthRate;
+    deathRate = other.deathRate;
+    cloningRate = other.cloningRate;
+    avgLifeTime = other.avgLifeTime;
+    lifeTimeStd = other.lifeTimeStd;
+    currentTypeCount = other.currentTypeCount;
+    currentTypeName = other.currentTypeName;
+    nageoiresSpeedFactor = other.nageoiresSpeedFactor;
+    carapaceResistanceFactor = other.carapaceResistanceFactor;
+    carapaceSlownessFactor = other.carapaceSlownessFactor;
+    camouflageFactor = other.camouflageFactor;
+
+    for (const auto& capteur : other.capteurs) {
+        auto clonedCapteur = capteur->clone();
+        if (!clonedCapteur) {
+            std::cerr << "Failed to clone capteur\n";
+        } else {
+            capteurs.push_back(std::move(clonedCapteur));
+            std::cout << "PopulationConfig : Cloned capteur\n";
+
+        }
+    }
+}
+
+PopulationConfig& PopulationConfig::operator=(const PopulationConfig& other) {
+    if (this != &other) {
+        typeCounts = other.typeCounts;
+        birthRate = other.birthRate;
+        deathRate = other.deathRate;
+        cloningRate = other.cloningRate;
+        avgLifeTime = other.avgLifeTime;
+        lifeTimeStd = other.lifeTimeStd;
+        currentTypeCount = other.currentTypeCount;
+        currentTypeName = other.currentTypeName;
+        nageoiresSpeedFactor = other.nageoiresSpeedFactor;
+        carapaceResistanceFactor = other.carapaceResistanceFactor;
+        carapaceSlownessFactor = other.carapaceSlownessFactor;
+        camouflageFactor = other.camouflageFactor;
+
+        capteurs.clear();
+        for (const auto& capteur : other.capteurs) {
+            capteurs.push_back(capteur->clone());
+        }
+    }
+    return *this;
 }
 
 void PopulationConfig::addTypeCount(const std::string& typeName, int count) {
@@ -34,7 +84,7 @@ void PopulationConfig::removeTypeCount(const std::string& typeName) {
 
 void PopulationConfig::setCurrentType(const std::string& typeName) {
     currentTypeName = typeName;
-    currentTypeCount = 0; // Always reset count when setting a new type
+    currentTypeCount = 0;  // Always reset count when setting a new type
 }
 
 void PopulationConfig::resetCurrentType() {
@@ -44,7 +94,7 @@ void PopulationConfig::resetCurrentType() {
 
 std::string PopulationConfig::getNextBirthType() {
     if (typeCounts.empty()) {
-        return ""; // Return an empty string if no types are configured
+        return "";  // Return an empty string if no types are configured
     }
 
     if (++currentTypeCount >= typeCounts[currentTypeName]) {
@@ -66,15 +116,29 @@ int PopulationConfig::getTotalPopulationSize() const {
     return total;
 }
 
-void PopulationConfig::addGlobalCapteur(std::string s) {
-    globalCapteurs.push_back(s);
+void PopulationConfig::addYeux(double champVision, double distanceVision,
+                               double capaciteDetection) {
+    std::unique_ptr<Capteur> capteur =
+        std::make_unique<Yeux>(champVision, distanceVision, capaciteDetection);
+    if (!capteur) {
+        std::cout << "PopulationConfig : Null pointer in capteurs" << std::endl;
+    }
+    capteurs.push_back(std::move(capteur));
+}
+
+void PopulationConfig::addOreilles(double distanceAudible,
+                                   double capaciteDetection) {
+    std::unique_ptr<Capteur> capteur =
+        std::make_unique<Oreilles>(distanceAudible, capaciteDetection);
+    capteurs.push_back(std::move(capteur));
 }
 
 void PopulationConfig::addNageoires(double speedFactor) {
     PopulationConfig::nageoiresSpeedFactor = speedFactor;
 }
 
-void PopulationConfig::addCarapace(double resistanceFactor, double slownessFactor) {
+void PopulationConfig::addCarapace(double resistanceFactor,
+                                   double slownessFactor) {
     carapaceResistanceFactor = resistanceFactor;
     carapaceSlownessFactor = slownessFactor;
 }

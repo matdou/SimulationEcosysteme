@@ -15,6 +15,13 @@ Oreilles::Oreilles() : Capteur() {
 
 }
 
+Oreilles::Oreilles(double distanceAudible, double capaciteDetection) : Capteur() {
+    this->distanceAudible = distanceAudible;
+    this->capaciteDetection = capaciteDetection;
+    std::cout << "Oreilles created" << std::endl;
+
+}
+
 bool Oreilles::jeTeVois(const Bestiole& bestiole, const Bestiole& moi) {
     if (capaciteDetection < std::rand()/RAND_MAX) {
         return false;
@@ -23,3 +30,7 @@ bool Oreilles::jeTeVois(const Bestiole& bestiole, const Bestiole& moi) {
     return distance < distanceAudible;
 }
 
+
+std::unique_ptr<Capteur> Oreilles::clone() const {
+    return std::make_unique<Oreilles>(*this);
+}

@@ -22,6 +22,13 @@ class Bestiole {
     static const double COLLISION_DISTANCE;
     static const double EXPLOSION_PROBABILITY;
 
+    static const double MAX_MULT_VITESSE;
+    static const double MAX_MULT_SLOWNESS;
+    static const double MAX_MULT_PROTECTION;
+    static const double MAX_MULT_DISCRETION;
+    static const double MIN_MULT_DISCRETION;
+
+
     static int next;
 
    private:
@@ -72,8 +79,7 @@ class Bestiole {
     double getLifeExpectancy(void) const;
     void setLifeExpectancyFromAvg(double averageLifeExpectancy, double std);
 
-    void addCapteur(std::unique_ptr<Capteur>& capteur);
-    void addCapteurs(std::vector<std::unique_ptr<Capteur>>& capteurs);
+    void addCapteur(std::unique_ptr<Capteur> capteur);
 
     void percevoirEnvironnement() const;
     virtual void update(const std::vector<std::reference_wrapper<Bestiole>>& voisins) = 0; // permet de traiter les bestioles voisines sans modifier l'ensemble original des bestioles TODO MAKE VIRTUAL
@@ -92,10 +98,11 @@ class Bestiole {
 
     void updateCollision();
 
-    void setMultiplicateurVitesse(double multiplicateurVitesse);
+    void setMultiplicateurVitesse(double multiplicateurVitesseNageoires, double multiplicateurVitesseCarapace);
     void setMultiplicateurProtection(double multiplicateurProtection);
     void setMultiplicateurDiscretion(double multiplicateurDiscretion);
-    
+
+    double getInitialMultipliedVitesse() const;
 };
 
 #endif

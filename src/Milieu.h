@@ -39,7 +39,7 @@ public:
     void step(void);
     void addMember(std::unique_ptr<Bestiole> b);
     int nbVoisins(const Bestiole& b);
-    void addPopulationConfig(const PopulationConfig& config);
+    void addPopulationConfig(PopulationConfig& config);
     void initFromConfigs(void);
     void killMember(int identite);
 

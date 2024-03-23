@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+#include "Capteur.h"
+
 
 class PopulationConfig {
 private:
@@ -19,7 +21,7 @@ private:
     int currentTypeCount;
     std::string currentTypeName;
 
-    std::vector<std::string> globalCapteurs;
+    std::vector<std::unique_ptr<Capteur>> capteurs;
 
     double nageoiresSpeedFactor;
     double carapaceResistanceFactor;
@@ -32,12 +34,12 @@ private:
 
 public:
     PopulationConfig();
+    PopulationConfig(const PopulationConfig& other); // Copy constructor
+    PopulationConfig& operator=(const PopulationConfig& other);
 
     // Modifier methods for type counts
     void addTypeCount(const std::string& typeName, int count);
     void removeTypeCount(const std::string& typeName);
-
-    void addGlobalCapteur(std::string s);
 
     // Setters
     void setBirthRate(double rate) { birthRate = rate; }
@@ -50,6 +52,9 @@ public:
     void addCarapace(double resistanceFactor, double slownessFactor);
     void addCamouflage(double factor);
 
+    void addYeux(double champVision, double distanceVision, double capaciteDetection);
+    void addOreilles(double distanceAudible, double capaciteDetection);
+
 
     // Accessor methods
     std::string getNextBirthType();
@@ -61,8 +66,7 @@ public:
     double getLifeTimeStd() const { return lifeTimeStd; }
     std::string getCurrentTypeName() const { return currentTypeName; }
     const std::map<std::string, int>& getTypeCounts() const { return typeCounts; }
-    const std::vector<std::string>& getGlobalCapteurs() const { return globalCapteurs; }
-
+     std::vector<std::unique_ptr<Capteur>>& getCapteurs() { return capteurs; }
     double getSpeedFactor() const { return nageoiresSpeedFactor; }
     double getProtectionFactor() const { return carapaceResistanceFactor; }
     double getSlownessFactor() const { return carapaceSlownessFactor; }

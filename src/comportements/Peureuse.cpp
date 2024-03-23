@@ -36,7 +36,7 @@ void Peureuse::update(const std::vector<std::reference_wrapper<Bestiole>>& voisi
         setCouleur(0, 0, 150); // dark blue when the cooldown is active
     }
     else{
-        setVitesse( getVitesseInitiale());
+        setVitesse(getInitialMultipliedVitesse()); // reset the speed
     }
     
     

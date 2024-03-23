@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "BestioleFactory.h"
+#include "Capteur.h"
 
 const T Milieu::white[] = {(T)255, (T)255, (T)255};
 
@@ -79,14 +80,16 @@ void Milieu::addBestioleFromConfig(PopulationConfig& config) {
     std::unique_ptr<Bestiole> bestiole(
         BestioleFactory::createBestiole(config.getNextBirthType()));
     if (bestiole) {
-        bestiole.get()->setLifeExpectancyFromAvg(config.getAvgLifeTime(),
-                                                 config.getLifeTimeStd());
-        for (std::string capteur : config.getGlobalCapteurs()) {
-            bestiole.get()->addCapteursFromString(capteur);
+        bestiole->setLifeExpectancyFromAvg(config.getAvgLifeTime(),
+                                           config.getLifeTimeStd());
+        for (std::unique_ptr<Capteur>& capteur : config.getCapteurs()) {
+            bestiole->addCapteur(capteur->clone());
         }
-        bestiole.get()->setMultiplicateurVitesse(config.getSpeedFactor() * config.getSlownessFactor());
-        bestiole.get()->setMultiplicateurProtection(config.getProtectionFactor());
-        bestiole.get()->setMultiplicateurDiscretion(config.getCamouflageFactor());
+
+
+        bestiole->setMultiplicateurVitesse(config.getSpeedFactor(), config.getSlownessFactor());
+        bestiole->setMultiplicateurProtection(config.getProtectionFactor());
+        bestiole->setMultiplicateurDiscretion(config.getCamouflageFactor());
         addMember(std::move(bestiole));
     }
 }
@@ -125,8 +128,9 @@ int Milieu::nbVoisins(const Bestiole& b) {
     return nb;
 }
 
-void Milieu::addPopulationConfig(const PopulationConfig& config) {
-    populationConfigs.push_back(config);
+void Milieu::addPopulationConfig(PopulationConfig& config) {
+    std::cout << "COPYING POPULATION CONFIG" << std::endl;
+    populationConfigs.push_back(config); // Copy the config // clone called
 }
 
 // Method to calculate total population size
