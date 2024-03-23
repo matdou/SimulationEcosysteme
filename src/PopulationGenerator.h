@@ -16,3 +16,4 @@ class PopulationGenerator {
 };
 
 #endif  // POPULATIONGENERATOR_H
+

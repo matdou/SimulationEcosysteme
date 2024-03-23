@@ -3,24 +3,19 @@
 #include "BestioleFactory.h"
 #include "Capteur.h"
 
-static bool dummy = []()
-{
+static bool dummy = []() {
     BestioleFactory::registerType(
-        "Prevoyante", []() -> Bestiole *
-        { return new Prevoyante(); });
+        "Prevoyante", []() -> Bestiole* { return new Prevoyante(); });
     return true;
 }();
 
-Prevoyante::Prevoyante()
-{
-    setCouleur(255, 255, 0); // Jaune
+Prevoyante::Prevoyante() {
+    setCouleur(255, 255, 0);  // Jaune
 }
 
-Prevoyante::~Prevoyante()
-{
+Prevoyante::~Prevoyante() {
     // Destructor
 }
-
 
 void Prevoyante::update(
     const std::vector<std::reference_wrapper<Bestiole>>& voisins) {
@@ -36,8 +31,10 @@ void Prevoyante::update(
             double xVoisin = voisinRef.get().getX();
             double yVoisin = voisinRef.get().getY();
             double coeff = 10.0;
-            double xProjected = xVoisin + speedVoisin * coeff * cos(directionVoisin);
-            double yProjected = yVoisin - speedVoisin * coeff * sin(directionVoisin);
+            double xProjected =
+                xVoisin + speedVoisin * coeff * cos(directionVoisin);
+            double yProjected =
+                yVoisin - speedVoisin * coeff * sin(directionVoisin);
             sumX += xProjected;
             sumY += yProjected;
         }
@@ -48,7 +45,7 @@ void Prevoyante::update(
         double deltaX = avgX - getX();
         double deltaY = avgY - getY();
 
-        double targetDirection =  + std::atan2(deltaY, deltaX);
+        double targetDirection = +std::atan2(deltaY, deltaX);
         double diff_orientation = targetDirection - getOrientation();
 
         while (diff_orientation >= M_PI) {
@@ -62,7 +59,6 @@ void Prevoyante::update(
     }
 }
 
-std::unique_ptr<Bestiole> Prevoyante::clone() const
-{
+std::unique_ptr<Bestiole> Prevoyante::clone() const {
     return std::make_unique<Prevoyante>(*this);
 }

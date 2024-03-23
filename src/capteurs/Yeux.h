@@ -1,16 +1,17 @@
 #ifndef YEUX_H
 #define YEUX_H
 
-#include "Capteur.h"
 #include <string>
 
+#include "Capteur.h"
 
 class Yeux : public Capteur {
-private:
+   private:
     double champVision;
     double distanceVision;
     double capaciteDetection;
-public:
+
+   public:
     Yeux();
     Yeux(double champVision, double distanceVision, double capaciteDetection);
     ~Yeux() = default;
@@ -18,7 +19,6 @@ public:
 
     bool jeTeVois(const Bestiole& bestiole, const Bestiole& moi) override;
     std::unique_ptr<Capteur> clone() const override;
-
 };
 
 #endif  // YEUX_H

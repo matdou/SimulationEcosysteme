@@ -6,13 +6,13 @@
 class Gregaire : public Bestiole {
    public:
     Gregaire();
-    virtual ~Gregaire() override; // Destructor
+    virtual ~Gregaire() override;  // Destructor
     static std::string getTypeName() { return "Gregaire"; }
     static bool dummy;
 
-    void update(const std::vector<std::reference_wrapper<Bestiole>>& voisins) override;
+    void update(
+        const std::vector<std::reference_wrapper<Bestiole>>& voisins) override;
     std::unique_ptr<Bestiole> clone() const override;
 };
-
 
 #endif  // GREGAIRE

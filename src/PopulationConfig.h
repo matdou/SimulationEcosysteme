@@ -8,10 +8,9 @@
 
 #include "Capteur.h"
 
-
 class PopulationConfig {
-private:
-    std::map<std::string, int> typeCounts; // Typename to count mapping
+   private:
+    std::map<std::string, int> typeCounts;  // Typename to count mapping
     double birthRate;
     double deathRate;
     double cloningRate;
@@ -32,9 +31,9 @@ private:
     void setCurrentType(const std::string& typeName);
     void resetCurrentType();
 
-public:
+   public:
     PopulationConfig();
-    PopulationConfig(const PopulationConfig& other); // Copy constructor
+    PopulationConfig(const PopulationConfig& other);  // Copy constructor
     PopulationConfig& operator=(const PopulationConfig& other);
 
     // Modifier methods for type counts
@@ -53,9 +52,9 @@ public:
     void addCarapace(double resistanceFactor, double slownessFactor);
     void addCamouflage(double factor);
 
-    void addYeux(double champVision, double distanceVision, double capaciteDetection);
+    void addYeux(double champVision, double distanceVision,
+                 double capaciteDetection);
     void addOreilles(double distanceAudible, double capaciteDetection);
-
 
     // Accessor methods
     std::string getNextBirthType();
@@ -66,14 +65,14 @@ public:
     double getAvgLifeTime() const { return avgLifeTime; }
     double getLifeTimeStd() const { return lifeTimeStd; }
     std::string getCurrentTypeName() const { return currentTypeName; }
-    const std::map<std::string, int>& getTypeCounts() const { return typeCounts; }
-     std::vector<std::unique_ptr<Capteur>>& getCapteurs() { return capteurs; }
+    const std::map<std::string, int>& getTypeCounts() const {
+        return typeCounts;
+    }
+    std::vector<std::unique_ptr<Capteur>>& getCapteurs() { return capteurs; }
     double getSpeedFactor() const { return nageoiresSpeedFactor; }
     double getProtectionFactor() const { return carapaceResistanceFactor; }
     double getSlownessFactor() const { return carapaceSlownessFactor; }
     double getCamouflageFactor() const { return camouflageFactor; }
-
-
 };
 
 #endif  // POPULATIONCONFIG_H

@@ -22,19 +22,19 @@ int main() {
     config.addTypeCount("Peureuse", 10);
     config.addTypeCount("Gregaire", 10);
     config.setTotalCount(10);
-    config.setBirthRate(0.0);  // births per second in average
-    config.setAvgLifeTime(10);
+    config.setBirthRate(0.0);   // births per second in average
+    config.setAvgLifeTime(20);  // average life time in seconds
     // config.setDeathRate(0);  // No decay rate
     // config.setLifeTimeStd(2.);
-    config.setCloningRate(0.0); // clones per second in average
-    config.addOreilles(8000, 1);
-    std::cout << "Total population size: " << config.getTotalPopulationSize() << std::endl;
-    
+    config.setCloningRate(0.0);  // clones per second in average
+    config.addOreilles(80, 1);
+
+    std::cout << "Total population size: " << config.getTotalPopulationSize()
+              << std::endl;
+
     milieu.addPopulationConfig(config);
 
-
-
-    milieu.initFromConfigs();                      
+    milieu.initFromConfigs();
     aquarium.run();
 
     return 0;

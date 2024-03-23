@@ -1,15 +1,16 @@
 #ifndef OREILLES_H
 #define OREILLES_H
 
-#include "Capteur.h"
 #include <string>
 
-class Oreilles : public Capteur {
-private:
+#include "Capteur.h"
 
+class Oreilles : public Capteur {
+   private:
     double distanceAudible;
     double capaciteDetection;
-public:
+
+   public:
     Oreilles();
     Oreilles(double distanceAudible, double capaciteDetection);
     ~Oreilles() = default;

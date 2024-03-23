@@ -4,20 +4,20 @@
 #include <cstdlib>
 
 #include "Milieu.h"
-#include "Yeux.h"
 #include "Oreilles.h"
+#include "Yeux.h"
 
 const double Bestiole::AFF_SIZE = 8.;
 const double Bestiole::MAX_VITESSE = 15.;
 const double Bestiole::LIMITE_VUE = 30.;
 const double Bestiole::COLLISION_DISTANCE = 10.;
-const double Bestiole::EXPLOSION_PROBABILITY = 0.01; //TODO
+const double Bestiole::EXPLOSION_PROBABILITY = 0.01;  // TODO
 
-const double Bestiole::MAX_MULT_VITESSE = 5.0; // v^max
-const double Bestiole::MAX_MULT_SLOWNESS = 10; // \eta^max
-const double Bestiole::MAX_MULT_PROTECTION = 10.0; // \omega^max
-const double Bestiole::MAX_MULT_DISCRETION = 0.9; // \ksi^max
-const double Bestiole::MIN_MULT_DISCRETION = 0.5; // \ksi^min
+const double Bestiole::MAX_MULT_VITESSE = 5.0;      // v^max
+const double Bestiole::MAX_MULT_SLOWNESS = 10;      // \eta^max
+const double Bestiole::MAX_MULT_PROTECTION = 10.0;  // \omega^max
+const double Bestiole::MAX_MULT_DISCRETION = 0.9;   // \ksi^max
+const double Bestiole::MIN_MULT_DISCRETION = 0.5;   // \ksi^min
 
 int Bestiole::next = 0;
 
@@ -41,7 +41,6 @@ Bestiole::Bestiole(void) {
     vitesseInitiale = vitesse;
 }
 
-
 Bestiole::Bestiole(const Bestiole &b) {
     identite = ++next;
     x = b.x;
@@ -56,13 +55,10 @@ Bestiole::Bestiole(const Bestiole &b) {
               << identite << std::endl;
 }
 
-
 Bestiole::~Bestiole(void) {
     std::cout << "dest Bestiole (" << identite << ")" << std::endl;
     // delete[] couleur;
 }
-
-
 
 // getters and setters
 int Bestiole::getIdentite() const { return identite; }
@@ -139,7 +135,7 @@ bool Bestiole::jeTeVois(const Bestiole &b) const {
         return false;
     }
     for (const auto &capteur : capteurs) {
-        //check if it is a null pointer
+        // check if it is a null pointer
         if (!capteur) {
             i++;
             std::cout << "Null pointer in capteurs : " << i << std::endl;
@@ -148,14 +144,14 @@ bool Bestiole::jeTeVois(const Bestiole &b) const {
 
         if (capteur->jeTeVois(b, *this)) {
             if (b.multiplicateurDiscretion > 0) {
-                if (static_cast<double>(rand()) / RAND_MAX < 1 - b.multiplicateurDiscretion) {
+                if (static_cast<double>(rand()) / RAND_MAX <
+                    1 - b.multiplicateurDiscretion) {
                     // The other bestiole is not detected
                     return false;
                 }
             }
             return true;
         }
-
     }
 
     return false;
@@ -183,20 +179,14 @@ void Bestiole::setLifeExpectancyFromAvg(double averageLifeExpectancy,
                      std * (static_cast<double>(rand()) / RAND_MAX - 0.5);
 }
 
+double Bestiole::getX() const { return x + cumulX; }
 
-double Bestiole::getX() const {
-    return x + cumulX;
-}
+double Bestiole::getY() const { return y + cumulY; }
 
-double Bestiole::getY() const {
-    return y + cumulY;
-}
-
-void Bestiole::addCapteursFromString(const std::string& s) {
+void Bestiole::addCapteursFromString(const std::string &s) {
     if (s == "Yeux") {
         std::unique_ptr<Capteur> capteur = std::make_unique<Yeux>();
         capteurs.push_back(std::move(capteur));
-
     }
     if (s == "Oreilles") {
         std::unique_ptr<Capteur> capteur = std::make_unique<Oreilles>();
@@ -204,28 +194,24 @@ void Bestiole::addCapteursFromString(const std::string& s) {
     }
 }
 
-
-
 double Bestiole::getVitesseInitiale() const { return vitesseInitiale; };
 
-
 bool Bestiole::collidesWith(const Bestiole &other) const {
-    double distance = sqrt(pow(getX() - other.getX(), 2) +
-                           pow(getY() - other.getY(), 2));
+    double distance =
+        sqrt(pow(getX() - other.getX(), 2) + pow(getY() - other.getY(), 2));
     if (distance < COLLISION_DISTANCE && distance > 0.) {
         // Collision
         return true;
     }
 }
 
-
 void Bestiole::updateCollision() {
     if (static_cast<double>(rand()) / RAND_MAX < EXPLOSION_PROBABILITY) {
-        if(static_cast<double>(rand()) / RAND_MAX < 1/multiplicateurProtection){
+        if (static_cast<double>(rand()) / RAND_MAX <
+            1 / multiplicateurProtection) {
             setLifeExpectancy(0);
         }
-    }
-    else {
+    } else {
         // Change direction
         double orientation = getOrientation() + M_PI;
         if (orientation > 2 * M_PI) {
@@ -235,20 +221,27 @@ void Bestiole::updateCollision() {
     }
 }
 
-void Bestiole::setMultiplicateurVitesse(double multiplicateurVitesseNageoires, double multiplicateurVitesseCarapace) {
-    multiplicateurVitesseNageoires = std::min(std::max(0.0, multiplicateurVitesseNageoires), MAX_MULT_VITESSE);
-    multiplicateurVitesseCarapace = std::min(std::max(0.0, multiplicateurVitesseCarapace), MAX_MULT_SLOWNESS);
-    this -> multiplicateurVitesse = multiplicateurVitesseNageoires/multiplicateurVitesseCarapace;
-    this -> vitesse = multiplicateurVitesse * vitesseInitiale;
+void Bestiole::setMultiplicateurVitesse(double multiplicateurVitesseNageoires,
+                                        double multiplicateurVitesseCarapace) {
+    multiplicateurVitesseNageoires = std::min(
+        std::max(0.0, multiplicateurVitesseNageoires), MAX_MULT_VITESSE);
+    multiplicateurVitesseCarapace = std::min(
+        std::max(0.0, multiplicateurVitesseCarapace), MAX_MULT_SLOWNESS);
+    this->multiplicateurVitesse =
+        multiplicateurVitesseNageoires / multiplicateurVitesseCarapace;
+    this->vitesse = multiplicateurVitesse * vitesseInitiale;
 }
 
 void Bestiole::setMultiplicateurProtection(double multiplicateurProtection) {
-    multiplicateurProtection = std::min(std::max(0.0, multiplicateurProtection), MAX_MULT_PROTECTION);
+    multiplicateurProtection =
+        std::min(std::max(0.0, multiplicateurProtection), MAX_MULT_PROTECTION);
     this->multiplicateurProtection = multiplicateurProtection;
 }
 
 void Bestiole::setMultiplicateurDiscretion(double multiplicateurDiscretion) {
-    multiplicateurDiscretion = std::min(std::max(MIN_MULT_DISCRETION, multiplicateurDiscretion), MAX_MULT_DISCRETION);
+    multiplicateurDiscretion =
+        std::min(std::max(MIN_MULT_DISCRETION, multiplicateurDiscretion),
+                 MAX_MULT_DISCRETION);
     this->multiplicateurDiscretion = multiplicateurDiscretion;
 }
 

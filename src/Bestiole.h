@@ -1,14 +1,13 @@
 #ifndef _BESTIOLES_H_
 #define _BESTIOLES_H_
 
+#include <array>
 #include <iostream>
 #include <vector>
-#include <array>
 
 #include "UImg.h"
 
-class Capteur; // Forward declaration
-
+class Capteur;  // Forward declaration
 
 class Milieu;
 
@@ -27,7 +26,6 @@ class Bestiole {
     static const double MAX_MULT_PROTECTION;
     static const double MAX_MULT_DISCRETION;
     static const double MIN_MULT_DISCRETION;
-
 
     static int next;
 
@@ -55,8 +53,8 @@ class Bestiole {
    public:                        // Forme canonique :
     Bestiole(void);               // Constructeur par defaut
     Bestiole(const Bestiole& b);  // Constructeur de copies
-    virtual ~Bestiole();           // Destructeur
-    
+    virtual ~Bestiole();          // Destructeur
+
     Bestiole(Bestiole&& b);
     void action(Milieu& monMilieu);
     void draw(UImg& support);
@@ -82,8 +80,11 @@ class Bestiole {
     void addCapteur(std::unique_ptr<Capteur> capteur);
 
     void percevoirEnvironnement() const;
-    virtual void update(const std::vector<std::reference_wrapper<Bestiole>>& voisins) = 0; // permet de traiter les bestioles voisines sans modifier l'ensemble original des bestioles TODO MAKE VIRTUAL
-
+    virtual void update(
+        const std::vector<std::reference_wrapper<Bestiole>>&
+            voisins) = 0;  // permet de traiter les bestioles voisines sans
+                           // modifier l'ensemble original des bestioles TODO
+                           // MAKE VIRTUAL
 
     double getX() const;
     double getY() const;
@@ -98,7 +99,8 @@ class Bestiole {
 
     void updateCollision();
 
-    void setMultiplicateurVitesse(double multiplicateurVitesseNageoires, double multiplicateurVitesseCarapace);
+    void setMultiplicateurVitesse(double multiplicateurVitesseNageoires,
+                                  double multiplicateurVitesseCarapace);
     void setMultiplicateurProtection(double multiplicateurProtection);
     void setMultiplicateurDiscretion(double multiplicateurDiscretion);
 

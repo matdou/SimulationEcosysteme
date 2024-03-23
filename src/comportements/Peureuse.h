@@ -9,10 +9,11 @@ class Peureuse : public Bestiole {
     virtual ~Peureuse() override;
     static std::string getTypeName() { return "Peureuse"; }
     static bool dummy;
-    void update(const std::vector<std::reference_wrapper<Bestiole>>& voisins) override;
+    void update(
+        const std::vector<std::reference_wrapper<Bestiole>>& voisins) override;
     std::unique_ptr<Bestiole> clone() const override;
 
-    int turnCooldown = 0; // Cooldown for turning 180 degrees
+    int turnCooldown = 0;  // Cooldown for turning 180 degrees
 };
 
 #endif  // PEUREUSE_H

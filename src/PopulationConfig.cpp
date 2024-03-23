@@ -36,7 +36,6 @@ PopulationConfig::PopulationConfig(const PopulationConfig& other) {
         } else {
             capteurs.push_back(std::move(clonedCapteur));
             std::cout << "PopulationConfig : Cloned capteur\n";
-
         }
     }
 }
@@ -146,7 +145,6 @@ void PopulationConfig::addCarapace(double resistanceFactor,
 void PopulationConfig::addCamouflage(double factor) {
     camouflageFactor = factor;
 }
-
 
 void PopulationConfig::setTotalCount(int count) {
     int total = getTotalPopulationSize();

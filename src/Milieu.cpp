@@ -12,7 +12,10 @@
 const T Milieu::white[] = {(T)255, (T)255, (T)255};
 
 Milieu::Milieu(int _width, int _height, int _delay)
-    : UImg(_width, _height, 1, 3), width(_width), height(_height), lifeCycleManager(*this) {
+    : UImg(_width, _height, 1, 3),
+      width(_width),
+      height(_height),
+      lifeCycleManager(*this) {
     std::cout << "const Milieu" << std::endl;
     delay = _delay;
     std::srand(time(NULL));
@@ -36,7 +39,6 @@ void Milieu::processBestiolesActionsAndDrawings() {
     }
 }
 
-
 void Milieu::step() {
     clearEnvironment();
     processBestiolesActionsAndDrawings();
@@ -48,10 +50,8 @@ void Milieu::step() {
     lifeCycleManager.handleCollisions();
 }
 
-
 void Milieu::addPopulationConfig(PopulationConfig& config) {
-    std::cout << "COPYING POPULATION CONFIG" << std::endl;
-    populationConfigs.push_back(config); // Copy the config // clone called
+    populationConfigs.push_back(config);  // Copy the config // clone called
 }
 
 int Milieu::calculateTotalPopulationSize() const {
@@ -67,6 +67,3 @@ int Milieu::calculateTotalPopulationSize() const {
 void Milieu::initFromConfigs() { lifeCycleManager.initFromConfigs(); }
 
 void Milieu::killMember(int identite) { lifeCycleManager.killMember(identite); }
-
-
-
