@@ -17,29 +17,26 @@ int main() {
 
     PopulationConfig config;
 
- 
-    config.addTypeCount("Kamikaze", 100);
-    // config.addTypeCount("Prevoyante", 2);
-    config.setBirthRate(0.5);  // 1 births per second in average
-    // config.setDeathRate(0);  // No decay rate
-    config.setAvgLifeTime(10);
-    // config.setLifeTimeStd(2.);
-    config.setCloningRate(1);
-    config.addOreilles(80, 1);
 
-    // config.addCarapace(5, 5);
+    vector<string> types = {"Kamikaze", "Prevoyante", "Peureuse", "Gregaire"};
+
+    config.addTypeCount("Kamikaze", 70);
+    config.addTypeCount("Prevoyante", 10);
+    config.addTypeCount("Peureuse", 10);
+    config.addTypeCount("Gregaire", 10);
+    config.setTotalCount(10);
+    config.setBirthRate(0.0);  // births per second in average
+    config.setAvgLifeTime(10);
+    // config.setDeathRate(0);  // No decay rate
+    // config.setLifeTimeStd(2.);
+    config.setCloningRate(0.0); // clones per second in average
+    config.addOreilles(80, 1);
     std::cout << "Total population size: " << config.getTotalPopulationSize() << std::endl;
-    milieu.addPopulationConfig(config);
-   /*
-    PopulationConfig config2;
- 
-    // config.addNageoires(3);
-    config2.addTypeCount("Peureuse", 10);
-    config2.addTypeCount("Gregaire", 10);
-    config2.addOreilles(80, 1);
-    milieu.addPopulationConfig(config2);
-    */
     
+    milieu.addPopulationConfig(config);
+
+
+
     milieu.initFromConfigs();                      
     aquarium.run();
 

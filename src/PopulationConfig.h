@@ -41,6 +41,7 @@ public:
     void addTypeCount(const std::string& typeName, int count);
     void removeTypeCount(const std::string& typeName);
 
+    void setTotalCount(int c);
     // Setters
     void setBirthRate(double rate) { birthRate = rate; }
     void setDeathRate(double a) { deathRate = a; }

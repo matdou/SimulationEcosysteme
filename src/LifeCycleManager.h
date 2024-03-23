@@ -10,9 +10,9 @@ class Milieu;
 
 class LifeCycleManager {
 public:
-    static const int ESTIMATION_TIME = 60*2;
-    static const int MAX_POPULATION_SIZE = 1000;
-    static const int MEMORY_MARGIN = 2;
+    static const int ESTIMATION_TIME;
+    static const int MAX_POPULATION_SIZE;
+    static const int MEMORY_MARGIN;
 
     LifeCycleManager(Milieu& milieu);
     void handleBirths();

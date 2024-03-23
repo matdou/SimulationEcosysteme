@@ -1,21 +1,22 @@
 #include "LifeCycleManager.h"
-#include "Milieu.h"
-#include "BestioleFactory.h"
+
 #include <algorithm>
 #include <cstdlib>
+
+#include "BestioleFactory.h"
 #include "Milieu.h"
 
-const int ESTIMATED_TIME = 60 * 2; // 2 minutes
-const int MAX_VECTOR_SIZE = 100000; 
-const int STORAGE_MARGIN = 2; // 2 times the estimated memory size
-
+const int ESTIMATED_TIME = 60 * 2;  // 2 minutes
+const int MAX_VECTOR_SIZE = 100000;
+const int STORAGE_MARGIN = 2;  // 2 times the estimated memory size
 
 LifeCycleManager::LifeCycleManager(Milieu& milieu)
     : milieu(milieu), bestioles(milieu.getBestioles()) {}
 
 void LifeCycleManager::handleBirths() {
     for (auto& config : milieu.getPopulationConfigs()) {
-        double probability = calculateProbability(config.getBirthRate(), milieu.getDelay());
+        double probability =
+            calculateProbability(config.getBirthRate(), milieu.getDelay());
         if (static_cast<double>(rand()) / RAND_MAX < probability) {
             addBestioleFromConfig(config);
         }
@@ -24,8 +25,11 @@ void LifeCycleManager::handleBirths() {
 
 void LifeCycleManager::handleRandomDeaths() {
     for (auto& config : milieu.getPopulationConfigs()) {
-        double probability = calculateProbability(config.getDeathRate(), milieu.getDelay()) * bestioles.size();
-        if (!bestioles.empty() && static_cast<double>(rand()) / RAND_MAX < probability) {
+        double probability =
+            calculateProbability(config.getDeathRate(), milieu.getDelay()) *
+            bestioles.size();
+        if (!bestioles.empty() &&
+            static_cast<double>(rand()) / RAND_MAX < probability) {
             int index = rand() % bestioles.size();
             bestioles.erase(bestioles.begin() + index);
         }
@@ -35,8 +39,11 @@ void LifeCycleManager::handleRandomDeaths() {
 void LifeCycleManager::handleCloning() {
     double probability;
     for (auto& config : milieu.getPopulationConfigs()) {
-        probability = calculateProbability(config.getCloningRate(), milieu.getDelay()) * bestioles.size();
-        if (!bestioles.empty() && static_cast<double>(rand()) / RAND_MAX < probability) {
+        probability =
+            calculateProbability(config.getCloningRate(), milieu.getDelay()) *
+            bestioles.size();
+        if (!bestioles.empty() &&
+            static_cast<double>(rand()) / RAND_MAX < probability) {
             int index = rand() % bestioles.size();
             std::unique_ptr<Bestiole> clone = bestioles[index]->clone();
             bestioles.push_back(std::move(clone));
@@ -47,20 +54,23 @@ void LifeCycleManager::handleCloning() {
 void LifeCycleManager::updateLifeExpectancyAndRemoveExpired() {
     for (auto it = bestioles.begin(); it != bestioles.end();) {
         if ((*it)->getLifeExpectancy() == -1) {
-            ++it; // -1 denotes immortality
+            ++it;  // -1 denotes immortality
         } else if ((*it)->getLifeExpectancy() <= 0) {
-            it = bestioles.erase(it); // Remove expired bestiole
+            it = bestioles.erase(it);  // Remove expired bestiole
         } else {
-            (*it)->setLifeExpectancy((*it)->getLifeExpectancy() - milieu.getDelay() / 1000.0);
+            (*it)->setLifeExpectancy((*it)->getLifeExpectancy() -
+                                     milieu.getDelay() / 1000.0);
             ++it;
         }
     }
 }
 
 void LifeCycleManager::addBestioleFromConfig(PopulationConfig& config) {
-    std::unique_ptr<Bestiole> bestiole(BestioleFactory::createBestiole(config.getNextBirthType()));
+    std::unique_ptr<Bestiole> bestiole(
+        BestioleFactory::createBestiole(config.getNextBirthType()));
     if (bestiole) {
-        bestiole->setLifeExpectancyFromAvg(config.getAvgLifeTime(), config.getLifeTimeStd());
+        bestiole->setLifeExpectancyFromAvg(config.getAvgLifeTime(),
+                                           config.getLifeTimeStd());
         for (const std::unique_ptr<Capteur>& capteur : config.getCapteurs()) {
             bestiole->addCapteur(capteur->clone());
         }
@@ -70,12 +80,13 @@ void LifeCycleManager::addBestioleFromConfig(PopulationConfig& config) {
     }
 }
 
-void LifeCycleManager::setupBestioleFactors(Bestiole& bestiole, PopulationConfig& config){
-    bestiole.setMultiplicateurVitesse(config.getSpeedFactor(), config.getSlownessFactor());
+void LifeCycleManager::setupBestioleFactors(Bestiole& bestiole,
+                                            PopulationConfig& config) {
+    bestiole.setMultiplicateurVitesse(config.getSpeedFactor(),
+                                      config.getSlownessFactor());
     bestiole.setMultiplicateurProtection(config.getProtectionFactor());
     bestiole.setMultiplicateurDiscretion(config.getCamouflageFactor());
 }
-
 
 double LifeCycleManager::calculateProbability(double rate, int delay) const {
     return std::min((delay / 1000.0) * rate, 1.0);
@@ -83,7 +94,7 @@ double LifeCycleManager::calculateProbability(double rate, int delay) const {
 
 void LifeCycleManager::handleCollisions() {
     for (auto& bestiole : bestioles) {
-        //find all neighbors that collides with bestiole
+        // find all neighbors that collides with bestiole
         std::vector<std::reference_wrapper<Bestiole>> collidingNeighbors;
         for (auto& neighbor : bestioles) {
             if (bestiole->collidesWith(*neighbor)) {
@@ -91,17 +102,16 @@ void LifeCycleManager::handleCollisions() {
             }
         }
         if (!collidingNeighbors.empty()) {
-            collidingNeighbors.push_back(std::ref(*bestiole)); // add initial bestiole
+            collidingNeighbors.push_back(
+                std::ref(*bestiole));  // add initial bestiole
 
             // Update all colliding neighbors to handle collision
             for (auto& collidingNeighbor : collidingNeighbors) {
                 collidingNeighbor.get().updateCollision();
             }
         }
-
     }
 }
-
 
 void LifeCycleManager::updateBestiolesFromCapteurs() {
     for (auto& bestiole : bestioles) {
@@ -109,8 +119,8 @@ void LifeCycleManager::updateBestiolesFromCapteurs() {
     }
 }
 
-std::vector<std::reference_wrapper<Bestiole>> LifeCycleManager::visibleNeighbors(
-    std::unique_ptr<Bestiole>& b) {
+std::vector<std::reference_wrapper<Bestiole>>
+LifeCycleManager::visibleNeighbors(std::unique_ptr<Bestiole>& b) {
     std::vector<std::reference_wrapper<Bestiole>> neighbors;
     for (auto& bestiole : bestioles) {
         if (b->jeTeVois(*bestiole)) {
@@ -125,11 +135,12 @@ std::vector<std::reference_wrapper<Bestiole>> LifeCycleManager::visibleNeighbors
 }
 
 void LifeCycleManager::killMember(int identite) {
-    bestioles.erase(std::remove_if(bestioles.begin(), bestioles.end(),
-                                   [identite](const std::unique_ptr<Bestiole>& b) {
-                                       return b->getIdentite() == identite;
-                                   }),
-                    bestioles.end());
+    bestioles.erase(
+        std::remove_if(bestioles.begin(), bestioles.end(),
+                       [identite](const std::unique_ptr<Bestiole>& b) {
+                           return b->getIdentite() == identite;
+                       }),
+        bestioles.end());
 }
 
 int LifeCycleManager::calculateTotalPopulationSize() const {
@@ -140,6 +151,8 @@ int LifeCycleManager::calculateTotalPopulationSize() const {
     return totalPopulationSize;
 }
 
+// Estimate the memory size needed for the bestiole vector during simulation,
+// based on rates
 int LifeCycleManager::calculateMemorySize() const {
     double growingRate = 0.0;
     for (const auto& config : milieu.getPopulationConfigs()) {
@@ -147,16 +160,23 @@ int LifeCycleManager::calculateMemorySize() const {
         growingRate -= config.getDeathRate();
         growingRate += config.getCloningRate();
     }
-    int estimatedMemorySize = calculateTotalPopulationSize() * ESTIMATED_TIME * growingRate;
-    estimatedMemorySize = STORAGE_MARGIN * std::max(estimatedMemorySize, calculateTotalPopulationSize());
-    estimatedMemorySize = std::min(estimatedMemorySize, MAX_VECTOR_SIZE); 
+    int estimatedMemorySize =
+        calculateTotalPopulationSize() * ESTIMATED_TIME * growingRate;
+    std::cout << "First estimated memory size: " << estimatedMemorySize
+              << std::endl;
+    estimatedMemorySize =
+        STORAGE_MARGIN *
+        std::max(estimatedMemorySize, calculateTotalPopulationSize());
+    estimatedMemorySize = std::min(estimatedMemorySize, MAX_VECTOR_SIZE);
+    std::cout << "Estimated memory size: " << estimatedMemorySize << std::endl;
     return estimatedMemorySize;
 }
 
 void LifeCycleManager::initFromConfigs() {
     int totalPopulationSize = calculateTotalPopulationSize();
-    bestioles.reserve(calculateMemorySize());
-    std::cout << "Reserve " << totalPopulationSize << " bestioles" << std::endl;
+    int reservedMemorySize = calculateMemorySize();
+    bestioles.reserve(reservedMemorySize);
+    std::cout << "Reserve " << reservedMemorySize << " bestioles" << std::endl;
 
     for (auto& config : milieu.getPopulationConfigs()) {
         int popSize = config.getTotalPopulationSize();

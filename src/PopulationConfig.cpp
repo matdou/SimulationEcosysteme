@@ -146,3 +146,16 @@ void PopulationConfig::addCarapace(double resistanceFactor,
 void PopulationConfig::addCamouflage(double factor) {
     camouflageFactor = factor;
 }
+
+
+void PopulationConfig::setTotalCount(int count) {
+    int total = getTotalPopulationSize();
+    if (total == 0) {
+        return;
+    }
+
+    double factor = static_cast<double>(count) / total;
+    for (auto& pair : typeCounts) {
+        pair.second = static_cast<int>(pair.second * factor);
+    }
+}
