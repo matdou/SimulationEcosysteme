@@ -9,6 +9,7 @@
 const int ESTIMATED_TIME = 60 * 2;  // 2 minutes
 const int MAX_VECTOR_SIZE = 100000;
 const int STORAGE_MARGIN = 2;  // 2 times the estimated memory size
+const double MIN_TIME_BETWEEN_COLLISIONS = 0.5;  // 0.5 seconds
 
 LifeCycleManager::LifeCycleManager(Milieu& milieu)
     : milieu(milieu), bestioles(milieu.getBestioles()) {}
@@ -46,6 +47,7 @@ void LifeCycleManager::handleCloning() {
             static_cast<double>(rand()) / RAND_MAX < probability) {
             int index = rand() % bestioles.size();
             std::unique_ptr<Bestiole> clone = bestioles[index]->clone();
+            clone->setLastCollisionTime(milieu.getTimeSim());
             bestioles.push_back(std::move(clone));
         }
     }
@@ -98,7 +100,14 @@ void LifeCycleManager::handleCollisions() {
         std::vector<std::reference_wrapper<Bestiole>> collidingNeighbors;
         for (auto& neighbor : bestioles) {
             if (bestiole->collidesWith(*neighbor)) {
+                int timeSinceLastCollision =
+                    std::min(milieu.getTimeSim() - neighbor->getLastCollisionTime(),
+                             milieu.getTimeSim() - bestiole->getLastCollisionTime());
+                if ( timeSinceLastCollision*milieu.getDelay()/1000 < MIN_TIME_BETWEEN_COLLISIONS) {
+                    continue;
+                }
                 collidingNeighbors.push_back(std::ref(*neighbor));
+
             }
         }
         if (!collidingNeighbors.empty()) {
@@ -108,6 +117,7 @@ void LifeCycleManager::handleCollisions() {
             // Update all colliding neighbors to handle collision
             for (auto& collidingNeighbor : collidingNeighbors) {
                 collidingNeighbor.get().updateCollision();
+                collidingNeighbor.get().setLastCollisionTime(milieu.getTimeSim());
             }
         }
     }

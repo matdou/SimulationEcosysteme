@@ -14,7 +14,8 @@ public:
     static const int ESTIMATION_TIME; // Time estimation for memory allocation
     static const int MAX_POPULATION_SIZE; // Maximum population size
     static const int MEMORY_MARGIN; // Memory margin for vector allocation
-
+    static const double MIN_COLLISION_TIME; // Minimum time between collisions
+    
     /**
      * Constructs a LifeCycleManager associated with a specific milieu.
      * @param milieu Reference to the milieu that this manager will manipulate.

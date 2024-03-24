@@ -17,17 +17,23 @@ int main() {
 
     PopulationConfig config;
 
-    config.addTypeCount("Kamikaze", 70);
-    config.addTypeCount("Prevoyante", 10);
-    config.addTypeCount("Peureuse", 10);
-    config.addTypeCount("Gregaire", 10);
+    config.addTypeCount("Kamikaze", 40);
+    config.addTypeCount("Prevoyante", 20);
+    config.addTypeCount("Peureuse", 20);
+    config.addTypeCount("Gregaire", 20);
     config.setTotalCount(10);
-    config.setBirthRate(0.0);   // births per second in average
+    config.setBirthRate(0.5);   // births per second in average
     config.setAvgLifeTime(20);  // average life time in seconds
     // config.setDeathRate(0);  // No decay rate
     // config.setLifeTimeStd(2.);
-    config.setCloningRate(0.0);  // clones per second in average
+    //config.setCloningRate(0.5);  // clones per second in average
     config.addOreilles(80, 1);
+    config.addYeux(M_PI_4, 200, 1);
+
+    config.addNageoires(1.5);
+    config.addCarapace(1.5, 1.5);
+    //config.addCamouflage(1.5);
+
 
     std::cout << "Total population size: " << config.getTotalPopulationSize()
               << std::endl;

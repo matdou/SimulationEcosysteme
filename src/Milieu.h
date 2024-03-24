@@ -19,6 +19,8 @@ class Milieu : public UImg {
 
     int delay;
 
+    int timeSim = 0;
+
     int calculateTotalPopulationSize() const;
     // void createAndAddBestiole(const PopulationConfig& config, const const
     // std::pair<const std::string, int>& typeCount);
@@ -56,6 +58,8 @@ class Milieu : public UImg {
         std::unique_ptr<Bestiole>& b);
 
     void handleCollisions();
+
+    int getTimeSim() const { return timeSim; };
 };
 
 #endif

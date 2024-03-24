@@ -11,7 +11,7 @@ const double Bestiole::AFF_SIZE = 8.;
 const double Bestiole::MAX_VITESSE = 15.;
 const double Bestiole::LIMITE_VUE = 30.;
 const double Bestiole::COLLISION_DISTANCE = 10.;
-const double Bestiole::EXPLOSION_PROBABILITY = 0.01;  // TODO
+const double Bestiole::EXPLOSION_PROBABILITY = 0.1;  // TODO
 
 const double Bestiole::MAX_MULT_VITESSE = 5.0;      // v^max
 const double Bestiole::MAX_MULT_SLOWNESS = 10;      // \eta^max
@@ -51,6 +51,10 @@ Bestiole::Bestiole(const Bestiole &b) {
     vitesseInitiale = b.vitesseInitiale;
     couleur = b.couleur;
     lifeTime = b.lifeTime;
+    multiplicateurVitesse = b.multiplicateurVitesse;
+    multiplicateurProtection = b.multiplicateurProtection;
+    multiplicateurDiscretion = b.multiplicateurDiscretion;
+    lastCollisionTime = b.lastCollisionTime;
     std::cout << "Bestiole : created from copy constructor, with identite : "
               << identite << std::endl;
 }

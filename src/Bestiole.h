@@ -50,6 +50,9 @@ private:
     /** Moves the creature within the given limits. */
     void bouge(int xLim, int yLim);
 
+    // Milieu::timeSim when the creature was last collided with
+    int lastCollisionTime = 0;
+
 public:
     // Constructors & Destructor
     Bestiole();
@@ -103,6 +106,11 @@ public:
     /** Sets the life expectancy of the creature from average and standard deviation. */
     void setLifeExpectancyFromAvg(double averageLifeExpectancy, double std);
 
+    /** Sets the last collision time of the creature. */
+    void setLastCollisionTime(int time) { lastCollisionTime = time; };
+    /** Returns the last collision time of the creature. */
+    int getLastCollisionTime() const { return lastCollisionTime; };
+
     /** Adds a sensor to the creature. */
     void addCapteur(std::unique_ptr<Capteur> capteur);
     /** Adds sensors to the creature based on a string description. */
@@ -129,6 +137,8 @@ public:
     void setMultiplicateurProtection(double multiplicateurProtection);
     /* Sets the discretion multiplier of the creature. */
     void setMultiplicateurDiscretion(double multiplicateurDiscretion);
+    /** Increments the last collision time of the creature. **/
+    void IncrementLastCollisionTime() { lastCollisionTime++; };
 };
 
 #endif // BESTIOLES_H
