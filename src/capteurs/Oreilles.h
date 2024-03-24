@@ -7,6 +7,12 @@
 
 class Oreilles : public Capteur {
    private:
+
+    static const double MIN_DISTANCE;
+    static const double MAX_DISTANCE;
+    static const double MIN_DETECTION;
+    static const double MAX_DETECTION;
+    
     double distanceAudible;
     double capaciteDetection;
 

@@ -7,14 +7,21 @@
 #include "Bestiole.h"
 #include "Milieu.h"
 
+const double Oreilles::MIN_DISTANCE = 0;
+const double Oreilles::MAX_DISTANCE = 1000;
+const double Oreilles::MIN_DETECTION = 0.0;
+const double Oreilles::MAX_DETECTION = 1.0;
+
 Oreilles::Oreilles() : Capteur() {
-    distanceAudible = 80;
-    capaciteDetection = 1;
+    distanceAudible = MAX_DISTANCE;
+    capaciteDetection = MAX_DETECTION;
     std::cout << "Oreilles created" << std::endl;
 }
 
 Oreilles::Oreilles(double distanceAudible, double capaciteDetection)
     : Capteur() {
+    distanceAudible = std::max(MIN_DISTANCE, std::min(MAX_DISTANCE, distanceAudible));
+    capaciteDetection = std::max(MIN_DETECTION, std::min(MAX_DETECTION, capaciteDetection));
     this->distanceAudible = distanceAudible;
     this->capaciteDetection = capaciteDetection;
     std::cout << "Oreilles created" << std::endl;
