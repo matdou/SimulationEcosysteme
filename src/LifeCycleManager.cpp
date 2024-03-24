@@ -183,7 +183,6 @@ int LifeCycleManager::calculateMemorySize() const {
 }
 
 void LifeCycleManager::initFromConfigs() {
-    int totalPopulationSize = calculateTotalPopulationSize();
     int reservedMemorySize = calculateMemorySize();
     bestioles.reserve(reservedMemorySize);
     std::cout << "Reserve " << reservedMemorySize << " bestioles" << std::endl;

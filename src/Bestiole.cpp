@@ -207,6 +207,7 @@ bool Bestiole::collidesWith(const Bestiole &other) const {
         // Collision
         return true;
     }
+    return false;
 }
 
 void Bestiole::updateCollision() {

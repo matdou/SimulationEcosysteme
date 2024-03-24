@@ -1,7 +1,8 @@
 #ifndef _AQUARIUM_H_
 #define _AQUARIUM_H_
 
-#include <CImg.h>
+
+#include "CImgWrapper.h"
 #include <iostream>
 
 // using namespace std;

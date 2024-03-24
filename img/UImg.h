@@ -2,7 +2,7 @@
 #define _UIMG_H_
 
 
-#include <CImg.h>
+#include "CImgWrapper.h"
 
 using namespace cimg_library;
 
