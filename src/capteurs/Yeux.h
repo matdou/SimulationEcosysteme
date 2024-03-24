@@ -11,6 +11,14 @@ class Yeux : public Capteur {
     double distanceVision;
     double capaciteDetection;
 
+    static const double MIN_ANGLE;
+    static const double MAX_ANGLE;
+    static const double MIN_DISTANCE;
+    static const double MAX_DISTANCE;
+    static const double MIN_DETECTION;
+    static const double MAX_DETECTION;
+
+
    public:
     Yeux();
     Yeux(double champVision, double distanceVision, double capaciteDetection);

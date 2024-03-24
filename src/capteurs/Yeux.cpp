@@ -6,16 +6,25 @@
 
 #include "Bestiole.h"
 #include "Milieu.h"
+const double Yeux::MIN_ANGLE = 0;
+const double Yeux::MAX_ANGLE = 2 * M_PI;
+const double Yeux::MIN_DISTANCE = 0;
+const double Yeux::MAX_DISTANCE = 1000;
+const double Yeux::MIN_DETECTION = 0.0;
+const double Yeux::MAX_DETECTION = 1.0;
 
 Yeux::Yeux() : Capteur() {
-    champVision = 6;
-    distanceVision = 800;
-    capaciteDetection = 1;
+    champVision = M_PI_4;
+    distanceVision = MAX_DISTANCE;
+    capaciteDetection = MAX_DETECTION;
     std::cout << "Yeux created" << std::endl;
 }
 
 Yeux::Yeux(double champVision, double distanceVision, double capaciteDetection)
     : Capteur() {
+    champVision = std::max(MIN_ANGLE, std::min(MAX_ANGLE, champVision));
+    distanceVision = std::max(MIN_DISTANCE, std::min(MAX_DISTANCE, distanceVision));
+    capaciteDetection = std::max(MIN_DETECTION, std::min(MAX_DETECTION, capaciteDetection));
     this->champVision = champVision;
     this->distanceVision = distanceVision;
     this->capaciteDetection = capaciteDetection;
