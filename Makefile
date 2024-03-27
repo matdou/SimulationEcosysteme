@@ -2,41 +2,38 @@ CXX = g++
 CXXFLAGS = -Wall -std=c++14 -fsanitize=address
 LDFLAGS = -lX11 -lpthread -fsanitize=address
 
-# Include directories for project headers
-INC_DIR = -I. -Isrc -Isrc/comportements -Isrc/capteurs
-
-# Source directories
-SRCDIR = src
-SRCDIR2 = src/comportements
-SRCDIR3 = src/capteurs
-SRCS = $(wildcard $(SRCDIR)/*.cpp) $(wildcard $(SRCDIR2)/*.cpp) $(wildcard $(SRCDIR3)/*.cpp)
-
-# Object directory
-OBJDIR = obj
-OBJS = $(patsubst %.cpp,$(OBJDIR)/%.o,$(notdir $(SRCS)))
-
-# Binary directory
-BINDIR = bin
-EXEC = $(BINDIR)/main
-
-# Include directory for image headers
+# Directories
+SRC_DIRS = src src/comportements src/capteurs
+OBJ_DIR = obj
+BIN_DIR = bin
 IMG_DIR = img
-INC_DIR += -I$(IMG_DIR)
 
-vpath %.cpp $(SRCDIR) $(SRCDIR2) $(SRCDIR3)
+# Include directories
+INC_DIRS = $(SRC_DIRS) $(IMG_DIR)
+INC_FLAGS = $(addprefix -I,$(INC_DIRS))
+
+# Find all cpp files in the source directories
+SRCS = $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.cpp))
+
+# Object files have same name as cpp files, but with .o extension
+OBJS = $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
+
+# Target executable
+EXEC = $(BIN_DIR)/main
 
 .PHONY: all clean
 
 all: $(EXEC)
 
+# Link object files to create the executable
 $(EXEC): $(OBJS)
-	@mkdir -p $(BINDIR)
-	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+	@mkdir -p $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 
-# Generic rule for compiling any .cpp to an .o
-$(OBJDIR)/%.o: %.cpp
-	@mkdir -p $(OBJDIR)
-	$(CXX) $(CXXFLAGS) $(INC_DIR) -c $< -o $@
+# Compile cpp files to object files
+$(OBJ_DIR)/%.o: %.cpp
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) $(INC_FLAGS) -c $< -o $@
 
 clean:
-	rm -rf $(OBJDIR) $(BINDIR)
+	rm -rf $(OBJ_DIR) $(BIN_DIR)
