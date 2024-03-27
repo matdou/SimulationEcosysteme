@@ -48,6 +48,7 @@ void Milieu::step() {
     lifeCycleManager.updateLifeExpectancyAndRemoveExpired();
     lifeCycleManager.updateBestiolesFromCapteurs();
     lifeCycleManager.handleCollisions();
+    lifeCycleManager.updateComportementMultiple();
     timeSim++;
 }
 

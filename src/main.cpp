@@ -16,18 +16,19 @@ int main() {
     Milieu& milieu = aquarium.getMilieu();
 
     PopulationConfig config;
-
+    
     config.addTypeCount("Kamikaze", 40);
     config.addTypeCount("Prevoyante", 20);
     config.addTypeCount("Peureuse", 20);
-    config.addTypeCount("Gregaire", 20);
-
+    config.addTypeCount("ComportementMultiple", 10);
+    config.addTypeCount("Gregaire", 10);
+    
 
     config.setTotalCount(100);
-    config.setBirthRate(0.5);   // births per second in average
+    //config.setBirthRate(0.5);   // births per second in average
     config.setAvgLifeTime(20);  // average life time in seconds
-    // config.setDeathRate(0);  // No decay rate
-    // config.setLifeTimeStd(2.);
+    //config.setDeathRate(0);  // No decay rate
+    //config.setLifeTimeStd(2.);
     //config.setCloningRate(0.5);  // clones per second in average
     config.addOreilles(80, 1);
     config.addYeux(M_PI_4, 200, 1);

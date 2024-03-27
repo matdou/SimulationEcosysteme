@@ -15,6 +15,7 @@ public:
     static const int MAX_POPULATION_SIZE; // Maximum population size
     static const int MEMORY_MARGIN; // Memory margin for vector allocation
     static const double MIN_COLLISION_TIME; // Minimum time between collisions
+    static const double COMPORTMENT_CHANGE_RATE; // Rate of changing ComportementMultiple
     
     /**
      * Constructs a LifeCycleManager associated with a specific milieu.
@@ -89,6 +90,11 @@ public:
      * @return A vector of reference wrappers to the visible neighbors.
      */
     std::vector<std::reference_wrapper<Bestiole>> visibleNeighbors(std::unique_ptr<Bestiole>& b);
+
+    /**
+     * Updates the behaviour of ComportementMultiple bestioles from one base Comportement to another.
+     */
+    void updateComportementMultiple();
 
 private:
     Milieu& milieu; // Reference to the milieu to interact with the bestioles

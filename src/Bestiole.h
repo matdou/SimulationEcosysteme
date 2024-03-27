@@ -146,6 +146,9 @@ public:
     void setMultiplicateurDiscretion(double multiplicateurDiscretion);
     /** Increments the last collision time of the creature. **/
     void IncrementLastCollisionTime() { lastCollisionTime++; };
+
+    /** Virtual Method redefined only in ComportementMultiple, to be called by LifeCycleManager */
+    virtual void UpdateComportementForComportementMultiple() {};
 };
 
 #endif // BESTIOLES_H
