@@ -148,7 +148,7 @@ public:
     void IncrementLastCollisionTime() { lastCollisionTime++; };
 
     /** Virtual Method redefined only in ComportementMultiple, to be called by LifeCycleManager */
-    virtual void UpdateComportementForComportementMultiple() {};
+    virtual void updateComportementForComportementMultiple() {};
 };
 
 #endif // BESTIOLES_H

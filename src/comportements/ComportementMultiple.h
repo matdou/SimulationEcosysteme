@@ -25,8 +25,7 @@ public:
     // Static variables
     static bool dummy; // Dummy variable to force the linker to include the class in the factory
 
-    void changeComportementRandom();
-    virtual void UpdateComportementForComportementMultiple() override;
+    virtual void updateComportementForComportementMultiple() override;
 };
 
 

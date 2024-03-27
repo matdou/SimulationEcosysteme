@@ -210,7 +210,7 @@ void LifeCycleManager::updateComportementMultiple() {
         double probability =
             calculateProbability(CHANGE_COMPORTMENT_RATE, milieu.getDelay());
         if (static_cast<double>(rand()) / RAND_MAX < probability) {
-            bestiole->UpdateComportementForComportementMultiple();
+            bestiole->updateComportementForComportementMultiple();
         }
     }
 }

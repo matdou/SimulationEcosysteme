@@ -36,7 +36,7 @@ void ComportementMultiple::update(
     }
 
 }
-void ComportementMultiple::UpdateComportementForComportementMultiple(){
+void ComportementMultiple::updateComportementForComportementMultiple(){
     comportementActuel = static_cast<ComportementActif>(rand() % 4);
 }
 
