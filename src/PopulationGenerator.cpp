@@ -1,5 +1,5 @@
 #include "PopulationGenerator.h"
-
+/*
 std::vector<std::unique_ptr<Bestiole>>
 PopulationGenerator::generateInitialPopulation(const PopulationConfig& config) {
     std::vector<std::unique_ptr<Bestiole>> population;
@@ -16,3 +16,4 @@ PopulationGenerator::generateInitialPopulation(const PopulationConfig& config) {
 
     return population;
 }
+*/

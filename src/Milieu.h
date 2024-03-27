@@ -22,8 +22,6 @@ class Milieu : public UImg {
     int timeSim = 0;
 
     int calculateTotalPopulationSize() const;
-    // void createAndAddBestiole(const PopulationConfig& config, const const
-    // std::pair<const std::string, int>& typeCount);
 
     void clearEnvironment();
     void processBestiolesActionsAndDrawings();
@@ -48,16 +46,11 @@ class Milieu : public UImg {
 
     void step(void);
     void addMember(std::unique_ptr<Bestiole> b);
-    int nbVoisins(const Bestiole& b);
     void addPopulationConfig(PopulationConfig& config);
     void initFromConfigs(void);
     void killMember(int identite);
 
-    void updateBestiolesFromCapteurs();
-    std::vector<std::reference_wrapper<Bestiole>> visibleNeighbors(
-        std::unique_ptr<Bestiole>& b);
 
-    void handleCollisions();
 
     int getTimeSim() const { return timeSim; };
 };
