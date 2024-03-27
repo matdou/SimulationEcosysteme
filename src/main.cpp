@@ -17,11 +17,11 @@ int main() {
 
     PopulationConfig config;
     
-    // config.addTypeCount("Kamikaze", 40);
-    // config.addTypeCount("Prevoyante", 20);
-    //config.addTypeCount("Peureuse", 20);
-    config.addTypeCount("ComportementMultiple", 10);
-    //config.addTypeCount("Gregaire", 10);
+    config.addTypeCount("Kamikaze", 40);
+    config.addTypeCount("Prevoyante", 20);
+    config.addTypeCount("Peureuse", 10);
+    config.addTypeCount("ComportementMultiple", 20);
+    config.addTypeCount("Gregaire", 10);
 
     config.setTotalCount(20);
 

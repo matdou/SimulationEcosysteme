@@ -191,7 +191,7 @@ void LifeCycleManager::initFromConfigs() {
 
     for (auto& config : milieu.getPopulationConfigs()) {
         int popSize = config.getTotalPopulationSize();
-        std::cout << "Adding " << popSize << " bestioles of type "
+        std::cout << "Adding " << popSize << " bestioles "
                   << config.getCurrentTypeName() << std::endl;
         for (int i = 0; i < popSize; i++) {
             addBestioleFromConfig(config);
@@ -209,10 +209,7 @@ void LifeCycleManager::updateComportementMultiple() {
     for (auto& bestiole : bestioles) {
         double probability =
             calculateProbability(CHANGE_COMPORTMENT_RATE, milieu.getDelay());
-        std::cout << "Probability: " << probability << std::endl;
         if (static_cast<double>(rand()) / RAND_MAX < probability) {
-            std::cout << "Changing comportement for bestiole "
-                      << bestiole->getIdentite() << std::endl;
             bestiole->updateComportementForComportementMultiple();
         }
     }
