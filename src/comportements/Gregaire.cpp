@@ -18,30 +18,7 @@ Gregaire::~Gregaire() {}
 // its neighbors
 void Gregaire::update(
     const std::vector<std::reference_wrapper<Bestiole>>& voisins) {
-    this->setCouleur(0, 255, 0);  // Set the color to green
-    if (!voisins.empty()) {
-        this->setCouleur(
-            0, 200, 0);  // Set the color to dark green when there are neighbors
-        double directionMoyenne = 0.0;
-        for (const auto& voisinRef : voisins) {
-            Bestiole& voisin = voisinRef.get();
-            directionMoyenne += voisin.getOrientation();
-        }
-
-        directionMoyenne /= voisins.size();
-
-        double currentDirection = getOrientation();
-        double direction_diff = directionMoyenne - currentDirection;
-
-        if (direction_diff > M_PI) {
-            direction_diff -= 2 * M_PI;
-        } else if (direction_diff < -M_PI) {
-            direction_diff += 2 * M_PI;
-        }
-
-        double newOrientation = getOrientation() + direction_diff / 7;
-        setOrientation(newOrientation);
-    }
+    Comportement::gregaireUpdate(voisins);
 }
 
 std::unique_ptr<Bestiole> Gregaire::clone() const {

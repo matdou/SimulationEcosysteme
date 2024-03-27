@@ -2,12 +2,14 @@
 #define KAMIKAZE_H
 
 #include "BestioleFactory.h"
+#include "Comportement.h"
+
 #include <memory>
 #include <string>
 #include <vector>
 #include <functional>
 
-class Kamikaze : public Bestiole {
+class Kamikaze : public Comportement {
 public:
     // Constructors & Destructor
     Kamikaze();

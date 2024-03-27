@@ -2,12 +2,14 @@
 #define GREGAIRE_H
 
 #include "BestioleFactory.h"
+#include "Comportement.h"
+
 #include <memory>
 #include <string>
 #include <vector>
 #include <functional>
 
-class Gregaire : public Bestiole {
+class Gregaire : public Comportement {
 public:
     // Constructors & Destructor
     Gregaire();

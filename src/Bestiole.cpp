@@ -83,6 +83,13 @@ void Bestiole::initCoords(int xLim, int yLim) {
     y = rand() % yLim;
 }
 
+void Bestiole::setCoords(int xCoord, int yCoord) {
+    //partie entiere
+    x = static_cast<int>(xCoord);
+    y = static_cast<int>(yCoord);
+
+}
+
 void Bestiole::bouge(int xLim, int yLim) {
     double nx, ny;
     double dx = cos(orientation) * vitesse;
@@ -167,6 +174,8 @@ void Bestiole::setCouleur(int r, int g, int b) {
     couleur[2] = b;
 }
 
+std::array<int, 3> Bestiole::getCouleur() const { return couleur; }
+
 void Bestiole::setLifeExpectancy(double lifeExpectancy) {
     this->lifeTime = lifeExpectancy;
 }
@@ -184,8 +193,10 @@ void Bestiole::setLifeExpectancyFromAvg(double averageLifeExpectancy,
 }
 
 double Bestiole::getX() const { return x + cumulX; }
+int Bestiole::getXInt() const { return x; }
 
 double Bestiole::getY() const { return y + cumulY; }
+int Bestiole::getYInt() const { return y; }
 
 void Bestiole::addCapteursFromString(const std::string &s) {
     if (s == "Yeux") {

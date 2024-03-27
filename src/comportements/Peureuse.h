@@ -2,12 +2,14 @@
 #define PEUREUSE_H
 
 #include "BestioleFactory.h"
+#include "Comportement.h"
+
 #include <memory>
 #include <string>
 #include <vector>
 #include <functional>
 
-class Peureuse : public Bestiole {
+class Peureuse : public Comportement {
 public:
     // Constructors & Destructor
     Peureuse();
@@ -22,9 +24,6 @@ public:
 
     // Static variables
     static bool dummy; // Dummy variable to force the linker to include the class in the factory
-
-    // Class-specific variables
-    int turnCooldown = 0; // Cooldown for turning 180 degrees
 };
 
 #endif  // PEUREUSE_H

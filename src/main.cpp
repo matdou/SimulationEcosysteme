@@ -21,7 +21,9 @@ int main() {
     config.addTypeCount("Prevoyante", 20);
     config.addTypeCount("Peureuse", 20);
     config.addTypeCount("Gregaire", 20);
-    config.setTotalCount(10);
+
+
+    config.setTotalCount(100);
     config.setBirthRate(0.5);   // births per second in average
     config.setAvgLifeTime(20);  // average life time in seconds
     // config.setDeathRate(0);  // No decay rate

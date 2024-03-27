@@ -78,6 +78,9 @@ public:
     /** Initializes the coordinates of the creature. */
     void initCoords(int xLim, int yLim);
 
+    /** Set the coordinates of the creature. */
+    void setCoords(int x, int y);
+
     /** Returns the identity of the creature. */
     int getIdentite() const;
 
@@ -97,6 +100,8 @@ public:
 
     /** Sets the color of the creature. */
     void setCouleur(int r, int g, int b);
+    /** Returns the color of the creature. */
+    std::array<int, 3> getCouleur() const;
 
     /** Sets the life expectancy of the creature. */
     void setLifeExpectancy(double lifeExpectancy);
@@ -128,8 +133,10 @@ public:
 
     /** Returns the X coordinate of the creature. */
     double getX() const;
+    int getXInt() const;
     /** Returns the Y coordinate of the creature. */
     double getY() const;
+    int getYInt() const;
 
     /** Sets speed multipliers of the creature. */
     void setMultiplicateurVitesse(double multiplicateurVitesseNageoires, double multiplicateurVitesseCarapace);

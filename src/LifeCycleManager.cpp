@@ -75,6 +75,7 @@ void LifeCycleManager::addBestioleFromConfig(PopulationConfig& config) {
                                            config.getLifeTimeStd());
         for (const std::unique_ptr<Capteur>& capteur : config.getCapteurs()) {
             bestiole->addCapteur(capteur->clone());
+            bestiole->initCoords(milieu.getWidth(), milieu.getHeight());
         }
 
         setupBestioleFactors(*bestiole, config);

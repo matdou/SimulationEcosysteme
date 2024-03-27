@@ -2,12 +2,14 @@
 #define PREVOYANTE_H
 
 #include "BestioleFactory.h"
+#include "Comportement.h"
+
 #include <memory>
 #include <string>
 #include <vector>
 #include <functional>
 
-class Prevoyante : public Bestiole {
+class Prevoyante : public Comportement {
 public:
     // Constructors & Destructor
     Prevoyante();
