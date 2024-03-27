@@ -11,6 +11,7 @@ static bool dummy = []() {
 
 ComportementMultiple::ComportementMultiple() {
     comportementActuel = GREGAIRE;
+    updateComportementForComportementMultiple();
 }
 
 // Destructor
@@ -34,8 +35,8 @@ void ComportementMultiple::update(
             Comportement::kamikazeUpdate(voisins);
             break;
     }
-
 }
+
 void ComportementMultiple::updateComportementForComportementMultiple(){
     comportementActuel = static_cast<ComportementActif>(rand() % 4);
 }

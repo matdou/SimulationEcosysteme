@@ -1,6 +1,7 @@
 #include "Comportement.h"
 
-void Comportement::gregaireUpdate(const std::vector<std::reference_wrapper<Bestiole>>& voisins) {
+void Comportement::gregaireUpdate(
+    const std::vector<std::reference_wrapper<Bestiole>>& voisins) {
     this->setCouleur(0, 255, 0);  // Set the color to green
     if (!voisins.empty()) {
         this->setCouleur(
@@ -27,7 +28,8 @@ void Comportement::gregaireUpdate(const std::vector<std::reference_wrapper<Besti
     }
 }
 
-void Comportement::kamikazeUpdate(const std::vector<std::reference_wrapper<Bestiole>>& voisins) {
+void Comportement::kamikazeUpdate(
+    const std::vector<std::reference_wrapper<Bestiole>>& voisins) {
     setCouleur(255, 0, 0);
     if (!voisins.empty()) {
         setCouleur(200, 0, 0);
@@ -67,8 +69,10 @@ void Comportement::kamikazeUpdate(const std::vector<std::reference_wrapper<Besti
         setOrientation(getOrientation() + diff_orientation / 10);
     }
 }
-void Comportement::peureuseUpdate(const std::vector<std::reference_wrapper<Bestiole>>& voisins) {
-    this->setCouleur(0, 0, 255);  // blue when
+
+void Comportement::peureuseUpdate(
+    const std::vector<std::reference_wrapper<Bestiole>>& voisins) {
+    this->setCouleur(0, 0, 255);  // blue
 
     if (voisins.size() >= 3) {
         setCouleur(150, 0, 150);  // purple when there are 3 or more neighbors
@@ -90,9 +94,9 @@ void Comportement::peureuseUpdate(const std::vector<std::reference_wrapper<Besti
 
 void Comportement::prevoyanteUpdate(
     const std::vector<std::reference_wrapper<Bestiole>>& voisins) {
-    setCouleur(255, 255, 0);
+    setCouleur(255, 255, 0); // yellow
     if (!voisins.empty()) {
-        setCouleur(200, 200, 0);
+        setCouleur(200, 200, 0); // dark yellow when there are neighbors
         double sumX = 0;
         double sumY = 0;
         for (const auto& voisinRef : voisins) {

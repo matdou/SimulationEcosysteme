@@ -10,7 +10,7 @@ const int ESTIMATED_TIME = 60 * 2;  // 2 minutes
 const int MAX_VECTOR_SIZE = 100000;
 const int STORAGE_MARGIN = 2;  // 2 times the estimated memory size
 const double MIN_TIME_BETWEEN_COLLISIONS = 0.5;  // 0.5 seconds
-const double CHANGE_COMPORTMENT_RATE = 3.0; // 3 seconds
+const double CHANGE_COMPORTMENT_RATE = 0.5 ; // 0.5 per seconds =  every 2 seconds
 
 LifeCycleManager::LifeCycleManager(Milieu& milieu)
     : milieu(milieu), bestioles(milieu.getBestioles()) {}
@@ -209,7 +209,10 @@ void LifeCycleManager::updateComportementMultiple() {
     for (auto& bestiole : bestioles) {
         double probability =
             calculateProbability(CHANGE_COMPORTMENT_RATE, milieu.getDelay());
-        if (static_cast<double>(rand()) / RAND_MAX > probability) {
+        std::cout << "Probability: " << probability << std::endl;
+        if (static_cast<double>(rand()) / RAND_MAX < probability) {
+            std::cout << "Changing comportement for bestiole "
+                      << bestiole->getIdentite() << std::endl;
             bestiole->updateComportementForComportementMultiple();
         }
     }
