@@ -74,9 +74,9 @@ void Comportement::peureuseUpdate(const std::vector<std::reference_wrapper<Besti
         setCouleur(150, 0, 150);  // purple when there are 3 or more neighbors
 
         if (turnCooldown == 0) {
-            setVitesse(10);
+            setVitesse(Bestiole::MAX_VITESSE);
             setOrientation(getOrientation() + M_PI);
-            turnCooldown = 20;
+            turnCooldown = TURN_COOLDOWN;
         }
     }
 

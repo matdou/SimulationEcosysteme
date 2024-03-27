@@ -18,7 +18,6 @@ class Milieu; // Forward declaration
 class Bestiole {
 private:
     static const double AFF_SIZE;
-    static const double MAX_VITESSE;
     static const double LIMITE_VUE;
     static const double COLLISION_DISTANCE;
     static const double EXPLOSION_PROBABILITY;
@@ -54,6 +53,7 @@ private:
     int lastCollisionTime = 0;
 
 public:
+    static const double MAX_VITESSE;
     // Constructors & Destructor
     Bestiole();
     Bestiole(const Bestiole& b);
